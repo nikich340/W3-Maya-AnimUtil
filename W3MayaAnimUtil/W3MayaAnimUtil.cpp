@@ -244,11 +244,7 @@ bool W3MayaAnimUtil::applyMotionToBone(QJsonValueRef ref) {
     QVector<int> framePoints;
     framePoints.append(1);
     upn(i, 0, deltaTimes.size() - 1) {
-        int delta = static_cast<uint8_t>(deltaTimes[i]);
-        if (delta <= 0) {
-            addLog(QString("!!!!!! NEGATIVE! [%1] = %2, dtimes = %3").arg(i).arg(delta).arg(QString(deltaTimes)) );
-        }
-        framePoints.append( framePoints.back() + delta );
+        framePoints.append( framePoints.back() + static_cast<uint8_t>(deltaTimes[i]) );
     }
 
     QVector<double> motionX, motionY, motionZ, motionRotZ;
@@ -293,7 +289,7 @@ bool W3MayaAnimUtil::applyMotionToBone(QJsonValueRef ref) {
                     anyFlag = false;
                     break;
                 }
-                motionRotZ.append( framesObj[i].toDouble() );
+                motionRotZ.append( framesObj[i].toDouble() * 360.0 / mW3AngleKoefficient );
                 ++i;
             }
         }
@@ -471,7 +467,7 @@ bool W3MayaAnimUtil::extractMotionFromBone(QJsonValueRef ref) {
         motionZ.append( posArray[frame].toObject().value("z").toDouble() );
     }
     upn(frame, 0, rotFrames - 1) {
-        motionRotZ.append( rotArray[frame].toObject().value("Z").toDouble() );
+        motionRotZ.append( rotArray[frame].toObject().value("Z").toDouble() * mW3AngleKoefficient / 360.0 );
     }
 
     if (rotFrames == 1) {
