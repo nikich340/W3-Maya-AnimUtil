@@ -1,4 +1,4 @@
-# W3-Maya-Utils
+# W3-Maya-AnimUtil
 Tool and resources for improving process of creating new animations for The Witcher 3 game. 
 Kudos to **Dingdio** for his tools and tutorials and **Amasiuncula** for his help.
 
