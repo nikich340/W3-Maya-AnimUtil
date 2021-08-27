@@ -192,10 +192,10 @@ bool W3MayaAnimUtil::applyMotionToBone(QJsonValueRef ref) {
     QJsonObject motionObj = animObj["motionExtraction"].toObject();
     if (ui->checkRemoveMotionChunk) {
         animObj.remove("motionExtraction");
-        ref = animObj;
     }
     if (motionObj.isEmpty()) {
         addLog("    Empty motionExtraction, skipping.", logWarning);
+        ref = animObj;
         return false;
     }
 
@@ -223,6 +223,7 @@ bool W3MayaAnimUtil::applyMotionToBone(QJsonValueRef ref) {
         if ( posFrames + rotFrames > 2 && QMessageBox::Yes != QMessageBox::question(this, "Attention!", QString("Anim %1 already contains RootMotion bone with %2 position and %3 rotation frames.<br>Do you want to overwrite them with values from motionExtraction?").arg(animName).arg(posFrames).arg(rotFrames)) )
         {
             addLog(QString("    Anim already contains %1 bone with %2 position and %3 rotation frames. Skipping.").arg(mBoneName).arg(posFrames).arg(rotFrames));
+            ref = animObj;
             return false;
         } else {
             addLog(QString("    Anim already contains %1 bone with %2 position and %3 rotation frames. Overwriting values from motionExtraction.").arg(mBoneName).arg(posFrames).arg(rotFrames));
@@ -332,7 +333,10 @@ bool W3MayaAnimUtil::applyMotionToBone(QJsonValueRef ref) {
             QJsonArray rotationFrames;
             blendMotion(motionRotZ, animFrames, framePoints);
             upn(frame, 1, animFrames) {
-                rotationFrames.append( objXYZW(0, 0, motionRotZ[frame]) );
+                if (ui->checkSwapYZrot->isChecked())
+                    rotationFrames.append( objXYZW(0, motionRotZ[frame], 0) );
+                else
+                    rotationFrames.append( objXYZW(0, 0, motionRotZ[frame]) );
             }
             mBoneObj["rotationFrames"] = rotationFrames;
         } else {
@@ -349,13 +353,62 @@ bool W3MayaAnimUtil::applyMotionToBone(QJsonValueRef ref) {
             blendMotion(motionZ, animFrames, framePoints);
 
             upn(frame, 1, animFrames) {
-                positionFrames.append( objXYZ(motionX[frame], motionY[frame], motionZ[frame]) );
+                if (ui->checkSwapYZpos->isChecked())
+                    positionFrames.append( objXYZ(motionX[frame], motionZ[frame], motionY[frame]) );
+                else
+                    positionFrames.append( objXYZ(motionX[frame], motionY[frame], motionZ[frame]) );
             }
             mBoneObj["positionFrames"] = positionFrames;
+
+            // ADD INVERTED PELVIS TO ROOT, if root has no motion
+            if (ui->checkAddInverted->isChecked()) {
+                int rootIndex = -1, pelvisIndex = -1;
+                upn(i, 0, bonesArray.size() - 1) {
+                    if (bonesArray[i].toObject().value("BoneName").toString() == "Root") {
+                        rootIndex = i;
+                    }
+                    if (bonesArray[i].toObject().value("BoneName").toString() == "pelvis") {
+                        pelvisIndex = i;
+                    }
+                }
+                QJsonObject pelvisBone = bonesArray[pelvisIndex].toObject();
+                QJsonObject rootBone = bonesArray[rootIndex].toObject();
+                int pelvisFrames = pelvisBone.value("position_numFrames").toInt();
+                int rootFrames = rootBone.value("position_numFrames").toInt();
+                if (pelvisFrames > 1 && rootFrames == 1) {
+                    rootBone["position_numFrames"] = pelvisFrames;
+                    QJsonArray pelvisPositionArray = pelvisBone.value("positionFrames").toArray();
+                    QJsonObject rootOriginalKeys = rootBone.value("positionFrames").toArray().at(0).toObject();
+                    upn(j, 0, pelvisPositionArray.size() - 1) {
+                        QJsonObject frameKeys = pelvisPositionArray[j].toObject();
+                        if (flags & BYTE_X) {
+                            frameKeys["x"] = - frameKeys.value("x").toDouble();
+                        } else {
+                            frameKeys["x"] = rootOriginalKeys.value("x");
+                        }
+                        if (flags & BYTE_Y) {
+                            frameKeys["y"] = - frameKeys.value("y").toDouble();
+                        } else {
+                            frameKeys["y"] = rootOriginalKeys.value("y");
+                        }
+                        if (flags & BYTE_Z) {
+                            frameKeys["z"] = - frameKeys.value("z").toDouble();
+                        } else {
+                            frameKeys["z"] = rootOriginalKeys.value("z");
+                        }
+                        pelvisPositionArray[j] = frameKeys;
+                    }
+
+                    rootBone["positionFrames"] = pelvisPositionArray;
+                    bonesArray[rootIndex] = rootBone;
+                    addLog("    Added inverted pelvis motion to Root!");
+                }
+            }
         } else {
             mBoneObj["position_numFrames"] = QJsonValue(1);
             mBoneObj["positionFrames"] = QJsonArray({ objXYZ(0, 0, 0) });
         }
+
         addLog("    [FINISH] Processed anim: " + animName);
     }
 
@@ -463,8 +516,13 @@ bool W3MayaAnimUtil::extractMotionFromBone(QJsonValueRef ref) {
     int flags = BYTE_X | BYTE_Y | BYTE_Z | BYTE_RotZ; // 15
     upn(frame, 0, posFrames - 1) {
         motionX.append( posArray[frame].toObject().value("x").toDouble() );
-        motionY.append( posArray[frame].toObject().value("y").toDouble());
-        motionZ.append( posArray[frame].toObject().value("z").toDouble() );
+        if (ui->checkSwapYZpos_2->isChecked()) {
+            motionY.append( posArray[frame].toObject().value("z").toDouble());
+            motionZ.append( posArray[frame].toObject().value("y").toDouble() );
+        } else {
+            motionY.append( posArray[frame].toObject().value("y").toDouble());
+            motionZ.append( posArray[frame].toObject().value("z").toDouble() );
+        }
     }
     upn(frame, 0, rotFrames - 1) {
         motionRotZ.append( rotArray[frame].toObject().value("Z").toDouble() * mW3AngleKoefficient / 360.0 );

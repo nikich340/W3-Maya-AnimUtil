@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>896</width>
-    <height>556</height>
+    <width>1052</width>
+    <height>707</height>
    </rect>
   </property>
   <property name="font">
@@ -111,13 +111,49 @@
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="checkRemoveMotionChunk">
-         <property name="text">
-          <string>Remove motionExtraction chunk after processing</string>
-         </property>
-         <property name="checked">
-          <bool>true</bool>
-         </property>
+        <widget class="QWidget" name="widget_3" native="true">
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QCheckBox" name="checkRemoveMotionChunk">
+            <property name="text">
+             <string>Remove motionExtraction chunk after processing</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkAddInverted">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="whatsThis">
+             <string>Some imported anims don't have inverted motion in Root, so it has &quot;doubled&quot; motion. This option should help.</string>
+            </property>
+            <property name="text">
+             <string>Add inverted pelvis translation to Root, if Root doesn't contain any (only if motionExtraction exists)</string>
+            </property>
+            <property name="checkable">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkSwapYZpos">
+            <property name="text">
+             <string>Swap Y and Z translation</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkSwapYZrot">
+            <property name="text">
+             <string>Swap Y and Z rotation</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
        <item>
@@ -157,6 +193,13 @@
        <item>
         <widget class="QWidget" name="widget_2" native="true">
          <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QCheckBox" name="checkSwapYZpos_2">
+            <property name="text">
+             <string>Swap Y and Z translation</string>
+            </property>
+           </widget>
+          </item>
           <item>
            <widget class="QCheckBox" name="checkBase64">
             <property name="text">
@@ -269,7 +312,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>896</width>
+     <width>1052</width>
      <height>25</height>
     </rect>
    </property>
