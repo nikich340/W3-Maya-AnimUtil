@@ -148,6 +148,10 @@ QJsonObject W3MayaAnimUtil::objXYZW(double X, double Y, double Z, double W) cons
     ret["W"] = QJsonValue(W);
     return ret;
 }
+QJsonObject W3MayaAnimUtil::objQuanternion(double Pitch, double Yaw, double Roll) const {
+    QVector4D vec4 = QQuaternion::fromEulerAngles(QVector3D(Pitch, Yaw, Roll)).toVector4D();
+    return objXYZW( vec4.x(), vec4.y(), vec4.z(), vec4.w() );
+}
 void W3MayaAnimUtil::blendMotion(QVector<double>& motion, int animFrames, const QVector<int>& framePoints) {
     if (motion.isEmpty()) {
         motion.fill(0, animFrames + 1);
@@ -333,15 +337,15 @@ bool W3MayaAnimUtil::applyMotionToBone(QJsonValueRef ref) {
             QJsonArray rotationFrames;
             blendMotion(motionRotZ, animFrames, framePoints);
             upn(frame, 1, animFrames) {
-                if (ui->checkSwapYZrot->isChecked())
-                    rotationFrames.append( objXYZW(0, motionRotZ[frame], 0) );
+                if (ui->checkUseYRot->isChecked())
+                    rotationFrames.append( objQuanternion(0, motionRotZ[frame], 0) );
                 else
-                    rotationFrames.append( objXYZW(0, 0, motionRotZ[frame]) );
+                    rotationFrames.append( objQuanternion(0, 0, motionRotZ[frame]) );
             }
             mBoneObj["rotationFrames"] = rotationFrames;
         } else {
             mBoneObj["rotation_numFrames"] = QJsonValue(1);
-            mBoneObj["rotationFrames"] = QJsonArray({ objXYZW(0, 0, 0) });
+            mBoneObj["rotationFrames"] = QJsonArray({ objXYZW(0, 0, 0, 1) });
         }
 
         if (flags & (BYTE_X | BYTE_Y | BYTE_Z)) {
@@ -525,7 +529,12 @@ bool W3MayaAnimUtil::extractMotionFromBone(QJsonValueRef ref) {
         }
     }
     upn(frame, 0, rotFrames - 1) {
-        motionRotZ.append( rotArray[frame].toObject().value("Z").toDouble() * mW3AngleKoefficient / 360.0 );
+        QJsonObject rotFrameObj = rotArray[frame].toObject();
+        QQuaternion quat = QQuaternion(rotFrameObj["W"].toDouble(), rotFrameObj["X"].toDouble(), rotFrameObj["Y"].toDouble(), rotFrameObj["Z"].toDouble());
+        if (ui->checkUseYRot2->isChecked())
+            motionRotZ.append( quat.toEulerAngles().y() * mW3AngleKoefficient / 360.0 );
+        else
+            motionRotZ.append( quat.toEulerAngles().z() * mW3AngleKoefficient / 360.0 );
     }
 
     if (rotFrames == 1) {

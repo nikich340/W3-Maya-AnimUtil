@@ -147,9 +147,9 @@
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="checkSwapYZrot">
+           <widget class="QCheckBox" name="checkUseYRot">
             <property name="text">
-             <string>Swap Y and Z rotation</string>
+             <string>Use Y-axis rotation (instead of Z)</string>
             </property>
            </widget>
           </item>
@@ -197,6 +197,13 @@
            <widget class="QCheckBox" name="checkSwapYZpos_2">
             <property name="text">
              <string>Swap Y and Z translation</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkUseYRot2">
+            <property name="text">
+             <string>Use Y-axis rotation (instead of Z)</string>
             </property>
            </widget>
           </item>

@@ -11,6 +11,7 @@
 #include <QJsonArray>
 #include <QJsonValue>
 #include <QJsonParseError>
+#include <QQuaternion>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class W3MayaAnimUtil; }
@@ -45,6 +46,7 @@ private:
     QJsonObject jsonRoot;
     QJsonObject objXYZ(double X, double Y, double Z) const;
     QJsonObject objXYZW(double X, double Y, double Z, double W = 1) const;
+    QJsonObject objQuanternion(double Pitch, double Yaw, double Roll) const;
     bool loadW3Data();
     void blendMotion(QVector<double>& motion, int animFrames, const QVector<int>& framePoints);
     void reduceMotionRotZ(QVector<double>& motion, int animFrames, int& motionFrames);
