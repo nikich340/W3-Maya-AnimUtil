@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1052</width>
-    <height>707</height>
+    <width>1184</width>
+    <height>771</height>
    </rect>
   </property>
   <property name="font">
@@ -106,7 +106,7 @@
           </font>
          </property>
          <property name="text">
-          <string>MOTION EXTRACTION -&gt; RootMotion bone</string>
+          <string>motionExtraction -&gt; RootMotion bone</string>
          </property>
         </widget>
        </item>
@@ -142,7 +142,10 @@
           <item>
            <widget class="QCheckBox" name="checkSwapYZpos">
             <property name="text">
-             <string>Swap Y and Z translation</string>
+             <string>Use Y-up coordinates</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -150,6 +153,9 @@
            <widget class="QCheckBox" name="checkUseYRot">
             <property name="text">
              <string>Use Y-axis rotation (instead of Z)</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -179,15 +185,28 @@
       </property>
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
-        <widget class="QPushButton" name="buttonExtractMotionFromBone">
-         <property name="font">
-          <font>
-           <pointsize>9</pointsize>
-          </font>
-         </property>
-         <property name="text">
-          <string>RootMotion bone -&gt; MOTION EXTRACTION</string>
-         </property>
+        <widget class="QWidget" name="widget_4" native="true">
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QPushButton" name="buttonExtractMotionFromBone">
+            <property name="font">
+             <font>
+              <pointsize>9</pointsize>
+             </font>
+            </property>
+            <property name="text">
+             <string>RootMotion bone -&gt; motionExtraction</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="buttonExtractMotionFromBoneBatch">
+            <property name="text">
+             <string>BATCH: [RootMotion bone -&gt; motionExtraction]</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
        <item>
@@ -196,7 +215,10 @@
           <item>
            <widget class="QCheckBox" name="checkSwapYZpos_2">
             <property name="text">
-             <string>Swap Y and Z translation</string>
+             <string>Use Y-up coordinates</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -205,12 +227,25 @@
             <property name="text">
              <string>Use Y-axis rotation (instead of Z)</string>
             </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="checkBase64">
             <property name="text">
              <string>Encode deltaTimes array as base64-string</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkIgnoreEmptyRootMotion">
+            <property name="text">
+             <string>Don't remove motionExtraction if RootMotion wasn't found (protects files processed before)</string>
+            </property>
+            <property name="checked">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -319,7 +354,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1052</width>
+     <width>1184</width>
      <height>25</height>
     </rect>
    </property>

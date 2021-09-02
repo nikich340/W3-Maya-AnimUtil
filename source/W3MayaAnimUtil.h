@@ -48,6 +48,7 @@ private:
     QJsonObject objXYZW(double X, double Y, double Z, double W = 1) const;
     QJsonObject objQuanternion(double Pitch, double Yaw, double Roll) const;
     bool loadW3Data();
+    bool loadJsonFile(QString filePath);
     void blendMotion(QVector<double>& motion, int animFrames, const QVector<int>& framePoints);
     void reduceMotionRotZ(QVector<double>& motion, int animFrames, int& motionFrames);
     void reduceMotionPos(QVector<double>& motionX, QVector<double>& motionY, QVector<double>& motionZ, int animFrames, int& motionFrames);
@@ -59,5 +60,6 @@ private slots:
     void onClicked_Save();
     void onClicked_applyMotionToBone();
     void onClicked_extractMotionFromBone();
+    void onClicked_extractMotionFromBoneBatch();
 };
 #endif // W3MAYAANIMUTIL_H

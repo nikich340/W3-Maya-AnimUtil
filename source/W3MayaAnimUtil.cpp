@@ -20,6 +20,7 @@ W3MayaAnimUtil::W3MayaAnimUtil(QWidget *parent)
     connect(ui->buttonSave, SIGNAL(clicked(bool)), this, SLOT(onClicked_Save()));
     connect(ui->buttonApplyMotionToBone, SIGNAL(clicked(bool)), this, SLOT(onClicked_applyMotionToBone()));
     connect(ui->buttonExtractMotionFromBone, SIGNAL(clicked(bool)), this, SLOT(onClicked_extractMotionFromBone()));
+    connect(ui->buttonExtractMotionFromBoneBatch, SIGNAL(clicked(bool)), this, SLOT(onClicked_extractMotionFromBoneBatch()));
 }
 
 void W3MayaAnimUtil::addLog(QString text, LogType type) {
@@ -35,21 +36,11 @@ void W3MayaAnimUtil::addLog(QString text, LogType type) {
     ui->textLog->verticalScrollBar()->setValue( ui->textLog->verticalScrollBar()->maximum() );
 }
 
-void W3MayaAnimUtil::onClicked_Load() {
-    if (hasChanges && QMessageBox::Yes != QMessageBox::question(this, "Attention!", "Currently loaded .json has some unsaved changes. Do you want to discard them and load new file?")) {
-        return;
-    }
-    hasChanges = false;
-
-    QString filePath = QFileDialog::getOpenFileName(this, "Open animation json", "", "JSON Files (*.json)");
-    if (filePath.isEmpty()) {
-        addLog("Loading file canceled by user", logWarning);
-        return;
-    }
+bool W3MayaAnimUtil::loadJsonFile(QString filePath) {
     jsonFile.setFileName(filePath);
     if ( !jsonFile.open(QIODevice::ReadOnly | QIODevice::Text) ) {
         addLog("Can't open file in read-only text mode: " + filePath, logError);
-        return;
+        return false;
     }
 
     QByteArray bArray = jsonFile.readAll();
@@ -57,10 +48,10 @@ void W3MayaAnimUtil::onClicked_Load() {
     jsonDoc = QJsonDocument::fromJson(bArray, jsonError);
     if ( jsonDoc.isNull() ) {
         addLog( QString("Can't load json document correctly, parse error = %1").arg(jsonError->errorString()), logError );
-        return;
+        return false;
     } else if ( !jsonDoc.isObject() ) {
         addLog( "Json root is not an object, can't load info.", logError );
-        return;
+        return false;
     }
 
     if ( QFile::exists(filePath + ".bak") ) {
@@ -73,10 +64,26 @@ void W3MayaAnimUtil::onClicked_Load() {
     if ( loadW3Data() ) {
         addLog( QString("[OK] Loaded %1, original file saved as: %1.bak").arg(QFileInfo(filePath).fileName()) );
         ui->linePath->setText(filePath);
+        return true;
     } else {
         addLog( QString("Failed to detect data format: %1").arg(QFileInfo(filePath).fileName()), logError );
         ui->linePath->setText("NO CORRECT .JSON LOADED!");
+        return false;
     }
+}
+
+void W3MayaAnimUtil::onClicked_Load() {
+    if (hasChanges && QMessageBox::Yes != QMessageBox::question(this, "Attention!", "Currently loaded .json has some unsaved changes. Do you want to discard them and load new file?")) {
+        return;
+    }
+    hasChanges = false;
+
+    QString filePath = QFileDialog::getOpenFileName(this, "Open animation json", "", "JSON Files (*.json)");
+    if (filePath.isEmpty()) {
+        addLog("Loading file canceled by user", logWarning);
+        return;
+    }
+    loadJsonFile(filePath);
 }
 bool W3MayaAnimUtil::loadW3Data() {
     if ( jsonRoot.contains("animations") ) {
@@ -485,10 +492,14 @@ bool W3MayaAnimUtil::extractMotionFromBone(QJsonValueRef ref) {
         }
     }
     if (mBoneIdx == -1) {
-        addLog(QString("    Anim doesn't contain [%2] bone, removing motionExtraction!").arg(mBoneName), logError );
-        // END
-        ref = animObj;
-        return true;
+        if (ui->checkIgnoreEmptyRootMotion->isChecked()) {
+            addLog(QString("    Anim doesn't contain [%2] bone, ignoring.").arg(mBoneName), logError );
+            return false;
+        } else {
+            addLog(QString("    Anim doesn't contain [%2] bone, removing motionExtraction!").arg(mBoneName), logError );
+            ref = animObj;
+            return true;
+        }
     }
 
     QJsonObject motionObj = bonesArray[mBoneIdx].toObject();
@@ -707,11 +718,33 @@ void W3MayaAnimUtil::onClicked_extractMotionFromBone() {
     } else {
         if ( extractMotionFromBone(jsonRoot["animation"]) ) {
             hasChanges = true;
-
         }
         addLog(QString("[Finished in %1s] Processed 1 animation.<br>").arg(eTimer.elapsed() / 1000.0));
         ui->progressBar->setValue(100);
     }
+}
+void W3MayaAnimUtil::onClicked_extractMotionFromBoneBatch() {
+    QString dirName = QFileDialog::getExistingDirectory(this, tr("Choose directory"),
+                                                        QDir::currentPath());
+    if (dirName.isEmpty()) {
+        addLog("User canceled operation.", logWarning);
+        return;
+    }
+    QStringList jsonList = QDir(dirName).entryList({"*.json"}, QDir::Files, QDir::Name);
+    for (const QString jsonPath : jsonList) {
+        addLog("[BATCH] Processing file: " + jsonPath);
+        if (loadJsonFile(dirName + "/" + jsonPath)) {
+            onClicked_extractMotionFromBone();
+            // YES it's dirty crutch
+            QApplication::processEvents();
+            if (hasChanges) {
+                onClicked_Save();
+            }
+        }
+        // YES it's dirty crutch
+        QApplication::processEvents();
+    }
+    addLog(QString("[BATCH] Completed processing %1 files.").arg(jsonList.size()));
 }
 
 W3MayaAnimUtil::~W3MayaAnimUtil()
