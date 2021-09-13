@@ -41,6 +41,7 @@ private:
     const double mW3AngleKoefficient = - 8.07; // picked up experimentally, real value is in [8.05 - 8.10]
     bool animSet;
     bool hasChanges = false;
+    bool batchMode = false;
     QFile jsonFile;
     QJsonDocument jsonDoc;
     QJsonObject jsonRoot;
@@ -55,11 +56,23 @@ private:
     bool applyMotionToBone(QJsonValueRef ref);
     bool extractMotionFromBone(QJsonValueRef ref);
 
+    /* extra nr */
+    QVector<QString> animNames;
+    QVector<double> animDurations;
+
+    /* ANIM EVENTS */
+    bool loadJsonAnimEvents(QString filePath);
+    QFile jsonFileEvents;
+    QJsonDocument jsonDocEvents;
+    QJsonObject jsonRootEvents;
+    QMap<QString, QJsonArray> animEventsByName;
+
 private slots:
     void onClicked_Load();
     void onClicked_Save();
     void onClicked_applyMotionToBone();
     void onClicked_extractMotionFromBone();
     void onClicked_extractMotionFromBoneBatch();
+    void onClicked_loadAnimEventsSource();
 };
 #endif // W3MAYAANIMUTIL_H

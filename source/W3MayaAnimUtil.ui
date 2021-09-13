@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1184</width>
-    <height>771</height>
+    <height>800</height>
    </rect>
   </property>
   <property name="font">
@@ -116,7 +116,7 @@
           <item>
            <widget class="QCheckBox" name="checkRemoveMotionChunk">
             <property name="text">
-             <string>Remove motionExtraction chunk after processing</string>
+             <string>motion: Remove motionExtraction chunk after processing</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -124,7 +124,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="checkAddInverted">
+           <widget class="QCheckBox" name="checkAddInvertedTrajectory">
             <property name="enabled">
              <bool>false</bool>
             </property>
@@ -132,7 +132,7 @@
              <string>Some imported anims don't have inverted motion in Root, so it has &quot;doubled&quot; motion. This option should help.</string>
             </property>
             <property name="text">
-             <string>Add inverted pelvis translation to Root, if Root doesn't contain any (only if motionExtraction exists)</string>
+             <string>Subtract Trajectory bone motion from Pevlis bone motion</string>
             </property>
             <property name="checkable">
              <bool>true</bool>
@@ -142,7 +142,7 @@
           <item>
            <widget class="QCheckBox" name="checkSwapYZpos">
             <property name="text">
-             <string>Use Y-up coordinates</string>
+             <string>motion: Use Y-up coordinates</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -152,7 +152,7 @@
           <item>
            <widget class="QCheckBox" name="checkUseYRot">
             <property name="text">
-             <string>Use Y-axis rotation (instead of Z)</string>
+             <string>motion: Use Y-axis rotation (instead of Z)</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -206,6 +206,13 @@
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="buttonLoadEventsSource">
+            <property name="text">
+             <string>Load animEvents .json source</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
@@ -215,7 +222,7 @@
           <item>
            <widget class="QCheckBox" name="checkSwapYZpos_2">
             <property name="text">
-             <string>Use Y-up coordinates</string>
+             <string>motion: Use Y-up coordinates</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -225,7 +232,7 @@
           <item>
            <widget class="QCheckBox" name="checkUseYRot2">
             <property name="text">
-             <string>Use Y-axis rotation (instead of Z)</string>
+             <string>motion: Use Y-axis rotation (instead of Z)</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -235,14 +242,14 @@
           <item>
            <widget class="QCheckBox" name="checkBase64">
             <property name="text">
-             <string>Encode deltaTimes array as base64-string</string>
+             <string>motion: Encode deltaTimes array as base64-string</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="checkIgnoreEmptyRootMotion">
             <property name="text">
-             <string>Don't remove motionExtraction if RootMotion wasn't found (protects files processed before)</string>
+             <string>motion: Don't remove if RootMotion wasn't found (protects files processed before)</string>
             </property>
             <property name="checked">
              <bool>false</bool>
@@ -252,7 +259,7 @@
           <item>
            <widget class="QCheckBox" name="checkRemoveAxises">
             <property name="text">
-             <string>Remove unused axises</string>
+             <string>motion: Remove unused axises</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -262,10 +269,30 @@
           <item>
            <widget class="QCheckBox" name="checkRemoveLinear">
             <property name="text">
-             <string>Remove excess frames (where linear gradation)</string>
+             <string>motion: Remove excess frames (where linear gradation)</string>
             </property>
             <property name="checkable">
              <bool>true</bool>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkLoadAnimEvents">
+            <property name="text">
+             <string>Add anim events from source file (currently loaded: NONE)</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkOptimizeEqual">
+            <property name="text">
+             <string>Leave single frame for bone if possible (where all keys are equal)</string>
             </property>
             <property name="checked">
              <bool>true</bool>
