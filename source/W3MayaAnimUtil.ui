@@ -69,6 +69,38 @@
      </widget>
     </item>
     <item>
+     <widget class="QWidget" name="widget_5" native="true">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QLabel" name="labelSensivity">
+         <property name="text">
+          <string>Equality sensitivity:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDoubleSpinBox" name="spinSensivity">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="decimals">
+          <number>10</number>
+         </property>
+         <property name="minimum">
+          <double>0.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.000001000000000</double>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
      <widget class="QGroupBox" name="groupBox">
       <property name="title">
        <string>For .json exported with WolvenKit (from vanilla .w2anims). Should contain &quot;motionExtraction&quot; vars.</string>
@@ -244,6 +276,9 @@
             <property name="text">
              <string>motion: Encode deltaTimes array as base64-string</string>
             </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item>
@@ -292,7 +327,7 @@
           <item>
            <widget class="QCheckBox" name="checkOptimizeEqual">
             <property name="text">
-             <string>Leave single frame for bone if possible (where all keys are equal)</string>
+             <string>Set single frame to bone if possible (where all keys are equal)</string>
             </property>
             <property name="checked">
              <bool>true</bool>

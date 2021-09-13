@@ -37,7 +37,7 @@ private:
     const QString mBoneName = "RootMotion";
     const double mFps = 30.0;
     const int mBoneIndex = 94;
-    const double mReductionSensitivity = 1e-4; // 10^-4
+    double mReductionSensitivity(); // 10^-4
     const double mW3AngleKoefficient = - 8.07; // picked up experimentally, real value is in [8.05 - 8.10]
     bool animSet;
     bool hasChanges = false;

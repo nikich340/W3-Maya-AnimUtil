@@ -15,6 +15,9 @@ W3MayaAnimUtil::W3MayaAnimUtil(QWidget *parent)
     ui->setupUi(this);
     //ui->textLog->setFontPointSize(20);
     ui->textLog->setHtml("Welcome :)<br>Click \"Load anim .json\" to start");
+    ui->spinSensivity->setMinimum(0.0000000001);
+    ui->spinSensivity->setSingleStep(0.00001);
+    ui->spinSensivity->setValue(0.00001);
 
     connect(ui->buttonLoad, SIGNAL(clicked(bool)), this, SLOT(onClicked_Load()));
     connect(ui->buttonSave, SIGNAL(clicked(bool)), this, SLOT(onClicked_Save()));
@@ -24,6 +27,9 @@ W3MayaAnimUtil::W3MayaAnimUtil(QWidget *parent)
     connect(ui->buttonLoadEventsSource, SIGNAL(clicked(bool)), this, SLOT(onClicked_loadAnimEventsSource()));
 }
 
+double W3MayaAnimUtil::mReductionSensitivity() {
+    return ui->spinSensivity->value();
+}
 void W3MayaAnimUtil::addLog(QString text, LogType type) {
     QColor color;
     if (type == logInfo) {
@@ -547,6 +553,7 @@ bool W3MayaAnimUtil::extractMotionFromBone(QJsonValueRef ref) {
     int animFrames = bufferObj["numFrames"].toInt();
     int mBoneIdx = -1;
     QStringList brokenBones;
+    int bonesOptimized = 0;
 
     upn(i, 0, bonesArray.size() - 1) {
         QString boneName = bonesArray[i].toObject().value("BoneName").toString();
@@ -559,7 +566,69 @@ bool W3MayaAnimUtil::extractMotionFromBone(QJsonValueRef ref) {
         int scaleNum = tempObj["scale_numFrames"].toInt();
 
         if ( ui->checkOptimizeEqual->isChecked() ) {
+            bool optimizeTranslation = posNum > 1;
+            bool optimizeRotation = rotNum > 1;
+            bool optimizeScale = scaleNum > 1;
+            QJsonArray posArray = tempObj["positionFrames"].toArray();
+            QJsonArray rotArray = tempObj["rotationFrames"].toArray();
+            QJsonArray scaleArray = tempObj["scaleFrames"].toArray();
 
+            upn(frame, 1, posNum - 1) {
+                double diffX = posArray[frame].toObject().value("x").toDouble() - posArray[frame - 1].toObject().value("x").toDouble();
+                double diffY = posArray[frame].toObject().value("y").toDouble() - posArray[frame - 1].toObject().value("y").toDouble();
+                double diffZ = posArray[frame].toObject().value("z").toDouble() - posArray[frame - 1].toObject().value("z").toDouble();
+                double diffTotal = qAbs(diffX) + qAbs(diffY) + qAbs(diffZ);
+                if (diffTotal > mReductionSensitivity()) {
+                    optimizeTranslation = false;
+                    break;
+                }
+            }
+            upn(frame, 1, rotNum - 1) {
+                double diffX = rotArray[frame].toObject().value("X").toDouble() - rotArray[frame - 1].toObject().value("X").toDouble();
+                double diffY = rotArray[frame].toObject().value("Y").toDouble() - rotArray[frame - 1].toObject().value("Y").toDouble();
+                double diffZ = rotArray[frame].toObject().value("Z").toDouble() - rotArray[frame - 1].toObject().value("Z").toDouble();
+                double diffW = rotArray[frame].toObject().value("W").toDouble() - rotArray[frame - 1].toObject().value("W").toDouble();
+                double diffTotal = qAbs(diffX) + qAbs(diffY) + qAbs(diffZ) + qAbs(diffW);
+                if (diffTotal > mReductionSensitivity()) {
+                    optimizeRotation = false;
+                    break;
+                }
+            }
+            upn(frame, 1, scaleNum - 1) {
+                double diffX = scaleArray[frame].toObject().value("x").toDouble() - scaleArray[frame - 1].toObject().value("x").toDouble();
+                double diffY = scaleArray[frame].toObject().value("y").toDouble() - scaleArray[frame - 1].toObject().value("y").toDouble();
+                double diffZ = scaleArray[frame].toObject().value("z").toDouble() - scaleArray[frame - 1].toObject().value("z").toDouble();
+                double diffTotal = qAbs(diffX) + qAbs(diffY) + qAbs(diffZ);
+                if (diffTotal > mReductionSensitivity()) {
+                    optimizeScale = false;
+                    break;
+                }
+            }
+            if (optimizeTranslation) {
+                QJsonArray nposArray;
+                nposArray.append( posArray.first() );
+                tempObj["positionFrames"] = nposArray;
+                tempObj["position_numFrames"] = 1;
+                posNum = 1;
+            }
+            if (optimizeRotation) {
+                QJsonArray nrotArray;
+                nrotArray.append( rotArray.first() );
+                tempObj["rotationFrames"] = nrotArray;
+                tempObj["rotation_numFrames"] = 1;
+                rotNum = 1;
+            }
+            if (optimizeScale) {
+                QJsonArray nscaleArray;
+                nscaleArray.append( scaleArray.first() );
+                tempObj["scaleFrames"] = nscaleArray;
+                tempObj["scale_numFrames"] = 1;
+                scaleNum = 1;
+            }
+            if (optimizeTranslation || optimizeRotation || optimizeScale) {
+                bonesArray[i] = tempObj;
+                bonesOptimized += 1;
+            }
         }
 
         QString error;
@@ -575,13 +644,21 @@ bool W3MayaAnimUtil::extractMotionFromBone(QJsonValueRef ref) {
         }
     }
 
+    if (bonesOptimized) {
+        addLog( QString("    [OPTIMIZE] Set single frame to %1 bones.").arg(bonesOptimized) );
+    }
+
     if ( !brokenBones.isEmpty() ) {
         QMessageBox::information(this, "Warning!", QString("Detected bones with incorrect numFrames in anim [%1] (numFrames = %2)\nIt may break the game!\nBones: %3").arg(animName).arg(animFrames).arg(brokenBones.join("\n")));
     }
     if (mBoneIdx == -1) {
+        if (bonesOptimized) {
+            bufferObj["bones"] = bonesArray;
+            animObj["animBuffer"] = bufferObj;
+        }
         if (ui->checkIgnoreEmptyRootMotion->isChecked()) {
             addLog(QString("    Anim doesn't contain [%2] bone, ignoring.").arg(mBoneName), logError );
-            return false;
+            return bonesOptimized > 0;
         } else {
             addLog(QString("    Anim doesn't contain [%2] bone, removing motionExtraction!").arg(mBoneName), logError );
             ref = animObj;
@@ -657,10 +734,11 @@ bool W3MayaAnimUtil::extractMotionFromBone(QJsonValueRef ref) {
             double tmp_deltaY = motionY[frame + 1] - motionY[frame];
             double tmp_deltaZ = motionZ[frame + 1] - motionZ[frame];
             double tmp_deltaRotZ = motionRotZ[frame] - motionRotZ[frame];
-            double tmp_totalDelta = qAbs(tmp_deltaX - deltaX) + qAbs(tmp_deltaY - deltaY) + qAbs(tmp_deltaZ - deltaZ) + qAbs(tmp_deltaRotZ - deltaRotZ);
+            double tmp_totalDelta = qAbs(tmp_deltaX - deltaX) + qAbs(tmp_deltaY - deltaY)
+                            + qAbs(tmp_deltaZ - deltaZ) + qAbs(tmp_deltaRotZ - deltaRotZ);
             //qDebug() << QString("[%1] total delta: %2,   X: %3, Y: %4, Z: %5, Rot: %6").arg(frame).arg(tmp_totalDelta).arg(tmp_deltaX).arg(tmp_deltaY).arg(tmp_deltaZ).arg(tmp_deltaRotZ);
 
-            if (tmp_totalDelta < mReductionSensitivity && frame - lastDelta < 255) {
+            if (tmp_totalDelta < mReductionSensitivity() && frame - lastDelta < 255) {
                 // current->next transition: still linear!
                 // or value is 255 (maximum for uint8)
             } else {
@@ -706,13 +784,13 @@ bool W3MayaAnimUtil::extractMotionFromBone(QJsonValueRef ref) {
         bool isSingleZ = true;
         bool isSingleRotZ = true;
         upn(frame, 0, posFrames - 1 - 1) {
-            if (qAbs(motionX[frame + 1] - motionX[frame]) > mReductionSensitivity)
+            if (qAbs(motionX[frame + 1] - motionX[frame]) > mReductionSensitivity())
                 isSingleX = false;
-            if (qAbs(motionY[frame + 1] - motionY[frame]) > mReductionSensitivity)
+            if (qAbs(motionY[frame + 1] - motionY[frame]) > mReductionSensitivity())
                 isSingleY = false;
-            if (qAbs(motionZ[frame + 1] - motionZ[frame]) > mReductionSensitivity)
+            if (qAbs(motionZ[frame + 1] - motionZ[frame]) > mReductionSensitivity())
                 isSingleZ = false;
-            if (qAbs(motionRotZ[frame + 1] - motionRotZ[frame]) > mReductionSensitivity)
+            if (qAbs(motionRotZ[frame + 1] - motionRotZ[frame]) > mReductionSensitivity())
                 isSingleRotZ = false;
         }
 
@@ -832,6 +910,7 @@ void W3MayaAnimUtil::onClicked_extractMotionFromBone() {
 }
 void W3MayaAnimUtil::onClicked_extractMotionFromBoneBatch() {
     batchMode = true;
+    ui->progressBar->setValue(0);
     animNames.clear();
     animDurations.clear();
 
@@ -842,7 +921,10 @@ void W3MayaAnimUtil::onClicked_extractMotionFromBoneBatch() {
         return;
     }
     QStringList jsonList = QDir(dirName).entryList({"*.json"}, QDir::Files, QDir::Name);
+
+    int current = 0;
     for (const QString jsonPath : jsonList) {
+        ++current;
         addLog("[BATCH] Processing file: " + jsonPath);
         if (loadJsonFile(dirName + "/" + jsonPath)) {
             onClicked_extractMotionFromBone();
@@ -852,6 +934,7 @@ void W3MayaAnimUtil::onClicked_extractMotionFromBoneBatch() {
                 onClicked_Save();
             }
         }
+        ui->progressBar->setValue( current * 100.0 / jsonList.count() );
         // YES it's dirty crutch
         QApplication::processEvents();
     }
@@ -863,12 +946,11 @@ void W3MayaAnimUtil::onClicked_extractMotionFromBoneBatch() {
         res += QString("		addAnim('%1', %2);\n").arg(animNames[i]).arg(animDurations[i]);
     }
     res += "    }\n";
-    upn(i, 0, badNames.size() - 1) {
-        res += QString("%1\n").arg(badNames[i]);
-    }
     QTextEdit* textEdit = new QTextEdit();
     textEdit->setPlainText(res);
     textEdit->showMaximized();
+
+    ui->progressBar->setValue(100);
     batchMode = false;
 }
 
