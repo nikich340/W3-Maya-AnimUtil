@@ -39,12 +39,17 @@ private:
     const int mBoneIndex = 94;
     double mReductionSensitivity(); // 10^-4
     const double mW3AngleKoefficient = - 8.07; // picked up experimentally, real value is in [8.05 - 8.10]
-    bool animSet;
+    bool animSet = false;
+    int framesCount = -1;
     bool hasChanges = false;
     bool batchMode = false;
     QFile jsonFile;
     QJsonDocument jsonDoc;
     QJsonObject jsonRoot;
+    void objToXYZ(QJsonObject obj, double& X, double& Y, double& Z) const;
+    void objToXYZW(QJsonObject obj, double& X, double& Y, double& Z, double& W) const;
+    void interpolatePos(double t, double& X1, double& Y1, double& Z1, double X2, double Y2, double Z2);
+    void interpolateRot(double t, double& X1, double& Y1, double& Z1, double& W1, double X2, double Y2, double Z2, double W2);
     QJsonObject objXYZ(double X, double Y, double Z) const;
     QJsonObject objXYZW(double X, double Y, double Z, double W = 1) const;
     QJsonObject objQuanternion(double Pitch, double Yaw, double Roll) const;
@@ -58,7 +63,15 @@ private:
 
     /* extra nr */
     QVector<QString> animNames;
+    QStringList additiveNames;
     QVector<double> animDurations;
+
+    /* EXTERNAL MOTION */
+    bool loadJsonMotion(QString filePath);
+    QFile jsonFileMotion;
+    QJsonDocument jsonDocMotion;
+    QJsonObject jsonRootMotion;
+    QMap<QString, QJsonObject> motionByName;
 
     /* ANIM EVENTS */
     bool loadJsonAnimEvents(QString filePath);
@@ -67,6 +80,13 @@ private:
     QJsonObject jsonRootEvents;
     QMap<QString, QJsonArray> animEventsByName;
 
+    /* BLEND */
+    bool loadBlendJson(QString filePath);
+    QFile jsonFileBlend;
+    QJsonDocument jsonDocBlend;
+    QJsonObject jsonRootBlend;
+    int blendSourceFramesCount = -1;
+
 private slots:
     void onClicked_Load();
     void onClicked_Save();
@@ -74,5 +94,11 @@ private slots:
     void onClicked_extractMotionFromBone();
     void onClicked_extractMotionFromBoneBatch();
     void onClicked_loadAnimEventsSource();
+    void onClicked_loadMotionSource();
+
+    void onClicked_LoadBlendJson();
+    void onClicked_Blend();
+    void onChanged_BlendParams();
+    void onChanged_BlendFrames();
 };
 #endif // W3MAYAANIMUTIL_H
