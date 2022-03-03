@@ -30,9 +30,17 @@ private:
     QElapsedTimer eTimer;
     enum LogType { logInfo, logWarning, logError };
     Ui::W3MayaAnimUtil *ui;
+
+    /* LOG */
     void addLog(QString text, LogType type = logInfo);
+    QFile logFile;
+    QTextStream logStream;
 
     const uint8_t BYTE_X = 1, BYTE_Y = 2, BYTE_Z = 4, BYTE_RotZ = 8;
+    QSet<int> logStarts;
+    int currentStart = 0;
+    int totalLen = 0;
+
     /* JSON */
     const QString mBoneName = "RootMotion";
     const double mFps = 30.0;
@@ -43,6 +51,7 @@ private:
     int framesCount = -1;
     bool hasChanges = false;
     bool batchMode = false;
+    bool onlyPrint = false;
     QFile jsonFile;
     QJsonDocument jsonDoc;
     QJsonObject jsonRoot;
@@ -58,12 +67,14 @@ private:
     void blendMotion(QVector<double>& motion, int animFrames, const QVector<int>& framePoints);
     void reduceMotionRotZ(QVector<double>& motion, int animFrames, int& motionFrames);
     void reduceMotionPos(QVector<double>& motionX, QVector<double>& motionY, QVector<double>& motionZ, int animFrames, int& motionFrames);
+    bool isAdditiveAnim(QJsonObject animObj);
     bool applyMotionToBone(QJsonValueRef ref);
     bool extractMotionFromBone(QJsonValueRef ref);
 
     /* extra nr */
     QVector<QString> animNames;
     QStringList additiveNames;
+    QStringList additiveTypes;
     QVector<double> animDurations;
 
     /* EXTERNAL MOTION */
@@ -87,6 +98,10 @@ private:
     QJsonObject jsonRootBlend;
     int blendSourceFramesCount = -1;
 
+    /* CUTSCENE */
+    QJsonArray extractAnimParts(QJsonValueRef ref);
+    void patchAnimParts(QString jsonPath, QJsonValueRef animArrayRef);
+
 private slots:
     void onClicked_Load();
     void onClicked_Save();
@@ -95,6 +110,11 @@ private slots:
     void onClicked_extractMotionFromBoneBatch();
     void onClicked_loadAnimEventsSource();
     void onClicked_loadMotionSource();
+    void onClicked_loadTxtDump();
+    void onClicked_PrintInfo();
+
+    void onClicked_extractPartsCutscene();
+    void onClicked_patchPartsCutscene();
 
     void onClicked_LoadBlendJson();
     void onClicked_Blend();

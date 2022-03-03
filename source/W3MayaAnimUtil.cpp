@@ -14,10 +14,15 @@ W3MayaAnimUtil::W3MayaAnimUtil(QWidget *parent)
 {
     ui->setupUi(this);
     //ui->textLog->setFontPointSize(20);
-    ui->textLog->setHtml("Welcome :)<br>Click \"Load anim .json\" to start");
+    ui->textLog->setHtml("Welcome to <span style=\"font-weight:700;\">W3MayaAnimUtil</span>!<br>Made by <span style=\"color:#6f00a6;font-weight:700;\">nikich340</span> for better the Witcher 3  modding experiene.<br><br>Click \"Load anim .json\" to start");
     ui->spinSensivity->setMinimum(0.0000000001);
     ui->spinSensivity->setSingleStep(0.00001);
     ui->spinSensivity->setValue(0.00001);
+
+    logFile.setFileName("W3AnimUtil_log.txt");
+    if (logFile.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text)) {
+        logStream.setDevice(&logFile);
+    }
 
     connect(ui->buttonLoad, SIGNAL(clicked(bool)), this, SLOT(onClicked_Load()));
     connect(ui->buttonSave, SIGNAL(clicked(bool)), this, SLOT(onClicked_Save()));
@@ -26,6 +31,12 @@ W3MayaAnimUtil::W3MayaAnimUtil(QWidget *parent)
     connect(ui->buttonExtractMotionFromBoneBatch, SIGNAL(clicked(bool)), this, SLOT(onClicked_extractMotionFromBoneBatch()));
     connect(ui->buttonLoadEventsSource, SIGNAL(clicked(bool)), this, SLOT(onClicked_loadAnimEventsSource()));
     connect(ui->buttonLoadMotionSource, SIGNAL(clicked(bool)), this, SLOT(onClicked_loadMotionSource()));
+    connect(ui->buttonLoadTxtDump, SIGNAL(clicked(bool)), this, SLOT(onClicked_loadTxtDump()));
+
+    connect(ui->buttonPrintInfo, SIGNAL(clicked(bool)), this, SLOT(onClicked_PrintInfo()));
+
+    connect(ui->buttonExtractCutscene, SIGNAL(clicked(bool)), this, SLOT(onClicked_extractPartsCutscene()));
+    connect(ui->buttonPatchCutscene, SIGNAL(clicked(bool)), this, SLOT(onClicked_patchPartsCutscene()));
 
     connect(ui->buttonBlendLoad, SIGNAL(clicked(bool)), this, SLOT(onClicked_LoadBlendJson()));
     connect(ui->buttonBlendDo, SIGNAL(clicked(bool)), this, SLOT(onClicked_Blend()));
@@ -38,14 +49,30 @@ double W3MayaAnimUtil::mReductionSensitivity() {
 }
 void W3MayaAnimUtil::addLog(QString text, LogType type) {
     QColor color;
+    QString stype;
     if (type == logInfo) {
         color.setRgb(0, 96, 8);
+        stype = " [INFO] ";
     } else if (type == logWarning) {
         color.setRgb(188, 94, 0);
+        stype = " [WARNING] ";
     } else {
         color.setRgb(188, 0, 0);
+        stype = " [ERROR] ";
     }
-    ui->textLog->setText( ui->textLog->toHtml() + QString("<font color=\"%1\">%2</font>").arg(color.name()).arg(text) );
+
+    if (logStream.device() != nullptr) {
+        logStream << QTime::currentTime().toString() << stype << text << "\n";
+        logStream.flush();
+    }
+
+    QString oldText = ui->textLog->toHtml();
+    if (oldText.length() > 10000) {
+        oldText = "";
+    }
+    text = QString("<font color=\"%1\">%2</font>").arg(color.name()).arg(text);
+
+    ui->textLog->setHtml( oldText + text );
     ui->textLog->verticalScrollBar()->setValue( ui->textLog->verticalScrollBar()->maximum() );
 }
 
@@ -67,10 +94,14 @@ bool W3MayaAnimUtil::loadJsonFile(QString filePath) {
         return false;
     }
 
-    if ( QFile::exists(filePath + ".bak") ) {
-        QFile::remove(filePath + ".bak");
+    if ( !onlyPrint ) {
+        if ( !QFile::exists(filePath + ".bak") ) {
+            jsonFile.copy(filePath + ".bak");
+        } else {
+            //QFile::remove(filePath + ".bak");
+            //jsonFile.copy(filePath + ".bak");
+        }
     }
-    jsonFile.copy(filePath + ".bak");
     jsonFile.close();
 
     jsonRoot = jsonDoc.object();
@@ -106,6 +137,9 @@ bool W3MayaAnimUtil::loadW3Data() {
         onChanged_BlendParams();
         if (animCount > 0) {
             addLog( QString("[OK] Detected array of %1 anims (probably, exported from WolvenKit)").arg(animCount) );
+            if ( jsonRoot.contains("SCutsceneActorDefs") ) {
+                addLog( QString("[OK] Detected cutscene definition.").arg(animCount) );
+            }
             return true;
 
         } else {
@@ -235,6 +269,52 @@ void W3MayaAnimUtil::blendMotion(QVector<double>& motion, int animFrames, const 
     }
     motion = res;
 }
+
+bool W3MayaAnimUtil::isAdditiveAnim(QJsonObject animObj) {
+    QString animName = animObj["name"].toString();
+
+    bool isAdditive = additiveNames.contains(animName);
+    //qDebug() << "Check anim: " << animName << ", contains: " << isAdditive;
+
+    if ( !isAdditive ) {
+        QJsonObject bufferObj = animObj["animBuffer"].toObject();
+        QJsonArray bonesArray = bufferObj["bones"].toArray();
+        int nullMotionBones = 0;
+        int testAllBones = 0;
+        int testAbsBones = 0;
+        double avPos = 0.0;
+
+        upn(i, 0, bonesArray.size() - 1) {
+            QJsonObject tempObj = bonesArray[i].toObject();
+            QString boneName = tempObj.value("BoneName").toString();
+            int posNum = tempObj["position_numFrames"].toInt();
+            int rotNum = tempObj["rotation_numFrames"].toInt();
+            int scaleNum = tempObj["scale_numFrames"].toInt();
+
+            QJsonObject tpos = tempObj["positionFrames"].toArray().at(0).toObject();
+            QJsonObject trot = tempObj["rotationFrames"].toArray().at(0).toObject();
+            double sumPos = qAbs(tpos.value("x").toDouble()) + qAbs(tpos.value("y").toDouble()) + qAbs(tpos.value("z").toDouble());
+            double sumRot = qAbs(trot.value("X").toDouble()) + qAbs(trot.value("Y").toDouble()) + qAbs(trot.value("Z").toDouble());
+            double diffW = qAbs( qAbs(trot.value("W").toDouble()) - 1.0 );
+
+            ++testAllBones;
+            if (sumPos < 0.000001) {
+                ++testAbsBones;
+            }
+            avPos += sumPos;
+        }
+        //qDebug() << "testAbsBones: " << testAbsBones << ", testAllBones: " << testAllBones << ", avPos: " << avPos / bonesArray.size();
+
+        if (testAbsBones + 3 >= testAllBones) { // equal in fact
+            isAdditive = true;
+        }
+    }
+    if (isAdditive) {
+        additiveNames.append(animName);
+    }
+    return isAdditive;
+}
+
 bool W3MayaAnimUtil::applyMotionToBone(QJsonValueRef ref) {
     QJsonObject animObj = ref.toObject();
     if (animObj.isEmpty()) {
@@ -254,6 +334,11 @@ bool W3MayaAnimUtil::applyMotionToBone(QJsonValueRef ref) {
         ref = animObj;
         return false;
     }
+    if (!ui->checkConvertME->isChecked()) {
+        addLog("    Not asked to convert motionExtraction, skipping.", logInfo);
+        ref = animObj;
+        return false;
+    }
 
     double animDuration = animObj["duration"].toDouble();
     QJsonObject bufferObj = animObj["animBuffer"].toObject();
@@ -263,7 +348,7 @@ bool W3MayaAnimUtil::applyMotionToBone(QJsonValueRef ref) {
         return false;
     }
 
-    /* TEST! Trajectory ! */
+    /* TEST! Trajectory !
     if (ui->checkAddInvertedTrajectory->isChecked()) {
         int trajectoryIdx = -1, pelvisIdx = -1;
         upn(i, 0, bonesArray.size() - 1) {
@@ -319,6 +404,7 @@ bool W3MayaAnimUtil::applyMotionToBone(QJsonValueRef ref) {
             bonesArray[trajectoryIdx] = trajectoryObj;
         }
     }
+    */
 
     int animFrames = bufferObj["numFrames"].toInt();
     int mBoneIdx = -1;
@@ -538,20 +624,37 @@ void W3MayaAnimUtil::onClicked_applyMotionToBone() {
 
     if (animSet) {
         QJsonArray animArray = jsonRoot["animations"].toArray();
+        QJsonArray animArrayRes = QJsonArray();
         upn(i, 0, animArray.size() - 1) {
             QJsonObject animObj = animArray[i].toObject();
+            bool isAdditive = isAdditiveAnim(animObj["animation"].toObject());
             if ( applyMotionToBone(animObj["animation"]) ) {
                 hasChanges = true;
             }
 
-            animArray[i] = animObj;
+            addLog(QString("additive anim: %1").arg(isAdditive));
+            if ((ui->radioLeaveOnlyNormal->isChecked() && !isAdditive)
+              || (ui->radioLeaveOnlyAdditives->isChecked() && isAdditive)
+              || ui->radioLeaveAll->isChecked()) {
+                animArrayRes.append(animObj);
+            }
             ui->progressBar->setValue((i + 1.0) * 100.0 / animArray.size());
             // YES it's dirty crutch
             QApplication::processEvents();
         }
+        if (animArray.count() != animArrayRes.count()) {
+            hasChanges = true;
+        }
+        if (ui->checkSplitSet->isChecked()) {
+            QJsonArray animArrayRes2 = QJsonArray();
+            for (int i = ui->spinSplitStart->value(); i <= ui->spinSplitEnd->value(); ++i) {
+                animArrayRes2.append( animArrayRes.at(i) );
+            }
+            animArrayRes = animArrayRes2;
+        }
 
-        jsonRoot["animations"] = animArray;
-        addLog(QString("[Finished in %1s] Processed %2 animations.<br>").arg(eTimer.elapsed() / 1000.0).arg(animArray.size()));
+        jsonRoot["animations"] = animArrayRes;
+        addLog(QString("[Finished in %1s] Processed %2 animations. Anims in result: %3<br>").arg(eTimer.elapsed() / 1000.0).arg(animArray.size()).arg(animArrayRes.count()));
     } else {
         if ( applyMotionToBone(jsonRoot["animation"]) ) {
             hasChanges = true;
@@ -571,7 +674,7 @@ bool W3MayaAnimUtil::extractMotionFromBone(QJsonValueRef ref) {
     qDebug() << "*** ANIM: " << animName;
     addLog("[START] Processing anim: " + animName);
 
-    if ( animObj.contains("motionExtraction") ) {
+    if ( animObj.contains("motionExtraction") && !onlyPrint ) {
         addLog("    Overwriting existing motionExtraction.", logWarning);
         animObj.remove("motionExtraction");
     }
@@ -592,6 +695,7 @@ bool W3MayaAnimUtil::extractMotionFromBone(QJsonValueRef ref) {
     int mBoneIdx = -1;
     QStringList brokenBones;
     int bonesOptimized = 0;
+    int bonesBaked = 0;
 
     upn(i, 0, bonesArray.size() - 1) {
         QJsonObject tempObj = bonesArray[i].toObject();
@@ -671,82 +775,96 @@ bool W3MayaAnimUtil::extractMotionFromBone(QJsonValueRef ref) {
         }
 
         QString error;
-        if (posNum != animFrames && posNum != 1)
+        if (posNum != animFrames && posNum != 1) {
+            if (ui->checkAutoBakeIncomplete->isChecked()) {
+                QJsonArray posArray = tempObj["positionFrames"].toArray();
+                while (posArray.count() != animFrames) {
+                    posArray.append( posArray.last() );
+                }
+                tempObj["positionFrames"] = posArray;
+                tempObj["position_numFrames"] = animFrames;
+            }
             error += QString(" [translation = %1];").arg(posNum);
-        if (rotNum != animFrames && rotNum != 1)
+        }
+
+        if (rotNum != animFrames && rotNum != 1) {
+            if (ui->checkAutoBakeIncomplete->isChecked()) {
+                QJsonArray rotArray = tempObj["rotationFrames"].toArray();
+                while (rotArray.count() != animFrames) {
+                    rotArray.append( rotArray.last() );
+                }
+                tempObj["rotationFrames"] = rotArray;
+                tempObj["rotation_numFrames"] = animFrames;
+            }
             error += QString(" [rotation = %1];").arg(rotNum);
-        if (scaleNum != animFrames && scaleNum != 1)
+        }
+
+        if (scaleNum != animFrames && scaleNum != 1) {
+            if (ui->checkAutoBakeIncomplete->isChecked()) {
+                QJsonArray scaleArray = tempObj["scaleFrames"].toArray();
+                while (scaleArray.count() != animFrames) {
+                    scaleArray.append( scaleArray.last() );
+                }
+                tempObj["scaleFrames"] = scaleArray;
+                tempObj["scale_numFrames"] = animFrames;
+            }
             error += QString(" [scale = %1];").arg(scaleNum);
+        }
 
         if (!error.isEmpty()) {
-            brokenBones.append( boneName + ":" + error );
+            if (ui->checkAutoBakeIncomplete->isChecked()) {
+                bonesArray[i] = tempObj;
+                ++bonesBaked;
+            }
+            if (boneName.endsWith("_roll") || boneName.startsWith("IK_"))
+                brokenBones.append( boneName + ":" + error );
+            else
+                brokenBones.append( "!!! " + boneName + ":" + error );
         }
     }
 
-    bool isAdditive = animName.contains("additive");
+    bool isAdditive = isAdditiveAnim(animObj);
+    if ( (additiveNames.contains(animName) && isAdditive) || (!additiveNames.contains(animName) && !isAdditive) ) {
+        qDebug() << "ADD MATCH :) == " << isAdditive;
+    } else {
+        qDebug() << "ADD WRONG :(" << isAdditive;
+    }
+    if ( isAdditive && ui->checkFixAdditives->isChecked() && !onlyPrint ) {
+        bonesOptimized += 1;
+        QString additiveType = additiveTypes.at( additiveNames.indexOf(animName) );
+        addLog("    [ADDITIVE] Detected! Fixing bones.");
 
-    if ( ui->checkDetectAdditives->isChecked() ) {
-        if (!isAdditive) {
-            int nullMotionBones = 0;
-            QStringList nullBones;
-            // count bones which seems to be "null"-animated
-            // having some of such bones is typical for additive anim
-
-            upn(i, 0, bonesArray.size() - 1) {
-                QJsonObject tempObj = bonesArray[i].toObject();
-                QString boneName = tempObj.value("BoneName").toString();
-                int posNum = tempObj["position_numFrames"].toInt();
-                int rotNum = tempObj["rotation_numFrames"].toInt();
-                int scaleNum = tempObj["scale_numFrames"].toInt();
-                if (posNum == 1 && rotNum == 1) {
-                    QJsonObject tpos = tempObj["positionFrames"].toArray().at(0).toObject();
-                    QJsonObject trot = tempObj["rotationFrames"].toArray().at(0).toObject();
-                    double sumPos = qAbs(tpos.value("x").toDouble()) + qAbs(tpos.value("y").toDouble()) + qAbs(tpos.value("z").toDouble());
-                    double sumRot = qAbs(trot.value("X").toDouble()) + qAbs(trot.value("Y").toDouble()) + qAbs(trot.value("Z").toDouble());
-                    double diffW = qAbs( qAbs(trot.value("W").toDouble()) - 1.0 );
-                    //qDebug() << QString("Bone %1, sumPos = %2, sumRot = %3, diffW = %4").arg(boneName).arg(sumPos).arg(sumRot).arg(diffW);
-                    if (sumPos < mReductionSensitivity() && sumRot < 0.006 && diffW < mReductionSensitivity()) {
-                        ++nullMotionBones;
-                        nullBones.append(boneName);
-                    }
+        upn(i, 0, bonesArray.size() - 1) {
+            QJsonObject tempObj = bonesArray[i].toObject();
+            QString boneName = tempObj.value("BoneName").toString();
+            int posNum = tempObj["position_numFrames"].toInt();
+            int rotNum = tempObj["rotation_numFrames"].toInt();
+            int scaleNum = tempObj["scale_numFrames"].toInt();
+            if (posNum == 1) {
+                QJsonArray nArray;
+                nArray.append( objXYZ(0, 0, 0) );
+                tempObj["positionFrames"] = nArray;
+            }
+            if (rotNum == 1) {
+                QJsonArray nArray;
+                if (additiveType == "AT_Ref") {
+                    nArray.append( objXYZW(0.0, 0.0, 0.0, -1.0) );
+                } else {
+                    nArray.append( objXYZW(-0.00048828125, -0.00048828125, -0.00048828125, 0.999577046) );
                 }
+                tempObj["rotationFrames"] = nArray;
             }
-
-            if (nullMotionBones > 6 && (nullBones.contains("r_weapon") || nullBones.contains("l_weapon"))) {
-                //qDebug() << "Additive anim detected! Bones: " << nullBones.join(", ");
-                isAdditive = true;
+            if (scaleNum == 1) {
+                QJsonArray nArray;
+                nArray.append( objXYZ(1.0, 1.0, 1.0) );
+                tempObj["scaleFrames"] = nArray;
             }
+            bonesArray[i] = tempObj;
         }
+    }
 
-        if (isAdditive) {
-            bonesOptimized += 1;
-            additiveNames.append(animName);
-            addLog("    [ADDITIVE] Detected! Fixing bones.");
-
-            upn(i, 0, bonesArray.size() - 1) {
-                QJsonObject tempObj = bonesArray[i].toObject();
-                QString boneName = tempObj.value("BoneName").toString();
-                int posNum = tempObj["position_numFrames"].toInt();
-                int rotNum = tempObj["rotation_numFrames"].toInt();
-                int scaleNum = tempObj["scale_numFrames"].toInt();
-                if (posNum == 1) {
-                    QJsonArray nArray;
-                    nArray.append( objXYZ(0, 0, 0) );
-                    tempObj["positionFrames"] = nArray;
-                }
-                if (rotNum == 1) {
-                    QJsonArray nArray;
-                    nArray.append( objXYZW(-0.00048828125, -0.00048828125, -0.00048828125, 1.0) );
-                    tempObj["rotationFrames"] = nArray;
-                }
-                if (scaleNum == 1) {
-                    QJsonArray nArray;
-                    nArray.append( objXYZ(1.0, 1.0, 1.0) );
-                    tempObj["scaleFrames"] = nArray;
-                }
-                bonesArray[i] = tempObj;
-            }
-        }
+    if (onlyPrint) {
+        return false;
     }
 
     if (bonesOptimized) {
@@ -754,10 +872,13 @@ bool W3MayaAnimUtil::extractMotionFromBone(QJsonValueRef ref) {
     }
 
     if ( !brokenBones.isEmpty() ) {
-        QMessageBox::information(this, "Warning!", QString("Detected bones with incorrect numFrames in anim [%1] (numFrames = %2)\nIt may break the game!\nBones: %3").arg(animName).arg(animFrames).arg(brokenBones.join("\n")));
+        if (ui->checkAutoBakeIncomplete->isChecked())
+            QMessageBox::information(this, "Warning!", QString("Detected bones with incorrect numFrames in anim [%1] (numFrames = %2)\nBones were auto-baked to numFrames (may make anim wrong): %3").arg(animName).arg(animFrames).arg(brokenBones.join("\n")));
+        else
+            QMessageBox::information(this, "Warning!", QString("Detected bones with incorrect numFrames in anim [%1] (numFrames = %2)\nIt may break the game!\nBones: %3").arg(animName).arg(animFrames).arg(brokenBones.join("\n")));
     }
     if (mBoneIdx == -1) {
-        if (bonesOptimized) {
+        if (bonesOptimized || bonesBaked) {
             bufferObj["bones"] = bonesArray;
             animObj["animBuffer"] = bufferObj;
         }
@@ -1021,7 +1142,7 @@ void W3MayaAnimUtil::onClicked_extractMotionFromBone() {
 void W3MayaAnimUtil::onClicked_extractMotionFromBoneBatch() {
     batchMode = true;
     ui->progressBar->setValue(0);
-    additiveNames.clear();
+    //additiveNames.clear();
     animNames.clear();
     animDurations.clear();
 
@@ -1060,7 +1181,11 @@ void W3MayaAnimUtil::onClicked_extractMotionFromBoneBatch() {
 
     res += "    function addAnims() {\n";
     upn(i, 0, animNames.size() - 1) {
-        res += QString("		addAnim('%1', %2);\n").arg(animNames[i]).arg(animDurations[i]);
+        QString add = "false);";
+        if (additiveNames.contains(animNames[i])) {
+            add = "true); //" + additiveTypes.at( additiveNames.indexOf(animNames[i]) );
+        }
+        res += QString("		addAnim('%1', %2, %3\n").arg(animNames[i]).arg(animDurations[i]).arg(add);
     }
     res += "    }\n";
     QTextEdit* textEdit = new QTextEdit();
@@ -1090,10 +1215,10 @@ bool W3MayaAnimUtil::loadJsonAnimEvents(QString filePath) {
         return false;
     }
 
-    /*if ( QFile::exists(filePath + ".bak") ) {
+    if ( QFile::exists(filePath + ".bak") ) {
         QFile::remove(filePath + ".bak");
     }
-    jsonFileEvents.copy(filePath + ".bak");*/
+    jsonFileEvents.copy(filePath + ".bak");
     jsonFileEvents.close();
     jsonRootEvents = jsonDocEvents.object();
 
@@ -1165,6 +1290,12 @@ void W3MayaAnimUtil::onClicked_loadAnimEventsSource() {
         ui->checkLoadAnimEvents->setText( QString("entries: Add anim events from source file (currently loaded: %1)").arg(QFileInfo(filePath).fileName()) );
     } else {
         ui->checkLoadAnimEvents->setText( QString("entries: Add anim events from source file (currently loaded: %1)").arg("NONE") );
+    }
+
+    if ( loadJsonMotion(filePath) ) {
+        ui->checkUseExternalMotion->setText( QString("motion: Use external file if it contains anim with the same name (currently loaded: %1)").arg(QFileInfo(filePath).fileName()) );
+    } else {
+        ui->checkUseExternalMotion->setText( QString("motion: Use external file if it contains anim with the same name (currently loaded: %1)").arg("NONE") );
     }
 }
 
@@ -1264,6 +1395,86 @@ void W3MayaAnimUtil::onClicked_loadMotionSource() {
     }
 }
 
+void W3MayaAnimUtil::onClicked_loadTxtDump() {
+    QString filePath = QFileDialog::getOpenFileName(this, "Open text dump from wkit", "", "TEXT Files (*.txt)");
+    if (filePath.isEmpty()) {
+        addLog("Loading file canceled by user", logWarning);
+        return;
+    }
+    QFile inputFile(filePath);
+    if (inputFile.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+       QTextStream in(&inputFile);
+       while (!in.atEnd())
+       {
+          QString line = in.readLine();
+          QStringList parts = line.split("|");
+          if (parts[1] != "SAT_Normal") {
+              qDebug() << "additive: " << parts[0];
+              additiveNames.append(parts[0]);
+              additiveTypes.append(parts[2]);
+          }
+       }
+       inputFile.close();
+    }
+}
+
+void W3MayaAnimUtil::onClicked_PrintInfo() {
+    batchMode = true;
+    onlyPrint = true;
+    ui->progressBar->setValue(0);
+    //additiveNames.clear();
+    animNames.clear();
+    animDurations.clear();
+
+    QString dirName = QFileDialog::getExistingDirectory(this, tr("Choose directory"),
+                                                        QDir::currentPath());
+    if (dirName.isEmpty()) {
+        addLog("User canceled operation.", logWarning);
+        return;
+    }
+    QStringList jsonList = QDir(dirName).entryList({"*.json"}, QDir::Files, QDir::Name);
+
+    int current = 0;
+    for (const QString jsonPath : jsonList) {
+        ++current;
+        addLog("[BATCH] Processing file: " + jsonPath);
+        if (loadJsonFile(dirName + "/" + jsonPath)) {
+            onClicked_extractMotionFromBone();
+            // YES it's dirty crutch
+            QApplication::processEvents();
+        }
+        ui->progressBar->setValue( current * 100.0 / jsonList.count() );
+        // YES it's dirty crutch
+        QApplication::processEvents();
+    }
+    addLog(QString("[BATCH] Completed processing %1 files.").arg(jsonList.size()));
+
+    /* extra nr */
+    QString res = QString("ADDITIVE anims: %1\n").arg(additiveNames.count());
+    for (QString i : additiveNames) {
+        res += "        " + i + "\n";
+    }
+    res += "\n||||||||||||||||||||||||||\n\n";
+
+    res += "    function addAnims() {\n";
+    upn(i, 0, animNames.size() - 1) {
+        QString add = "false);";
+        if (additiveNames.contains(animNames[i])) {
+            add = "true); //" + additiveTypes.at( additiveNames.indexOf(animNames[i]) );
+        }
+        res += QString("		addAnim('%1', %2, %3\n").arg(animNames[i]).arg(animDurations[i]).arg(add);
+    }
+    res += "    }\n";
+    QTextEdit* textEdit = new QTextEdit();
+    textEdit->setFontPointSize(11);
+    textEdit->setPlainText(res);
+    textEdit->showMaximized();
+
+    ui->progressBar->setValue(100);
+    batchMode = false;
+    onlyPrint = false;
+}
 
 void W3MayaAnimUtil::onChanged_BlendParams() {
     if (framesCount != -1) {
@@ -1290,6 +1501,188 @@ void W3MayaAnimUtil::onChanged_BlendParams() {
 
     ui->buttonBlendDo->setEnabled(true);
     onChanged_BlendFrames();
+}
+
+QJsonArray W3MayaAnimUtil::extractAnimParts(QJsonValueRef ref) {
+    bool mergeParts = ui->checkExtractCutsceneMerge->isChecked();
+    QJsonArray resultArray = QJsonArray();
+
+    QJsonObject animObj = ref.toObject();
+    if (animObj.isEmpty()) {
+        addLog("Empty anim object, skipping.", logError);
+        return resultArray;
+    }
+    QString animName = animObj["name"].toString();
+    if (ui->lineCutsceneFilter1->text() != QString() && !animName.startsWith(ui->lineCutsceneFilter1->text())) {
+        return resultArray;
+    }
+
+    qDebug() << "*** CUTSCENE ANIM: " << animName;
+    addLog("[START] Processing anim parts: " + animName);
+
+    if ( animObj.contains("motionExtraction") && animObj["motionExtraction"].isNull() ) {
+        addLog("    Removing empty motionExtraction.", logWarning);
+        animObj.remove("motionExtraction");
+    }
+
+    double animDuration = animObj["duration"].toDouble();
+    QJsonObject bufferObj = animObj["animBuffer"].toObject();
+    int numFrames = bufferObj["numFrames"].toInt();
+    QJsonArray firstFrames = bufferObj["firstFrames"].toArray();
+    QJsonArray parts = bufferObj["parts"].toArray();
+
+    upn(i, 0, parts.count() - 1) {
+        QJsonObject resObj;
+        QJsonObject resAnimObj;
+        QJsonObject partsObj = parts[i].toObject();
+        if (mergeParts && i > 0) {
+            // TODO
+        } else {
+            resAnimObj = animObj;
+            if (!mergeParts) {
+
+                resAnimObj["duration"] = partsObj["duration"];
+                resAnimObj["name"] = QString("%1+%2").arg(animName).arg(i);
+                resAnimObj["animBuffer"] = partsObj;
+
+                resObj["animation"] = resAnimObj;
+                resultArray.append(resObj);
+            }
+        }
+    }
+    return resultArray;
+}
+void W3MayaAnimUtil::onClicked_extractPartsCutscene() {
+    eTimer.start();
+    ui->progressBar->setValue(0);
+
+    // new json
+    QFile jsonFileParts;
+    QJsonDocument jsonDocParts;
+    QJsonObject jsonRootParts;
+    jsonRootParts["animations"] = QJsonArray();
+
+    if (!animSet) {
+        return;
+    }
+
+    QJsonArray animArray = jsonRoot["animations"].toArray();
+    QJsonArray animArrayParts = jsonRootParts["animations"].toArray();
+
+    upn(i, 0, animArray.size() - 1) {
+        QJsonObject animObj = animArray[i].toObject();
+        QJsonArray animObjParts = extractAnimParts(animObj["animation"]);
+
+        upn(j, 0, animObjParts.size() - 1) { // contains 1 if merged, PARTS count if not merged
+            animArrayParts.append(animObjParts[j]);
+        }
+        ui->progressBar->setValue((i + 1.0) * 100.0 / animArray.size());
+        // YES it's dirty crutch
+        QApplication::processEvents();
+    }
+    addLog(QString("[Finished in %1s] Processed %2 animations.<br>").arg(eTimer.elapsed() / 1000.0).arg(animArray.size()));
+
+    // SAVE
+    jsonRootParts["animations"] = animArrayParts;
+
+    jsonFileParts.setFileName(jsonFile.fileName().replace(".w2cutscene.json", ".w2anims.json"));
+    if ( !jsonFileParts.open(QFile::WriteOnly | QFile::Truncate) ) {
+        addLog( QString("Can't save parts into file: %1").arg(jsonFileParts.fileName()), logError );
+        return;
+    }
+
+    jsonDocParts.setObject(jsonRootParts);
+    QByteArray bArray = jsonDocParts.toJson();
+    jsonFileParts.write(bArray);
+    jsonFileParts.close();
+    addLog( QString("[OK] Anim parts extracted: %1").arg(jsonFileParts.fileName()) );
+}
+
+void W3MayaAnimUtil::patchAnimParts(QString jsonPath, QJsonValueRef animArrayRef) {
+    addLog("[PATCH CS] Processing anim json: " + jsonPath);
+    QFile animFile(jsonPath);
+    if ( !animFile.open(QFile::ReadOnly) ) {
+        addLog( QString("Can't open file: %1").arg(animFile.fileName()), logError );
+        return;
+    }
+
+    QByteArray bArray = animFile.readAll();
+    QJsonParseError* jsonError = new QJsonParseError;
+    QJsonDocument animDoc = QJsonDocument::fromJson(bArray, jsonError);
+    if ( jsonDoc.isNull() ) {
+        addLog( QString("Can't load json document correctly, parse error = %1").arg(jsonError->errorString()), logError );
+        return;
+    } else if ( !animDoc.isObject() ) {
+        addLog( "Json root is not an object, can't load info.", logError );
+        return;
+    }
+
+    QJsonObject animObj = animDoc.object().value("animation").toObject();
+    if (animObj.isEmpty()) {
+        addLog( "Json object is empty!", logError );
+        return;
+    }
+    QString animName = animObj.value("name").toString();
+    addLog("[PATCH CS] Anim name: " + animName);
+    QStringList animNameParts = animName.split("+"); // [0] - name, [1] - idx
+    QJsonArray animBones = animObj.value("animBuffer").toObject().value("bones").toArray();
+    double dur = animObj.value("animBuffer").toObject().value("duration").toDouble();
+    int numFrames = animObj.value("animBuffer").toObject().value("numFrames").toInt();
+    if (animBones.isEmpty()) {
+        addLog( "Json bones object is empty / anim name is incorrect!", logError );
+        return;
+    }
+    addLog(QString("[CS PATCH] PART info: bones = %1, len = %2 s, frames = %3").arg(animBones.count()).arg(dur).arg(numFrames), logInfo);
+
+    QJsonArray animArray = animArrayRef.toArray();
+    upn(i, 0, animArray.count() - 1) {
+        QJsonObject animObj0 = animArray[i].toObject();
+        QJsonObject animObj1 = animObj0["animation"].toObject();
+        QString animName0 = animObj1["name"].toString();
+        if (animNameParts[0] == animName0) {
+            QJsonObject animBuffer0 = animObj1["animBuffer"].toObject();
+            QJsonArray animBufferParts0 = animBuffer0["parts"].toArray();
+            if (animNameParts[1].toInt() >= animBufferParts0.count()) {
+                addLog( QString("Too big part index: %1, parts in anim: %2").arg(animNameParts[1]).arg(animBufferParts0.count()), logError );
+                continue;
+            }
+            QJsonObject partObject0 = animBufferParts0[ animNameParts[1].toInt() ].toObject();
+
+            //addLog(QString("BBBones count: %1").arg(partObject0["bones"].toArray().count()), logInfo);
+            partObject0["bones"] = animBones;
+            //addLog(QString("PArts count: %1").arg(animBuffer0["parts"].toArray().count()), logInfo);
+            animBufferParts0[ animNameParts[1].toInt() ] = partObject0;
+            animBuffer0["parts"] = animBufferParts0;
+            //addLog(QString("PPPArts count: %1").arg(animBuffer0["parts"].toArray().count()), logInfo);
+            animObj1["animBuffer"] = animBuffer0;
+            animObj0["animation"] = animObj1;
+            animArray[i] = animObj0;
+        }
+    }
+    animArrayRef = animArray;
+}
+void W3MayaAnimUtil::onClicked_patchPartsCutscene() {
+    ui->progressBar->setValue(0);
+
+    QString dirName = QFileDialog::getExistingDirectory(this, tr("Choose directory with anim jsons"),
+                                                        QDir::currentPath());
+    if (dirName.isEmpty()) {
+        addLog("User canceled operation.", logWarning);
+        return;
+    }
+    QStringList jsonList = QDir(dirName).entryList({"*.json"}, QDir::Files, QDir::Name);
+
+    int current = 0;
+
+    QJsonValueRef animArrayRef = jsonRoot["animations"];
+    for (const QString jsonPath : jsonList) {
+        ++current;
+        patchAnimParts(dirName + "/" + jsonPath, animArrayRef);
+
+        ui->progressBar->setValue( current * 100.0 / jsonList.count() );
+        // YES it's dirty crutch
+        QApplication::processEvents();
+    }
 }
 
 void W3MayaAnimUtil::onChanged_BlendFrames() {
