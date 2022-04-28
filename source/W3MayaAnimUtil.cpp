@@ -7,7 +7,7 @@
 
 #define upn(val, start, end) for(int val = start; val <= end; ++val)
 #define JRef QJsonValueRef
-#define VERSION "v1.3 "
+#define VERSION "v1.4"
 
 W3MayaAnimUtil::W3MayaAnimUtil(QWidget *parent)
     : QMainWindow(parent)
@@ -15,7 +15,7 @@ W3MayaAnimUtil::W3MayaAnimUtil(QWidget *parent)
 {
     ui->setupUi(this);
     //ui->textLog->setFontPointSize(20);
-    ui->textLog->setHtml("Welcome to <span style=\"font-weight:700;\">W3MayaAnimUtil " + QString(VERSION "(" __DATE__ ")") + "</span>!<br>Made by <span style=\"color:#6f00a6;font-weight:700;\">nikich340</span> for better the Witcher 3  modding experiene.<br><br>Click \"Load anim .json\" to start");
+    ui->textLog->setHtml("Welcome to <span style=\"font-weight:700;\">W3MayaAnimUtil " + QString(VERSION " (" __DATE__ ")") + "</span>!<br>Made by <span style=\"color:#6f00a6;font-weight:700;\">nikich340</span> for better the Witcher 3  modding experiene.<br><br>Click \"Load anim .json\" to start");
     ui->spinSensivity->setMinimum(0.0000000001);
     ui->spinSensivity->setSingleStep(0.00001);
     ui->spinSensivity->setValue(0.00001);
