@@ -52,6 +52,7 @@ private:
     bool hasChanges = false;
     bool batchMode = false;
     bool onlyPrint = false;
+    bool shownBroken = false;
     QFile jsonFile;
     QJsonDocument jsonDoc;
     QJsonObject jsonRoot;
@@ -105,6 +106,7 @@ private:
 private slots:
     void onClicked_Load();
     void onClicked_Save();
+    void onClicked_SaveSplit();
     void onClicked_applyMotionToBone();
     void onClicked_extractMotionFromBone();
     void onClicked_extractMotionFromBoneBatch();
