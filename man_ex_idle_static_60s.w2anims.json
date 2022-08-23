@@ -1,0 +1,2962 @@
+{
+  "animation": {
+    "animBuffer": {
+      "bones": [
+        {
+          "BoneName": "Root", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.0019531249560890745, 
+              "X": -0.0019532325260867424, 
+              "Y": -0.001953232526086743, 
+              "Z": -0.9999942775177786
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "Trajectory", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.00244140623526221, 
+              "X": -0.0024426961152544378, 
+              "Y": -0.0024426961152544373, 
+              "Z": 0.9999910529634609
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "Reference", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.00244140623526221, 
+              "X": -0.0024426961152544378, 
+              "Y": -0.0024426961152544373, 
+              "Z": 0.9999910529634609
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "IK_r_foot", 
+          "positionFrames": [
+            {
+              "x": -0.1484375, 
+              "y": 0.06982422, 
+              "z": 0.0883789063
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.307695567999801, 
+              "X": -0.551898099999643, 
+              "Y": 0.4459140299997115, 
+              "Z": 0.63394999999959
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "IK_l_foot", 
+          "positionFrames": [
+            {
+              "x": 0.134765625, 
+              "y": 0.056640625, 
+              "z": 0.08544922
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.43808830558992645, 
+              "X": -0.6378409081387331, 
+              "Y": 0.30475703288864386, 
+              "Z": 0.5553024070855569
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "IK_pelvis", 
+          "positionFrames": [
+            {
+              "x": -0.0111694336, 
+              "y": -0.0224609375, 
+              "z": 0.9921875
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.4981925133517823, 
+              "X": 0.5143107137837574, 
+              "Y": 0.500634813417237, 
+              "Z": -0.4864704440376255
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "IK_r_hand", 
+          "positionFrames": [
+            {
+              "x": -0.326171875, 
+              "y": -0.0578613281, 
+              "z": 1.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.5946153091253985, 
+              "X": -0.3383157051920384, 
+              "Y": -0.565324008675873, 
+              "Z": 0.4608512590725581
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "IK_l_hand", 
+          "positionFrames": [
+            {
+              "x": 0.306640625, 
+              "y": -0.110351563, 
+              "z": 0.99609375
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.586850759764996, 
+              "X": 0.35474926064894785, 
+              "Y": -0.672850665437468, 
+              "Z": -0.27754482494297883
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "IK_torso3", 
+          "positionFrames": [
+            {
+              "x": -0.00387573242, 
+              "y": -0.0200195313, 
+              "z": 1.40625
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.060583290741194784, 
+              "X": -0.7231010088466495, 
+              "Y": 0.029803607964626305, 
+              "Z": -0.6874346084102955
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "pelvis", 
+          "positionFrames": [
+            {
+              "x": -0.0111694336, 
+              "y": -0.0224609375, 
+              "z": 0.9921875
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.4981925133517823, 
+              "X": 0.5143107137837574, 
+              "Y": 0.500634813417237, 
+              "Z": -0.4864704440376255
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "torso", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": -0.104980469, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.05273889836212345, 
+              "X": 0.7041743515111499, 
+              "Y": -0.7075925585670274, 
+              "Z": 0.02588169882308835
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "torso2", 
+          "positionFrames": [
+            {
+              "x": 0.150390625, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9990744169653986, 
+              "X": 0.03906443395329522, 
+              "Y": 0.013672513663656505, 
+              "Z": 0.011719289025991987
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "torso3", 
+          "positionFrames": [
+            {
+              "x": 0.159179688, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9978885600988288, 
+              "X": 0.06395462968588418, 
+              "Y": 0.001464551652806794, 
+              "Z": 0.011228626544850134
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "neck", 
+          "positionFrames": [
+            {
+              "x": 0.193359375, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.973590441471461, 
+              "X": 0.09911670616063466, 
+              "Y": -0.015624437619903984, 
+              "Z": -0.2050692755737286
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "head", 
+          "positionFrames": [
+            {
+              "x": 0.106933594, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9779329103857577, 
+              "X": -0.17576437847472226, 
+              "Y": -0.005858927382488437, 
+              "Z": 0.11278199773794972
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_thigh", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": -0.0106811523, 
+              "z": -0.104492188
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.7050593193660002, 
+              "X": -0.00390626454729412, 
+              "Y": -0.015624700429166659, 
+              "Z": -0.7089654194732897
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_shin", 
+          "positionFrames": [
+            {
+              "x": 0.48828125, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.994821168862366, 
+              "X": -0.002441997093566152, 
+              "Y": -0.002441997093566151, 
+              "Z": 0.10158206182050893
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_foot", 
+          "positionFrames": [
+            {
+              "x": 0.439453125, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.7862034720740714, 
+              "X": 0.12842944314689034, 
+              "Y": -0.041019427456025104, 
+              "Z": -0.6030815742524674
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_thigh", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": -0.0106811523, 
+              "z": 0.104492188
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.6859479448516613, 
+              "X": -0.016111349761638725, 
+              "Y": 0.02734020959551201, 
+              "Z": -0.726958289244929
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_shin", 
+          "positionFrames": [
+            {
+              "x": 0.48828125, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.986521849312003, 
+              "X": -0.0019536276984407344, 
+              "Y": -0.001953627698440735, 
+              "Z": 0.1636062575443165
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_foot", 
+          "positionFrames": [
+            {
+              "x": 0.439453125, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.759515686894172, 
+              "X": -0.11129161507960678, 
+              "Y": 0.02489408957043987, 
+              "Z": -0.640414226949328
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_shoulder", 
+          "positionFrames": [
+            {
+              "x": 0.162109375, 
+              "y": -0.00248718262, 
+              "z": 0.0299072266
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.07420791008491857, 
+              "X": 0.5883053546732172, 
+              "Y": -0.015622983717877903, 
+              "Z": 0.8050751009212742
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_bicep", 
+          "positionFrames": [
+            {
+              "x": 0.186523438, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.8809793705070943, 
+              "X": -0.11372210148540476, 
+              "Y": -0.4592807649989908, 
+              "Z": 0.0019522491154996963
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_forearm", 
+          "positionFrames": [
+            {
+              "x": 0.26953125, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.652329228272111, 
+              "X": 0.682113829562983, 
+              "Y": -0.236322800242289, 
+              "Z": 0.23095202000951803
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_hand", 
+          "positionFrames": [
+            {
+              "x": 0.283203125, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9641501971756908, 
+              "X": -0.18160204546802863, 
+              "Y": 0.12643784262962254, 
+              "Z": -0.14645329057099077
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_middle1", 
+          "positionFrames": [
+            {
+              "x": 0.100097656, 
+              "y": -0.0078125, 
+              "z": -0.00958251953
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.982681272756053, 
+              "X": 0.0624853802676495, 
+              "Y": 0.007810620373457633, 
+              "Z": -0.1742758951683589
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_middle2", 
+          "positionFrames": [
+            {
+              "x": 0.048828125, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9913964917014303, 
+              "X": -0.000488491840911037, 
+              "Y": 0.0014650582877366034, 
+              "Z": -0.13088396090442453
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_shoulder", 
+          "positionFrames": [
+            {
+              "x": 0.162109375, 
+              "y": -0.00248718262, 
+              "z": -0.0299072266
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.05322433482120795, 
+              "X": -0.5669094831837796, 
+              "Y": -0.053224170821212835, 
+              "Z": 0.8203340756664532
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_bicep", 
+          "positionFrames": [
+            {
+              "x": 0.186523438, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.8840872028211678, 
+              "X": 0.16997911054241208, 
+              "Y": 0.42787860136538264, 
+              "Z": 0.08010507025561941
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_forearm", 
+          "positionFrames": [
+            {
+              "x": 0.26953125, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.6893554999927578, 
+              "X": -0.6693246359929684, 
+              "Y": 0.1998203999979008, 
+              "Z": 0.1920034739979829
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_hand", 
+          "positionFrames": [
+            {
+              "x": 0.283203125, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.992542777093206, 
+              "X": -0.020016965938030477, 
+              "Y": -0.09422576212537322, 
+              "Z": -0.07469713827607234
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_middle1", 
+          "positionFrames": [
+            {
+              "x": 0.100097656, 
+              "y": -0.0078125, 
+              "z": 0.00958251953
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.973799386271581, 
+              "X": -0.001953578388047449, 
+              "Y": 0.019046167221063937, 
+              "Z": -0.22660137321464152
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_middle2", 
+          "positionFrames": [
+            {
+              "x": 0.048828125, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9913882124614349, 
+              "X": -0.0019535935174996902, 
+              "Y": -0.003907067655009923, 
+              "Z": -0.13088288844317486
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_weapon", 
+          "positionFrames": [
+            {
+              "x": 0.104980469, 
+              "y": 0.0363769531, 
+              "z": 0.0162353516
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9937336102113534, 
+              "X": -0.05273880260679031, 
+              "Y": -0.02539282023660058, 
+              "Z": 0.09522255676226982
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_weapon", 
+          "positionFrames": [
+            {
+              "x": 0.08496094, 
+              "y": -0.01159668, 
+              "z": -0.008361816
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.04493182556176609, 
+              "X": -0.9938786687901862, 
+              "Y": 0.09816699537190601, 
+              "Z": -0.023442777036574054
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_toe", 
+          "positionFrames": [
+            {
+              "x": 0.174804688, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9725309112085461, 
+              "X": -0.0019529923416930397, 
+              "Y": 0.01318183509650683, 
+              "Z": -0.23239202178275614
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_legRoll", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": -0.0922851563, 
+              "z": -0.0991210938
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.6573694045423257, 
+              "X": -0.26353340182097695, 
+              "Y": -0.2811023019423754, 
+              "Z": -0.647608761474881
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_legRoll2", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9242931144357244, 
+              "X": -0.38133816469851034, 
+              "Y": 0.0019530160892040974, 
+              "Z": -0.0161129910083775
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_kneeRoll", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.999675469302739, 
+              "X": -0.001953564151858786, 
+              "Y": -0.0004884804449661544, 
+              "Z": -0.025394902014140863
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_toe", 
+          "positionFrames": [
+            {
+              "x": 0.174804688, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.977923460903485, 
+              "X": -0.0004883485419467869, 
+              "Y": -0.0004883485419467869, 
+              "Z": -0.20896226368881332
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_legRoll", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": -0.0922851563, 
+              "z": 0.0991210938
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.6591049012524217, 
+              "X": -0.2792652555306558, 
+              "Y": -0.2616891264972578, 
+              "Z": -0.6473874012301559
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_legRoll2", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9228765017835088, 
+              "X": -0.38477611574360066, 
+              "Y": -0.015625540030197206, 
+              "Z": 0.0014648234928308513
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_kneeRoll", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9996736809699003, 
+              "X": -0.001953560661208353, 
+              "Y": -0.001953560661208353, 
+              "Z": -0.025394857305685723
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_bicep2", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9985765763662471, 
+              "X": -0.05322497584030098, 
+              "Y": -0.002441626452212948, 
+              "Z": -0.002441626452212948
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_shoulderRoll", 
+          "positionFrames": [
+            {
+              "x": 0.19921875, 
+              "y": 0.0, 
+              "z": -0.00335693359
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9997049168799718, 
+              "X": 0.01123257906607213, 
+              "Y": -0.021488646113335924, 
+              "Z": 0.0014650671481876328
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_elbowRoll", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.6855599887878829, 
+              "X": -0.6855599887878834, 
+              "Y": 0.17444410614702183, 
+              "Z": -0.17200074818698224
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_forearmRoll1", 
+          "positionFrames": [
+            {
+              "x": 0.06982422, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9999942773076764, 
+              "X": -0.0019532325256763614, 
+              "Y": -0.0019532325256763614, 
+              "Z": -0.0019532325256763614
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_forearmRoll2", 
+          "positionFrames": [
+            {
+              "x": 0.06982422, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9987778331049466, 
+              "X": -0.0493044000977436, 
+              "Y": -0.0024409250565143818, 
+              "Z": -0.002440924836514396
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_handRoll", 
+          "positionFrames": [
+            {
+              "x": 0.06982422, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9994410639201009, 
+              "X": -0.003906092975300704, 
+              "Y": -0.015624014301232541, 
+              "Z": -0.029294920464819848
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_bicep2", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9987033972690463, 
+              "X": 0.05078974477554704, 
+              "Y": -0.002441936618811831, 
+              "Z": -0.0024419366188118312
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_elbowRoll", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.6846716714752675, 
+              "X": 0.6871136745875299, 
+              "Y": -0.17190040790249048, 
+              "Z": -0.1719004079024905
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_forearmRoll1", 
+          "positionFrames": [
+            {
+              "x": 0.06982422, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9999942773076764, 
+              "X": -0.0019532325256763614, 
+              "Y": -0.0019532325256763614, 
+              "Z": -0.0019532325256763614
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_forearmRoll2", 
+          "positionFrames": [
+            {
+              "x": 0.06982422, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9988950826066291, 
+              "X": 0.04686891208388991, 
+              "Y": -0.0024412113274921384, 
+              "Z": -0.0024412110974921424
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_handRoll", 
+          "positionFrames": [
+            {
+              "x": 0.06982422, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9994827636703597, 
+              "X": 0.001464741614173952, 
+              "Y": 0.013183152797514692, 
+              "Z": -0.029296145483339333
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_shoulderRoll", 
+          "positionFrames": [
+            {
+              "x": 0.19921875, 
+              "y": 0.0, 
+              "z": 0.00335693359
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9996848900387655, 
+              "X": -0.013674361463743546, 
+              "Y": 0.020999669790751428, 
+              "Z": 0.001465037685401816
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "hroll", 
+          "positionFrames": [
+            {
+              "x": 0.0834960938, 
+              "y": 0.0023651123, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9990703653733896, 
+              "X": -0.0024416399940774248, 
+              "Y": -0.0024416399940774256, 
+              "Z": 0.04297070887197974
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_index1", 
+          "positionFrames": [
+            {
+              "x": 0.100097656, 
+              "y": -0.00680542, 
+              "z": -0.0334472656
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9845389075611851, 
+              "X": -0.045395315048632624, 
+              "Y": -0.039537873403647915, 
+              "Z": -0.16449669126332225
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_index2", 
+          "positionFrames": [
+            {
+              "x": 0.0476074219, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9877181903003378, 
+              "X": -0.0004883634342041378, 
+              "Y": 0.0014646731856165092, 
+              "Z": -0.15623825646569772
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_index3", 
+          "positionFrames": [
+            {
+              "x": 0.0290527344, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9996239744574037, 
+              "X": -0.001953463524664865, 
+              "Y": -0.000488455238654994, 
+              "Z": -0.0273469391655028
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_middle3", 
+          "positionFrames": [
+            {
+              "x": 0.0383300781, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9999502920065027, 
+              "X": -0.0019531466343867517, 
+              "Y": -0.0004883759960959738, 
+              "Z": -0.009765255921937575
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_pinky0", 
+          "positionFrames": [
+            {
+              "x": 0.0198974609, 
+              "y": 0.0, 
+              "z": 0.0198974609
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9913691838423796, 
+              "X": 0.006351917416474622, 
+              "Y": 0.12557027995341943, 
+              "Z": -0.037133532894786984
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_pinky1", 
+          "positionFrames": [
+            {
+              "x": 0.07519531, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9436325191999261, 
+              "X": 0.27058625883061016, 
+              "Y": -0.0781475633084874, 
+              "Z": -0.17387841611137694
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_pinky2", 
+          "positionFrames": [
+            {
+              "x": 0.0322265625, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9935459786896019, 
+              "X": -0.0058588663743341755, 
+              "Y": 0.001464627188585461, 
+              "Z": -0.11326922257050778
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_pinky3", 
+          "positionFrames": [
+            {
+              "x": 0.0256347656, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.999844468608698, 
+              "X": -0.003905760697374015, 
+              "Y": -0.0019529399386851373, 
+              "Z": 0.017087119463529636
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_ring1", 
+          "positionFrames": [
+            {
+              "x": 0.09814453, 
+              "y": -0.00466918945, 
+              "z": 0.01550293
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.981025907745485, 
+              "X": 0.11133587853010583, 
+              "Y": -0.002441696590385737, 
+              "Z": -0.1587026420757915
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_ring2", 
+          "positionFrames": [
+            {
+              "x": 0.0441894531, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9877181903003378, 
+              "X": -0.0004883634342041378, 
+              "Y": 0.0014646731856165092, 
+              "Z": -0.15623825646569772
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_ring3", 
+          "positionFrames": [
+            {
+              "x": 0.03112793, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9996172997087291, 
+              "X": -0.003906781858033878, 
+              "Y": 0.0014649389430231637, 
+              "Z": -0.027346757256308963
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_thumb1", 
+          "positionFrames": [
+            {
+              "x": 0.0211181641, 
+              "y": 0.012878418, 
+              "z": -0.0220947266
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.7786701526274855, 
+              "X": -0.5248091139025393, 
+              "Y": -0.30658624412167174, 
+              "Z": 0.155733947125495
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_thumb2", 
+          "positionFrames": [
+            {
+              "x": 0.05078125, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9631553678730422, 
+              "X": -0.0024409586685795164, 
+              "Y": 0.05076940560653849, 
+              "Z": -0.26409893319073036
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_thumb3", 
+          "positionFrames": [
+            {
+              "x": 0.03930664, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9988017531021809, 
+              "X": -0.029778664455830627, 
+              "Y": 0.009763397854372167, 
+              "Z": -0.03758942943932766
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_index1", 
+          "positionFrames": [
+            {
+              "x": 0.100097656, 
+              "y": -0.00680542, 
+              "z": 0.0334472656
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9885590706400319, 
+              "X": 0.04491225276537407, 
+              "Y": 0.03710141423661331, 
+              "Z": -0.13913065251230122
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_index2", 
+          "positionFrames": [
+            {
+              "x": 0.0476074219, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9913882124614349, 
+              "X": -0.0019535935174996902, 
+              "Y": -0.003907067655009923, 
+              "Z": -0.13088288844317486
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_index3", 
+          "positionFrames": [
+            {
+              "x": 0.0290527344, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9861117157778364, 
+              "X": -0.0004882932582956842, 
+              "Y": -0.005858208019660183, 
+              "Z": -0.16597929682398396
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_middle3", 
+          "positionFrames": [
+            {
+              "x": 0.0383300781, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9923899213139837, 
+              "X": -0.0004885000634917253, 
+              "Y": -0.003907166083915881, 
+              "Z": -0.12307209064327204
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_pinky0", 
+          "positionFrames": [
+            {
+              "x": 0.0198974609, 
+              "y": 0.0, 
+              "z": -0.0198974609
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.990863928304803, 
+              "X": -0.005863041350922503, 
+              "Y": -0.12312505536924123, 
+              "Z": -0.05472221734188825
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_pinky1", 
+          "positionFrames": [
+            {
+              "x": 0.07519531, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.930977864427667, 
+              "X": -0.2813448202499145, 
+              "Y": 0.10208530309935689, 
+              "Z": -0.20905477501209138
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_pinky2", 
+          "positionFrames": [
+            {
+              "x": 0.0322265625, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9850010090031895, 
+              "X": 0.003906736655708685, 
+              "Y": -0.006348663058028587, 
+              "Z": -0.17238748257567066
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_pinky3", 
+          "positionFrames": [
+            {
+              "x": 0.0256347656, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9981628904356364, 
+              "X": -0.0004884571119577281, 
+              "Y": -0.0019534710478221625, 
+              "Z": -0.06055402148239939
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_ring1", 
+          "positionFrames": [
+            {
+              "x": 0.09814453, 
+              "y": -0.00466918945, 
+              "z": -0.01550293
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9547352825558024, 
+              "X": -0.12111229778712816, 
+              "Y": 0.00927869583046671, 
+              "Z": -0.2715257950388871
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_ring2", 
+          "positionFrames": [
+            {
+              "x": 0.0441894531, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9877022950072436, 
+              "X": -0.0004883555975314012, 
+              "Y": -0.0058589559703834445, 
+              "Z": -0.1562357532102407
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_ring3", 
+          "positionFrames": [
+            {
+              "x": 0.03112793, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9993685257697954, 
+              "X": 0.0034174187239820793, 
+              "Y": -0.00390580870311821, 
+              "Z": -0.03515132441808512
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_thumb1", 
+          "positionFrames": [
+            {
+              "x": 0.0211181641, 
+              "y": 0.012878418, 
+              "z": 0.0220947266
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.8136188925953382, 
+              "X": 0.5122965953376412, 
+              "Y": 0.2617645236177079, 
+              "Z": 0.08399898923553373
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_thumb2", 
+          "positionFrames": [
+            {
+              "x": 0.05078125, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9845323457497003, 
+              "X": -0.00048823627991680715, 
+              "Y": -0.03172773466967181, 
+              "Z": -0.1723054632060695
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_thumb3", 
+          "positionFrames": [
+            {
+              "x": 0.03930664, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.999022836126347, 
+              "X": 0.0034179068033260143, 
+              "Y": -0.009765736952358632, 
+              "Z": -0.04296883979037996
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_index_knuckleRoll", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9923603604344433, 
+              "X": 0.015139294913418705, 
+              "Y": 0.020999690157322892, 
+              "Z": 0.12062640590369407
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_middle_knuckleRoll", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9999942773076764, 
+              "X": -0.0019532325256763614, 
+              "Y": -0.0019532325256763614, 
+              "Z": -0.0019532325256763614
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_pinky_knuckleRoll", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9999942773076764, 
+              "X": -0.0019532325256763614, 
+              "Y": -0.0019532325256763614, 
+              "Z": -0.0019532325256763614
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_ring_knuckleRoll", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9999942773076764, 
+              "X": -0.0019532325256763614, 
+              "Y": -0.0019532325256763614, 
+              "Z": -0.0019532325256763614
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "l_thumb_roll", 
+          "positionFrames": [
+            {
+              "x": 0.03564453, 
+              "y": 0.00402832031, 
+              "z": 0.00145721436
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.7884567100598646, 
+              "X": -0.4608688486684274, 
+              "Y": -0.40618951660607083, 
+              "Z": 0.030757068910077567
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_index_knuckleRoll", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9999942773076764, 
+              "X": -0.0019532325256763614, 
+              "Y": -0.0019532325256763614, 
+              "Z": -0.0019532325256763614
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_middle_knuckleRoll", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9999942773076764, 
+              "X": -0.0019532325256763614, 
+              "Y": -0.0019532325256763614, 
+              "Z": -0.0019532325256763614
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_pinky_knuckleRoll", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9999942773076764, 
+              "X": -0.0019532325256763614, 
+              "Y": -0.0019532325256763614, 
+              "Z": -0.0019532325256763614
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_ring_knuckleRoll", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.9999942773076764, 
+              "X": -0.0019532325256763614, 
+              "Y": -0.0019532325256763614, 
+              "Z": -0.0019532325256763614
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "r_thumb_roll", 
+          "positionFrames": [
+            {
+              "x": 0.03564453, 
+              "y": 0.00402832031, 
+              "z": -0.00145721436
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 0.7903312014758461, 
+              "X": 0.45915407176100154, 
+              "Y": 0.4044463495809677, 
+              "Z": 0.03126148860288483
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ], 
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }, 
+        {
+          "BoneName": "RootMotion", 
+          "positionFrames": [
+            {
+              "x": 0.0, 
+              "y": 0.0, 
+              "z": 0.0
+            }
+          ], 
+          "position_dt": 0.0333333351, 
+          "position_numFrames": 1, 
+          "rotationFrames": [
+            {
+              "W": 1.0, 
+              "X": 0.0, 
+              "Y": 0.0, 
+              "Z": 0.0
+            }
+          ], 
+          "rotation_dt": 0.0333333351, 
+          "rotation_numFrames": 1, 
+          "scaleFrames": [
+            {
+              "x": 1.0, 
+              "y": 1.0, 
+              "z": 1.0
+            }
+          ],
+          "scale_dt": 0.0333333351, 
+          "scale_numFrames": 1
+        }
+      ], 
+      "dt": 0.0333333351, 
+      "duration": 60.0, 
+      "numFrames": 1801, 
+      "tracks": null, 
+      "version": 0
+    }, 
+    "duration": 60.0, 
+    "framesPerSecond": 30.0, 
+    "name": "man_ex_idle_static"
+  }, 
+  "entries": []
+}
