@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>909</width>
-    <height>958</height>
+    <width>967</width>
+    <height>1100</height>
    </rect>
   </property>
   <property name="font">
@@ -21,7 +21,19 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <property name="spacing">
-     <number>16</number>
+     <number>6</number>
+    </property>
+    <property name="leftMargin">
+     <number>6</number>
+    </property>
+    <property name="topMargin">
+     <number>6</number>
+    </property>
+    <property name="rightMargin">
+     <number>6</number>
+    </property>
+    <property name="bottomMargin">
+     <number>6</number>
     </property>
     <item>
      <widget class="QWidget" name="widget" native="true">
@@ -59,6 +71,9 @@
           <font>
            <pointsize>9</pointsize>
           </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(195, 222, 225);</string>
          </property>
          <property name="text">
           <string>Load anim .json</string>
@@ -111,21 +126,309 @@
      </widget>
     </item>
     <item>
+     <widget class="QWidget" name="widget_14" native="true">
+      <layout class="QHBoxLayout" name="horizontalLayout_9">
+       <item>
+        <widget class="QLabel" name="labelEditInfo">
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Bones&lt;/span&gt;: -. &lt;span style=&quot; font-weight:700;&quot;&gt;Events&lt;/span&gt;: -. &lt;span style=&quot; font-weight:700;&quot;&gt;Duration&lt;/span&gt;: - frames (- s), &lt;span style=&quot; color:#ff0000;&quot;&gt;rootMotion&lt;/span&gt;, &lt;span style=&quot; color:#ff0000;&quot;&gt;motionExtraction&lt;/span&gt;&lt;span style=&quot; color:#000000;&quot;&gt;. &lt;/span&gt;&lt;span style=&quot; font-weight:700; color:#000000;&quot;&gt;Anim&lt;/span&gt;&lt;span style=&quot; color:#000000;&quot;&gt;: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboEditAnims"/>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
      <widget class="QToolBox" name="toolBox">
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
-      <widget class="QWidget" name="page">
+      <widget class="QWidget" name="page_0_Edit">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>887</width>
-         <height>286</height>
+         <width>955</width>
+         <height>408</height>
         </rect>
        </property>
        <attribute name="label">
-        <string>For .json exported with WolvenKit (from vanilla .w2anims). Should contain &quot;motionExtraction&quot; vars.</string>
+        <string>[ANIM]: Edit</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_10">
+        <item>
+         <widget class="QWidget" name="widget_Edit_Main" native="true">
+          <layout class="QGridLayout" name="gridLayout_3">
+           <property name="leftMargin">
+            <number>6</number>
+           </property>
+           <property name="topMargin">
+            <number>6</number>
+           </property>
+           <property name="rightMargin">
+            <number>6</number>
+           </property>
+           <property name="bottomMargin">
+            <number>6</number>
+           </property>
+           <property name="spacing">
+            <number>8</number>
+           </property>
+           <item row="8" column="0">
+            <widget class="QPushButton" name="buttonEditApplyAll">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>APPLY (all)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QCheckBox" name="editForceDuration">
+             <property name="text">
+              <string>Force set duration from numFrames</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="1">
+            <widget class="QLabel" name="label_3">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QLineEdit" name="lineEditName">
+             <property name="text">
+              <string> - </string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0" colspan="3">
+            <widget class="QGroupBox" name="groupEditCut">
+             <property name="title">
+              <string>Crop animation frames</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_4">
+              <property name="leftMargin">
+               <number>12</number>
+              </property>
+              <property name="topMargin">
+               <number>6</number>
+              </property>
+              <property name="rightMargin">
+               <number>6</number>
+              </property>
+              <property name="bottomMargin">
+               <number>6</number>
+              </property>
+              <property name="spacing">
+               <number>6</number>
+              </property>
+              <item row="2" column="1">
+               <widget class="QSpinBox" name="spinEditDuration">
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>100000</number>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="labelEditStart">
+                <property name="text">
+                 <string>Start (- s) frame:</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="labelEditDuration">
+                <property name="text">
+                 <string>Duration (- s) frames:</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QSpinBox" name="spinEditEnd">
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>100000</number>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QSpinBox" name="spinEditStart">
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>100000</number>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="labelEditEnd">
+                <property name="text">
+                 <string>End (- s) frame:</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QCheckBox" name="checkEditCutEvents">
+                <property name="text">
+                 <string>Crop anim events + recalculate startTime</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0" colspan="3">
+            <widget class="QGroupBox" name="groupEditBake">
+             <property name="title">
+              <string>Bake bones to full animFrames</string>
+             </property>
+             <property name="flat">
+              <bool>false</bool>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_8">
+              <property name="spacing">
+               <number>6</number>
+              </property>
+              <property name="leftMargin">
+               <number>12</number>
+              </property>
+              <property name="topMargin">
+               <number>6</number>
+              </property>
+              <property name="rightMargin">
+               <number>6</number>
+              </property>
+              <property name="bottomMargin">
+               <number>6</number>
+              </property>
+              <item>
+               <widget class="QCheckBox" name="checkEditBakePos">
+                <property name="text">
+                 <string>Bake Pos</string>
+                </property>
+                <property name="checkable">
+                 <bool>true</bool>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="checkEditBakeRot">
+                <property name="text">
+                 <string>Bake Rot</string>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="checkEditBakeScale">
+                <property name="text">
+                 <string>Bake Scale</string>
+                </property>
+                <property name="checked">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QCheckBox" name="checkEditSortEvents">
+             <property name="text">
+              <string>Sort anim events by startTime</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="2">
+            <widget class="QPushButton" name="buttonEditApply">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>APPLY (current)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0" colspan="2">
+            <widget class="QLabel" name="labelEditName">
+             <property name="text">
+              <string>Rename animation: </string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="page_1">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>955</width>
+         <height>408</height>
+        </rect>
+       </property>
+       <attribute name="label">
+        <string>[ANIM]: Wkit (motionExtraction) -&gt; MAYA (RootMotion)</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
@@ -136,6 +439,9 @@
              <layout class="QVBoxLayout" name="verticalLayout_9">
               <item>
                <widget class="QPushButton" name="buttonApplyMotionToBone">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                   <horstretch>0</horstretch>
@@ -296,13 +602,13 @@
                  <item>
                   <widget class="QSpinBox" name="spinSplitStart">
                    <property name="minimum">
-                    <number>0</number>
+                    <number>1</number>
                    </property>
                    <property name="maximum">
                     <number>999999</number>
                    </property>
                    <property name="value">
-                    <number>0</number>
+                    <number>1</number>
                    </property>
                   </widget>
                  </item>
@@ -319,13 +625,13 @@
                  <item>
                   <widget class="QSpinBox" name="spinSplitEnd">
                    <property name="minimum">
-                    <number>0</number>
+                    <number>1</number>
                    </property>
                    <property name="maximum">
                     <number>999999</number>
                    </property>
                    <property name="value">
-                    <number>0</number>
+                    <number>1</number>
                    </property>
                   </widget>
                  </item>
@@ -350,7 +656,7 @@
         </rect>
        </property>
        <attribute name="label">
-        <string>For .json exported from Maya with Ding's w3 plugin. Should contain &quot;RootMotion&quot; bone with some motion on it.</string>
+        <string>[ANIM]: MAYA (RootMotion) -&gt; Wkit (motionExtraction)</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_7">
         <item>
@@ -361,6 +667,9 @@
              <layout class="QVBoxLayout" name="verticalLayout_4">
               <item>
                <widget class="QPushButton" name="buttonExtractMotionFromBone">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="font">
                  <font>
                   <pointsize>9</pointsize>
@@ -542,17 +851,267 @@
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="page_3">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>955</width>
+         <height>408</height>
+        </rect>
+       </property>
+       <attribute name="label">
+        <string>[ANIM]: Merge current (1st) with another (2nd) anims</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_8">
+        <item>
+         <widget class="QWidget" name="widget_8" native="true">
+          <layout class="QGridLayout" name="gridLayout">
+           <property name="leftMargin">
+            <number>4</number>
+           </property>
+           <property name="topMargin">
+            <number>4</number>
+           </property>
+           <property name="rightMargin">
+            <number>4</number>
+           </property>
+           <property name="bottomMargin">
+            <number>4</number>
+           </property>
+           <property name="spacing">
+            <number>6</number>
+           </property>
+           <item row="5" column="2">
+            <widget class="QSpinBox" name="spinMergeDuration">
+             <property name="maximum">
+              <number>60000</number>
+             </property>
+             <property name="value">
+              <number>1</number>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <widget class="QPushButton" name="buttonMergeHelp">
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(0, 0, 127);
+color: rgb(255, 255, 255);</string>
+             </property>
+             <property name="text">
+              <string>HELP PICTURE</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1" colspan="2">
+            <widget class="QPushButton" name="buttonMergeLoad">
+             <property name="text">
+              <string>Load 2nd anim</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QLabel" name="labelMergeDuration">
+             <property name="text">
+              <string>Merge duration (- s) frames:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="1" colspan="2">
+            <widget class="QComboBox" name="comboMergeEvents">
+             <property name="currentIndex">
+              <number>3</number>
+             </property>
+             <item>
+              <property name="text">
+               <string>None</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Only from 1st</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Only from 2nd</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>From both anims</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="labelMergeType">
+             <property name="text">
+              <string>Merge type:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QCheckBox" name="checkMergeRemoveOrigin">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="text">
+              <string>dev: remove origin from 2nd</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0" colspan="4">
+            <widget class="QLabel" name="labelMergeSecondInfo">
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;[2nd anim]:&lt;/span&gt; -&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QLabel" name="labelMergeStart">
+             <property name="text">
+              <string>Merge start (- s) frame:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="3">
+            <widget class="QCheckBox" name="checkMergeEventsSort">
+             <property name="text">
+              <string>Sort anim events by startTime</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="0">
+            <widget class="QLabel" name="labelMergeEvents">
+             <property name="text">
+              <string>Add anim events:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="1" colspan="2">
+            <widget class="QComboBox" name="comboMergeType">
+             <property name="currentIndex">
+              <number>0</number>
+             </property>
+             <item>
+              <property name="text">
+               <string>Blending (~)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Summation (+)</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Subtraction (-)</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="5" column="3">
+            <widget class="QCheckBox" name="checkMergeCropToSecond">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Crop result to 2nd anim duration</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="11" column="0" colspan="2">
+            <widget class="QLabel" name="labelMergeNote">
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700; color:#67009a;&quot;&gt;Note&lt;/span&gt;&lt;span style=&quot; color:#67009a;&quot;&gt;: Merged = 1st + blend(1st..2nd) + 2nd.&lt;/span&gt;&lt;br/&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Will be saved in a separate file.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item row="11" column="2" colspan="2">
+            <widget class="QPushButton" name="buttonMergeDo">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(130, 220, 225);</string>
+             </property>
+             <property name="text">
+              <string>Merge</string>
+             </property>
+             <property name="checkable">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QCheckBox" name="checkMergeSumInversePos">
+             <property name="text">
+              <string>dev: sum: inverse sign (POS)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="3">
+            <widget class="QPushButton" name="buttonMergeLastHalfSec">
+             <property name="text">
+              <string>Set last 0.5 s (for blend)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QSpinBox" name="spinMergeStart">
+             <property name="maximum">
+              <number>60000</number>
+             </property>
+             <property name="value">
+              <number>1</number>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QCheckBox" name="checkMergeSumInverseRot">
+             <property name="text">
+              <string>dev: sum: inverse sign (ROT)</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="page_4">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>887</width>
-         <height>174</height>
+         <width>955</width>
+         <height>408</height>
         </rect>
        </property>
        <attribute name="label">
-        <string>For .json w2cutscene</string>
+        <string>[CUTSCENE]: Wkit (motionExtraction) -&gt; MAYA (RootMotion)</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_5">
         <item>
@@ -607,152 +1166,6 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="page_3">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>887</width>
-         <height>268</height>
-        </rect>
-       </property>
-       <attribute name="label">
-        <string>Blend with another anim .json</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_8">
-        <item>
-         <widget class="QWidget" name="widget_8" native="true">
-          <layout class="QGridLayout" name="gridLayout">
-           <item row="0" column="3">
-            <widget class="QPushButton" name="buttonBlendLoad">
-             <property name="text">
-              <string>Load</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0" colspan="2">
-            <widget class="QLabel" name="labelBlend2">
-             <property name="text">
-              <string>[source] Blend start frame:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0" colspan="2">
-            <widget class="QLabel" name="labelBlend1">
-             <property name="text">
-              <string>Source .json:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="0" colspan="2">
-            <widget class="QLabel" name="labelBlend3">
-             <property name="text">
-              <string>[target] Blend start frame:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="7" column="0">
-            <widget class="QLabel" name="labelBlend5">
-             <property name="text">
-              <string>Blend koefficient (0.0 - 1.0]</string>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="0">
-            <widget class="QLabel" name="labelBlend4">
-             <property name="text">
-              <string>Blend duration (in frames):</string>
-             </property>
-            </widget>
-           </item>
-           <item row="6" column="2">
-            <widget class="QSpinBox" name="spinBlendDuration">
-             <property name="maximum">
-              <number>60000</number>
-             </property>
-             <property name="value">
-              <number>5</number>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QLineEdit" name="lineBlendPath">
-             <property name="text">
-              <string>NONE</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="3">
-            <widget class="QLabel" name="labelBlendSource">
-             <property name="text">
-              <string>Source anim duration: NONE</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="labelBlendTarget">
-             <property name="text">
-              <string>Target anim duration: NONE</string>
-             </property>
-            </widget>
-           </item>
-           <item row="7" column="2">
-            <widget class="QDoubleSpinBox" name="spinBlendKoef">
-             <property name="decimals">
-              <number>3</number>
-             </property>
-             <property name="minimum">
-              <double>0.001000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>1.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.100000000000000</double>
-             </property>
-             <property name="value">
-              <double>1.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="2">
-            <widget class="QSpinBox" name="spinBlendSource">
-             <property name="maximum">
-              <number>60000</number>
-             </property>
-             <property name="value">
-              <number>1</number>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="2">
-            <widget class="QSpinBox" name="spinBlendTarget">
-             <property name="maximum">
-              <number>60000</number>
-             </property>
-             <property name="value">
-              <number>1</number>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="2" colspan="2">
-            <widget class="QPushButton" name="buttonBlendDo">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Blend</string>
-             </property>
-             <property name="checkable">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </widget>
      </widget>
     </item>
     <item>
@@ -767,6 +1180,12 @@
     </item>
     <item>
      <widget class="QTextEdit" name="textLog">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="font">
        <font>
         <pointsize>9</pointsize>
@@ -831,7 +1250,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>909</width>
+     <width>967</width>
      <height>26</height>
     </rect>
    </property>

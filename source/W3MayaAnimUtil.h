@@ -27,12 +27,13 @@ public:
 
 private:
     QLabel* pLabel;
+    QLabel* pLabelInfo;
     QElapsedTimer eTimer;
-    enum LogType { logInfo, logWarning, logError };
+    enum LogType { logFinish, logWarning, logError, logProcess };
     Ui::W3MayaAnimUtil *ui;
 
     /* LOG */
-    void addLog(QString text, LogType type = logInfo);
+    void addLog(QString text, LogType type = logProcess);
     QFile logFile;
     QTextStream logStream;
 
@@ -48,7 +49,7 @@ private:
     double mReductionSensitivity(); // 10^-4
     const double mW3AngleKoefficient = - 8.07; // picked up experimentally, real value is in [8.05 - 8.10]
     bool animSet = false;
-    int framesCount = -1;
+    int m_framesCount = -1;
     bool hasChanges = false;
     bool batchMode = false;
     bool onlyPrint = false;
@@ -56,27 +57,47 @@ private:
     QFile jsonFile;
     QJsonDocument jsonDoc;
     QJsonObject jsonRoot;
+    QString vec3ToString(QVector3D vec) {
+        return QString("[%1, %2, %3]").arg(vec.x()).arg(vec.y()).arg(vec.z());
+    }
     void objToXYZ(QJsonObject obj, double& X, double& Y, double& Z) const;
     void objToXYZW(QJsonObject obj, double& X, double& Y, double& Z, double& W) const;
-    void interpolatePos(double t, double& X1, double& Y1, double& Z1, double X2, double Y2, double Z2);
-    void interpolateRot(double t, double& X1, double& Y1, double& Z1, double& W1, double X2, double Y2, double Z2, double W2);
+    void interpolatePos(double k, double& X1, double& Y1, double& Z1, double X2, double Y2, double Z2);
+    void interpolateRot(double k, double& X1, double& Y1, double& Z1, double& W1, double X2, double Y2, double Z2, double W2);
+    void blendPos(QJsonArray& posArray, int targetFrames);
+    void blendRot(QJsonArray& rotArray, int targetFrames);
+    double framesToSec(int frames, int fps = 30);
+    int secToFrames(double sec, int fps = 30);
     QJsonObject objXYZ(double X, double Y, double Z) const;
     QJsonObject objXYZW(double X, double Y, double Z, double W = 1) const;
     QJsonObject objQuanternion(double Pitch, double Yaw, double Roll) const;
     bool loadW3Data();
     bool loadJsonFile(QString filePath);
-    void blendMotion(QVector<double>& motion, int animFrames, const QVector<int>& framePoints);
+    void blendMotion(QVector<double>& motion, int targetFrames, const QVector<int>& framePoints);
     void reduceMotionRotZ(QVector<double>& motion, int animFrames, int& motionFrames);
     void reduceMotionPos(QVector<double>& motionX, QVector<double>& motionY, QVector<double>& motionZ, int animFrames, int& motionFrames);
     bool isAdditiveAnim(QJsonObject animObj);
     bool applyMotionToBone(QJsonValueRef ref);
-    bool extractMotionFromBone(QJsonValueRef ref);
+    bool extractMotionFromBone(QJsonValueRef bufferRef);
+
+    /* GENERAL EDIT */
+    double getEventStartTime(QJsonObject eventObj);
+    void setEventStartTime(QJsonObject& eventObj, double newTime);
+    void setCurrentAnimInfo(int bones, int events, int frames, double duration, bool rootMotion, bool motionExtraction);
+    void editBakeBones(QJsonObject& animObj, bool bakePos = true, bool bakeRot = true, bool bakeScale = false);
+    void editCropAnim(QJsonObject& animObj, QJsonArray& eventsArray, bool cropEvents, int startFrame, int durationFrames);
+    void editSetCDPRDuration(QJsonObject& animObj);
+    void editSortEvents(QJsonArray& eventsArray);
+    void editRenameAnim(QJsonObject& animObj, QJsonArray& eventsArray, QString newName);
+    int m_animIndex;
+    void applyEdits();
 
     /* extra nr */
-    QVector<QString> animNames;
+    QVector<QString> m_animNames;
+    QVector<int> m_animFrames;
+    QVector<double> m_animDurations;
     QStringList additiveNames;
     QStringList additiveTypes;
-    QVector<double> animDurations;
 
     /* EXTERNAL MOTION */
     bool loadJsonMotion(QString filePath);
@@ -92,12 +113,20 @@ private:
     QJsonObject jsonRootEvents;
     QMap<QString, QJsonArray> animEventsByName;
 
-    /* BLEND */
-    bool loadBlendJson(QString filePath);
-    QFile jsonFileBlend;
-    QJsonDocument jsonDocBlend;
-    QJsonObject jsonRootBlend;
-    int blendSourceFramesCount = -1;
+    /* MERGE */
+    bool loadMergeJson(QString filePath);
+    void saveMergedJson(QJsonObject root, QString suffix);
+    QFile jsonFileMerge;
+    QString m_mergeFilePath;
+    QJsonDocument jsonDocMerge;
+    QJsonObject jsonRootMerge;
+    QString m_secondAnimName;
+    int m_secondAnimFrames = -1;
+    int m_secondAnimBones = -1;
+    int m_secondAnimEvents = -1;
+    bool m_secondAnimMotionExtraction = false;
+    bool m_secondAnimRootMotion = false;
+    double m_secondAnimDuration = -1;
 
     /* CUTSCENE */
     QJsonArray extractAnimParts(QJsonValueRef ref);
@@ -118,9 +147,23 @@ private slots:
     void onClicked_extractPartsCutscene();
     void onClicked_patchPartsCutscene();
 
-    void onClicked_LoadBlendJson();
-    void onClicked_Blend();
-    void onChanged_BlendParams();
-    void onChanged_BlendFrames();
+    /* GENERAL EDIT */
+    void onChecked_EditCut(bool checked);
+    void onChanged_EditCurrentAnim(int newAnimIndex);
+    void onChanged_EditStart(int startFrame);
+    void onChanged_EditDuration(int durFrames);
+    void onChanged_EditEnd(int endFrame);
+    void onClicked_EditApply();
+    void onClicked_EditApplyAll();
+
+    /* MERGE */
+    void onClicked_LoadMergeJson();
+    void onClicked_MergeProcess();
+    void onClicked_MergePictureHelp();
+    void onUpdate_MergeInfo();
+    void onChanged_MergeStart();
+    void onChanged_MergeDuration();
+    void onChanged_MergeType(int index);
+    void onClicked_BlendHalfSec();
 };
 #endif // W3MAYAANIMUTIL_H
