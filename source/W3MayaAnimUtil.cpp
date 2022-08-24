@@ -243,7 +243,12 @@ void W3MayaAnimUtil::applyEdits() {
         hasChanges = true;
     }
     if (ui->checkEditAddRootMotion->isChecked()) {
-
+        QJsonObject animBuff = animObj.value("animBuffer").toObject();
+        QJsonArray animBones = animBuff.value("bones").toArray();
+        editAddEmptyBoneFrames(animBones, "RootMotion");
+        animBuff["bones"] = animBones;
+        animObj["animBuffer"] = animBuff;
+        hasChanges = true;
     }
     if (ui->groupEditBake->isChecked()) {
         editBakeBones(animObj, ui->checkEditBakePos->isChecked(), ui->checkEditBakeRot->isChecked(), ui->checkEditBakeScale->isChecked());
@@ -256,6 +261,11 @@ void W3MayaAnimUtil::applyEdits() {
     } else if (ui->editForceDuration->isChecked()) {
         editSetCDPRDuration(animObj);
         hasChanges = true;
+    }
+
+    if (ui->groupEditOptimize->isChecked()) {
+        int boneOptimized = editOptimizeBones(animObj, ui->checkEditOptimizePos->isChecked(), ui->checkEditOptimizeRot->isChecked(), ui->checkEditOptimizeScale->isChecked());
+        hasChanges = hasChanges || (boneOptimized > 0);
     }
 
     if (ui->checkEditSortEvents->isChecked()) {
@@ -397,7 +407,7 @@ void W3MayaAnimUtil::editCropAnim(QJsonObject& animObj, QJsonArray& eventsArray,
            .arg( framesToSec(durationFrames - 1) ));
 }
 
-void W3MayaAnimUtil::editAddEmptyBone(QJsonArray& bonesArr, QString boneName) {
+void W3MayaAnimUtil::editAddEmptyBoneFrames(QJsonArray& bonesArr, QString boneName, int numFrames) {
     int last_index = 0;
     if (!bonesArr.isEmpty()) {
         last_index = bonesArr.last().toObject().value("index").toInt();
@@ -411,14 +421,16 @@ void W3MayaAnimUtil::editAddEmptyBone(QJsonArray& bonesArr, QString boneName) {
     double dt = 0.033333333;
     QString attrNames[3] = { "position", "rotation", "scale" };
     upn(j, 0, 2) {
-        newBoneObj.insert(QString("%1_numFrames").arg(attrNames[j]), 1);
+        newBoneObj.insert(QString("%1_numFrames").arg(attrNames[j]), numFrames);
         QJsonArray attrArray = QJsonArray();
-        if (attrNames[j] == "rotation")
-            attrArray.append(objXYZW(0,0,0,1));
-        else if (attrNames[j] == "position")
-            attrArray.append(objXYZ(0,0,0));
-        else
-            attrArray.append(objXYZ(1,1,1));
+        upn(jj, 1, numFrames) {
+            if (attrNames[j] == "rotation")
+                attrArray.append(objXYZW(0,0,0,1));
+            else if (attrNames[j] == "position")
+                attrArray.append(objXYZ(0,0,0));
+            else
+                attrArray.append(objXYZ(1,1,1));
+        }
         newBoneObj.insert(QString("%1Frames").arg(attrNames[j]), attrArray);
         newBoneObj.insert(QString("%1_dt").arg(attrNames[j]), dt);
     }
@@ -471,6 +483,94 @@ void W3MayaAnimUtil::editBakeBones(QJsonObject& animObj, bool bakePos, bool bake
     animBuff["bones"] = animBones;
     animObj["animBuffer"] = animBuff;
 }
+
+bool W3MayaAnimUtil::editOptimizeBone(QJsonObject& boneObj, bool optimizePos, bool optimizeRot, bool optimizeScale) {
+    int posNum = boneObj["position_numFrames"].toInt();
+    int rotNum = boneObj["rotation_numFrames"].toInt();
+    int scaleNum = boneObj["scale_numFrames"].toInt();
+
+    optimizePos = posNum > 1;
+    optimizeRot = rotNum > 1;
+    optimizeScale = scaleNum > 1;
+    QJsonArray posArray = boneObj["positionFrames"].toArray();
+    QJsonArray rotArray = boneObj["rotationFrames"].toArray();
+    QJsonArray scaleArray = boneObj["scaleFrames"].toArray();
+
+    upn(frame, 1, posNum - 1) {
+        double diffX = posArray[frame].toObject().value("x").toDouble() - posArray[frame - 1].toObject().value("x").toDouble();
+        double diffY = posArray[frame].toObject().value("y").toDouble() - posArray[frame - 1].toObject().value("y").toDouble();
+        double diffZ = posArray[frame].toObject().value("z").toDouble() - posArray[frame - 1].toObject().value("z").toDouble();
+        double diffTotal = qAbs(diffX) + qAbs(diffY) + qAbs(diffZ);
+        if (diffTotal > mReductionSensitivity()) {
+            optimizePos = false;
+            break;
+        }
+    }
+    upn(frame, 1, rotNum - 1) {
+        double diffX = rotArray[frame].toObject().value("X").toDouble() - rotArray[frame - 1].toObject().value("X").toDouble();
+        double diffY = rotArray[frame].toObject().value("Y").toDouble() - rotArray[frame - 1].toObject().value("Y").toDouble();
+        double diffZ = rotArray[frame].toObject().value("Z").toDouble() - rotArray[frame - 1].toObject().value("Z").toDouble();
+        double diffW = rotArray[frame].toObject().value("W").toDouble() - rotArray[frame - 1].toObject().value("W").toDouble();
+        double diffTotal = qAbs(diffX) + qAbs(diffY) + qAbs(diffZ) + qAbs(diffW);
+        if (diffTotal > mReductionSensitivity()) {
+            optimizeRot = false;
+            break;
+        }
+    }
+    upn(frame, 1, scaleNum - 1) {
+        double diffX = scaleArray[frame].toObject().value("x").toDouble() - scaleArray[frame - 1].toObject().value("x").toDouble();
+        double diffY = scaleArray[frame].toObject().value("y").toDouble() - scaleArray[frame - 1].toObject().value("y").toDouble();
+        double diffZ = scaleArray[frame].toObject().value("z").toDouble() - scaleArray[frame - 1].toObject().value("z").toDouble();
+        double diffTotal = qAbs(diffX) + qAbs(diffY) + qAbs(diffZ);
+        if (diffTotal > mReductionSensitivity()) {
+            optimizeScale = false;
+            break;
+        }
+    }
+    if (optimizePos) {
+        QJsonArray newPosArray;
+        newPosArray.append( posArray.first() );
+        boneObj["positionFrames"] = newPosArray;
+        boneObj["position_numFrames"] = 1;
+    }
+    if (optimizeRot) {
+        QJsonArray newRotArray;
+        newRotArray.append( rotArray.first() );
+        boneObj["rotationFrames"] = newRotArray;
+        boneObj["rotation_numFrames"] = 1;
+    }
+    if (optimizeScale) {
+        QJsonArray newScaleArray;
+        newScaleArray.append( scaleArray.first() );
+        boneObj["scaleFrames"] = newScaleArray;
+        boneObj["scale_numFrames"] = 1;
+    }
+    return (optimizePos || optimizeRot || optimizeScale);
+}
+
+int W3MayaAnimUtil::editOptimizeBones(QJsonObject& animObj, bool optimizePos, bool optimizeRot, bool optimizeScale) {
+    QJsonObject bufferObj = animObj["animBuffer"].toObject();
+    QJsonArray bonesArray = bufferObj["bones"].toArray();
+    int optimized = 0;
+    int numBones = bonesArray.count();
+
+    upn(i, 0, numBones - 1) {
+        QJsonObject boneObj = bonesArray.at(i).toObject();
+        bool boneOptimized = editOptimizeBone(boneObj, optimizePos, optimizeRot, optimizeScale);
+        if (boneOptimized) {
+            optimized += 1;
+            bonesArray[i] = boneObj;
+        }
+    }
+
+    if (optimized > 0) {
+        bufferObj["bones"] = bonesArray;
+        animObj["animBuffer"] = bufferObj;
+    }
+    addLog(QString("\t[EDIT] Optimized %1 bones of %2.").arg(optimized).arg(numBones));
+    return optimized;
+}
+
 void W3MayaAnimUtil::onChecked_EditCut(bool checked) {
     if (checked) {
         if (!ui->groupEditBake->isChecked())
@@ -481,6 +581,13 @@ void W3MayaAnimUtil::onChecked_EditCut(bool checked) {
         ui->checkEditBakeRot->setChecked(true);
     } else {
         ui->groupEditBake->setEnabled(true);
+    }
+}
+void W3MayaAnimUtil::onClicked_EditGroupOptimize(bool checked) {
+    if (checked) {
+        ui->checkEditOptimizePos->setChecked(true);
+        ui->checkEditOptimizeRot->setChecked(true);
+        ui->checkEditOptimizeScale->setChecked(true);
     }
 }
 void W3MayaAnimUtil::onClicked_EditApply() {
@@ -1320,6 +1427,11 @@ bool W3MayaAnimUtil::extractMotionFromBone(QJsonValueRef ref) {
     m_animNames.push_back(animName);
     m_animDurations.push_back(animDuration);
 
+    int bonesOptimized = 0;
+    if ( ui->checkOptimizeEqual->isChecked() ) {
+        bonesOptimized = editOptimizeBones(animObj, true, true, true);
+    }
+
     QJsonObject bufferObj = animObj["animBuffer"].toObject();
     QJsonArray bonesArray = bufferObj["bones"].toArray();
     if ( bonesArray.isEmpty() ) {
@@ -1330,133 +1442,66 @@ bool W3MayaAnimUtil::extractMotionFromBone(QJsonValueRef ref) {
     int animFrames = bufferObj["numFrames"].toInt();
     int mBoneIdx = -1;
     QStringList brokenBones;
-    int bonesOptimized = 0;
-    int bonesBaked = 0;
+
 
     upn(i, 0, bonesArray.size() - 1) {
-        QJsonObject tempObj = bonesArray[i].toObject();
-        QString boneName = tempObj.value("BoneName").toString();
+        QJsonObject boneObj = bonesArray[i].toObject();
+        QString boneName = boneObj.value("BoneName").toString();
 
         if (boneName == mBoneName) {
             mBoneIdx = i;
         }
-        int posNum = tempObj["position_numFrames"].toInt();
-        int rotNum = tempObj["rotation_numFrames"].toInt();
-        int scaleNum = tempObj["scale_numFrames"].toInt();
-
-        if ( ui->checkOptimizeEqual->isChecked() ) {
-            bool optimizeTranslation = posNum > 1;
-            bool optimizeRotation = rotNum > 1;
-            bool optimizeScale = scaleNum > 1;
-            QJsonArray posArray = tempObj["positionFrames"].toArray();
-            QJsonArray rotArray = tempObj["rotationFrames"].toArray();
-            QJsonArray scaleArray = tempObj["scaleFrames"].toArray();
-
-            upn(frame, 1, posNum - 1) {
-                double diffX = posArray[frame].toObject().value("x").toDouble() - posArray[frame - 1].toObject().value("x").toDouble();
-                double diffY = posArray[frame].toObject().value("y").toDouble() - posArray[frame - 1].toObject().value("y").toDouble();
-                double diffZ = posArray[frame].toObject().value("z").toDouble() - posArray[frame - 1].toObject().value("z").toDouble();
-                double diffTotal = qAbs(diffX) + qAbs(diffY) + qAbs(diffZ);
-                if (diffTotal > mReductionSensitivity()) {
-                    optimizeTranslation = false;
-                    break;
-                }
-            }
-            upn(frame, 1, rotNum - 1) {
-                double diffX = rotArray[frame].toObject().value("X").toDouble() - rotArray[frame - 1].toObject().value("X").toDouble();
-                double diffY = rotArray[frame].toObject().value("Y").toDouble() - rotArray[frame - 1].toObject().value("Y").toDouble();
-                double diffZ = rotArray[frame].toObject().value("Z").toDouble() - rotArray[frame - 1].toObject().value("Z").toDouble();
-                double diffW = rotArray[frame].toObject().value("W").toDouble() - rotArray[frame - 1].toObject().value("W").toDouble();
-                double diffTotal = qAbs(diffX) + qAbs(diffY) + qAbs(diffZ) + qAbs(diffW);
-                if (diffTotal > mReductionSensitivity()) {
-                    optimizeRotation = false;
-                    break;
-                }
-            }
-            upn(frame, 1, scaleNum - 1) {
-                double diffX = scaleArray[frame].toObject().value("x").toDouble() - scaleArray[frame - 1].toObject().value("x").toDouble();
-                double diffY = scaleArray[frame].toObject().value("y").toDouble() - scaleArray[frame - 1].toObject().value("y").toDouble();
-                double diffZ = scaleArray[frame].toObject().value("z").toDouble() - scaleArray[frame - 1].toObject().value("z").toDouble();
-                double diffTotal = qAbs(diffX) + qAbs(diffY) + qAbs(diffZ);
-                if (diffTotal > mReductionSensitivity()) {
-                    optimizeScale = false;
-                    break;
-                }
-            }
-            if (optimizeTranslation) {
-                QJsonArray nposArray;
-                nposArray.append( posArray.first() );
-                tempObj["positionFrames"] = nposArray;
-                tempObj["position_numFrames"] = 1;
-                posNum = 1;
-            }
-            if (optimizeRotation) {
-                QJsonArray nrotArray;
-                nrotArray.append( rotArray.first() );
-                tempObj["rotationFrames"] = nrotArray;
-                tempObj["rotation_numFrames"] = 1;
-                rotNum = 1;
-            }
-            if (optimizeScale) {
-                QJsonArray nscaleArray;
-                nscaleArray.append( scaleArray.first() );
-                tempObj["scaleFrames"] = nscaleArray;
-                tempObj["scale_numFrames"] = 1;
-                scaleNum = 1;
-            }
-            if (optimizeTranslation || optimizeRotation || optimizeScale) {
-                bonesArray[i] = tempObj;
-                bonesOptimized += 1;
-            }
-        }
+        /*int posNum = boneObj["position_numFrames"].toInt();
+        int rotNum = boneObj["rotation_numFrames"].toInt();
+        int scaleNum = boneObj["scale_numFrames"].toInt();
 
         QString error;
         if (posNum != animFrames && posNum != 1) {
             if (ui->checkAutoBakeIncomplete->isChecked()) {
-                QJsonArray posArray = tempObj["positionFrames"].toArray();
+                QJsonArray posArray = boneObj["positionFrames"].toArray();
                 while (posArray.count() != animFrames) {
                     posArray.append( posArray.last() );
                 }
-                tempObj["positionFrames"] = posArray;
-                tempObj["position_numFrames"] = animFrames;
+                boneObj["positionFrames"] = posArray;
+                boneObj["position_numFrames"] = animFrames;
             }
             error += QString(" [translation = %1];").arg(posNum);
         }
 
         if (rotNum != animFrames && rotNum != 1) {
             if (ui->checkAutoBakeIncomplete->isChecked()) {
-                QJsonArray rotArray = tempObj["rotationFrames"].toArray();
+                QJsonArray rotArray = boneObj["rotationFrames"].toArray();
                 while (rotArray.count() != animFrames) {
                     rotArray.append( rotArray.last() );
                 }
-                tempObj["rotationFrames"] = rotArray;
-                tempObj["rotation_numFrames"] = animFrames;
+                boneObj["rotationFrames"] = rotArray;
+                boneObj["rotation_numFrames"] = animFrames;
             }
             error += QString(" [rotation = %1];").arg(rotNum);
         }
 
         if (scaleNum != animFrames && scaleNum != 1) {
             if (ui->checkAutoBakeIncomplete->isChecked()) {
-                QJsonArray scaleArray = tempObj["scaleFrames"].toArray();
+                QJsonArray scaleArray = boneObj["scaleFrames"].toArray();
                 while (scaleArray.count() != animFrames) {
                     scaleArray.append( scaleArray.last() );
                 }
-                tempObj["scaleFrames"] = scaleArray;
-                tempObj["scale_numFrames"] = animFrames;
+                boneObj["scaleFrames"] = scaleArray;
+                boneObj["scale_numFrames"] = animFrames;
             }
             error += QString(" [scale = %1];").arg(scaleNum);
         }
 
         if (!error.isEmpty()) {
             if (ui->checkAutoBakeIncomplete->isChecked()) {
-                bonesArray[i] = tempObj;
+                bonesArray[i] = boneObj;
                 ++bonesBaked;
             }
             if (boneName.endsWith("_roll") || boneName.startsWith("IK_"))
                 brokenBones.append( boneName + ":" + error );
             else
                 brokenBones.append( "!!! " + boneName + ":" + error );
-        }
+        }*/
     }
 
     bool isAdditive = isAdditiveAnim(animObj);
@@ -1515,7 +1560,7 @@ bool W3MayaAnimUtil::extractMotionFromBone(QJsonValueRef ref) {
             QMessageBox::information(this, "Warning!", QString("Detected bones with incorrect numFrames in anim [%1] (numFrames = %2)\nIt may break the game!\nBones: %3").arg(animName).arg(animFrames).arg(brokenBones.join("\n")));
     }
     if (mBoneIdx == -1) {
-        if (bonesOptimized || bonesBaked) {
+        if (bonesOptimized) {
             bufferObj["bones"] = bonesArray;
             animObj["animBuffer"] = bufferObj;
         }
@@ -2521,11 +2566,11 @@ void W3MayaAnimUtil::onClicked_MergeProcess() {
         boneByNameF[boneNameF] = animBonesF[i].toObject();
     }
     if (!boneByNameF.contains("RootMotion")) {
-        editAddEmptyBone(animBonesF, "RootMotion");
+        editAddEmptyBoneFrames(animBonesF, "RootMotion", framesF);
         boneByNameF["RootMotion"] = animBonesF.last().toObject();
     }
     if (!boneByNameS.contains("RootMotion")) {
-        editAddEmptyBone(animBonesS, "RootMotion");
+        editAddEmptyBoneFrames(animBonesS, "RootMotion", framesS);
         boneByNameS["RootMotion"] = animBonesS.last().toObject();
     }
 
@@ -2540,8 +2585,6 @@ void W3MayaAnimUtil::onClicked_MergeProcess() {
     // for every bone
     for (int j = 0; j < animBonesF.count(); j += 1) {
         QString boneNameF = animBonesF[j].toObject().value("BoneName").toString();
-        if ( !isBlend && boneNameF == "RootMotion" )
-            continue;
 
         QJsonObject boneF = animBonesF[j].toObject();
         QJsonObject boneS = boneByNameS[boneNameF];
@@ -2651,7 +2694,7 @@ void W3MayaAnimUtil::onClicked_MergeProcess() {
                 rotArrF[frame - 1] = objXYZW(sumQ.x(), sumQ.y(), sumQ.z(), sumQ.scalar());
             }
             if (ui->checkMergeCropToSecond->isChecked()) {
-                addLog(QString("\t[MERGE] Cropping anim from %1 to %2 frames.").arg(posArrF.count()).arg(framesS));
+                addLog(QString("\t[MERGE] Cropping bone %1 from %2 to %3 frames.").arg(boneNameF).arg(posArrF.count()).arg(framesS));
                 while (posArrF.count() > framesS) {
                     posArrF.pop_back();
                 }
@@ -2750,6 +2793,11 @@ void W3MayaAnimUtil::onClicked_MergeProcess() {
         animObjF["name"] = m_secondAnimName;
     animObjF["duration"] = framesToSec(framesTotal - 1);
     animObjF["animBuffer"] = animBuffF;
+
+    /* optimize */
+    if (ui->checkMergeOptimize->isChecked()) {
+        editOptimizeBones(animObjF, true, true, true);
+    }
 
     QJsonObject mergedJsonRoot = QJsonObject();
     mergedJsonRoot.insert("animation", animObjF);

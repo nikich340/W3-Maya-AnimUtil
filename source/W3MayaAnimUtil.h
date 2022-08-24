@@ -89,7 +89,9 @@ private:
     void editSetCDPRDuration(QJsonObject& animObj);
     void editSortEvents(QJsonArray& eventsArray);
     void editRenameAnim(QJsonObject& animObj, QJsonArray& eventsArray, QString newName);
-    void editAddEmptyBone(QJsonArray& bonesArr, QString boneName);
+    void editAddEmptyBoneFrames(QJsonArray& bonesArr, QString boneName, int numFrames = 1);
+    bool editOptimizeBone(QJsonObject& boneObj, bool optimizePos = true, bool optimizeRot = true, bool optimizeScale = true);
+    int editOptimizeBones(QJsonObject& animObj, bool optimizePos = true, bool optimizeRot = true, bool optimizeScale = true);
     int m_animIndex;
     void applyEdits();
 
@@ -156,6 +158,7 @@ private slots:
     void onChanged_EditEnd(int endFrame);
     void onClicked_EditApply();
     void onClicked_EditApplyAll();
+    void onClicked_EditGroupOptimize(bool checked);
 
     /* MERGE */
     void onClicked_LoadMergeJson();
