@@ -89,6 +89,7 @@ private:
     void editSetCDPRDuration(QJsonObject& animObj);
     void editSortEvents(QJsonArray& eventsArray);
     void editRenameAnim(QJsonObject& animObj, QJsonArray& eventsArray, QString newName);
+    void editAddEmptyBone(QJsonArray& bonesArr, QString boneName);
     int m_animIndex;
     void applyEdits();
 

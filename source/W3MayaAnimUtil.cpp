@@ -192,7 +192,7 @@ void W3MayaAnimUtil::onClicked_Load() {
 }
 void W3MayaAnimUtil::setCurrentAnimInfo(int bones, int events, int frames, double duration, bool rootMotion, bool motionExtraction) {
     if (frames == -1 && duration < 0) {
-        ui->labelEditInfo->setText("<html><head/><body><p><span style=\"font-weight:700;\">Bones</span>: -. <span style=\"font-weight:700;\">Events</span>: -. <span style=\"font-weight:700;\">Duration</span>: - frames (- s), <span style=\"color:#ff0000;\">rootMotion</span>, <span style=\"color:#ff0000;\">motionExtraction</span><span style=\"color:#000000;\">. </span><span style=\"font-weight:700; color:#000000;\">Anim name</span><span style=\"color:#000000;\">: </span></p></body></html>");
+        ui->labelEditInfo->setText("<html><head/><body><p><span style=\"font-weight:700;\">Bones</span>: -. <span style=\"font-weight:700;\">Events</span>: -. <span style=\"font-weight:700;\">Duration</span>: - frames (- s), <span style=\"color:#ff0000;\">RootMotion</span>, <span style=\"color:#ff0000;\">motionExtraction</span><span style=\"color:#000000;\">. </span><span style=\"font-weight:700; color:#000000;\">Anim name</span><span style=\"color:#000000;\">: </span></p></body></html>");
         ui->spinEditStart->setValue(-1);
         ui->spinEditDuration->setValue(-1);
         ui->spinEditEnd->setValue(-1);
@@ -202,7 +202,7 @@ void W3MayaAnimUtil::setCurrentAnimInfo(int bones, int events, int frames, doubl
         ui->buttonEditApply->setEnabled(false);
         ui->buttonEditApplyAll->setEnabled(false);
     } else {
-        ui->labelEditInfo->setText(QString("<html><head/><body><p><span style=\"font-weight:700;\">Bones</span>: %1. <span style=\"font-weight:700;\">Events</span>: %2. <span style=\"font-weight:700;\">Duration</span>: %3 frames (%4 s), <span style=\"color:%5;\">rootMotion</span>, <span style=\"color:%6;\">motionExtraction</span><span style=\"color:#000000;\">. </span><span style=\"font-weight:700; color:#000000;\">Anim name</span><span style=\"color:#000000;\">: </span></p></body></html>")
+        ui->labelEditInfo->setText(QString("<html><head/><body><p><span style=\"font-weight:700;\">Bones</span>: %1. <span style=\"font-weight:700;\">Events</span>: %2. <span style=\"font-weight:700;\">Duration</span>: %3 frames (%4 s), <span style=\"color:%5;\">RootMotion</span>, <span style=\"color:%6;\">motionExtraction</span><span style=\"color:#000000;\">. </span><span style=\"font-weight:700; color:#000000;\">Anim name</span><span style=\"color:#000000;\">: </span></p></body></html>")
                                    .arg(bones)
                                    .arg(events)
                                    .arg(frames)
@@ -241,6 +241,9 @@ void W3MayaAnimUtil::applyEdits() {
         ui->comboEditAnims->setItemText(m_animIndex, animName);
         m_animNames[m_animIndex] = animName;
         hasChanges = true;
+    }
+    if (ui->checkEditAddRootMotion->isChecked()) {
+
     }
     if (ui->groupEditBake->isChecked()) {
         editBakeBones(animObj, ui->checkEditBakePos->isChecked(), ui->checkEditBakeRot->isChecked(), ui->checkEditBakeScale->isChecked());
@@ -394,6 +397,34 @@ void W3MayaAnimUtil::editCropAnim(QJsonObject& animObj, QJsonArray& eventsArray,
            .arg( framesToSec(durationFrames - 1) ));
 }
 
+void W3MayaAnimUtil::editAddEmptyBone(QJsonArray& bonesArr, QString boneName) {
+    int last_index = 0;
+    if (!bonesArr.isEmpty()) {
+        last_index = bonesArr.last().toObject().value("index").toInt();
+    }
+    addLog(QString("\t[EDIT] Adding empty bone %1 with index %2").arg(boneName).arg(last_index + 1));
+
+    QJsonObject newBoneObj = QJsonObject();
+    newBoneObj.insert("BoneName", boneName);
+    newBoneObj.insert("index", last_index + 1);
+
+    double dt = 0.033333333;
+    QString attrNames[3] = { "position", "rotation", "scale" };
+    upn(j, 0, 2) {
+        newBoneObj.insert(QString("%1_numFrames").arg(attrNames[j]), 1);
+        QJsonArray attrArray = QJsonArray();
+        if (attrNames[j] == "rotation")
+            attrArray.append(objXYZW(0,0,0,1));
+        else if (attrNames[j] == "position")
+            attrArray.append(objXYZ(0,0,0));
+        else
+            attrArray.append(objXYZ(1,1,1));
+        newBoneObj.insert(QString("%1Frames").arg(attrNames[j]), attrArray);
+        newBoneObj.insert(QString("%1_dt").arg(attrNames[j]), dt);
+    }
+    bonesArr.append(newBoneObj);
+}
+
 void W3MayaAnimUtil::editBakeBones(QJsonObject& animObj, bool bakePos, bool bakeRot, bool bakeScale) {
     QJsonObject animBuff = animObj.value("animBuffer").toObject();
     int animFrames = animBuff.value("numFrames").toInt();
@@ -531,6 +562,12 @@ void W3MayaAnimUtil::onChanged_EditCurrentAnim(int newAnimIndex) {
             rootMotion = true;
             break;
         }
+    }
+    if (rootMotion) {
+        ui->checkEditAddRootMotion->setChecked(false);
+        ui->checkEditAddRootMotion->setEnabled(false);
+    } else {
+        ui->checkEditAddRootMotion->setEnabled(true);
     }
     ui->spinEditStart->setMaximum(animFrames);
     ui->spinEditDuration->setMaximum(animFrames);
@@ -780,9 +817,11 @@ void W3MayaAnimUtil::blendMotion(QVector<double>& motion, int animFrames, const 
 }
 void W3MayaAnimUtil::blendPos(QJsonArray& posArray, int targetFrames) {
     QJsonArray resArray;
-    resArray.append( posArray.first() );
     int frames = posArray.count();
     qDebug() << QString("blendPos [%1] -> [%2]").arg(frames).arg(targetFrames);
+    if (frames > targetFrames) {
+        addLog(QString("[ERROR] BlendPos: can't bake! posArray size (%1) is bigger than required (%2).").arg(frames).arg(targetFrames), logError);
+    }
     if (frames == targetFrames)
         return;
     if (frames == 1) {
@@ -792,20 +831,23 @@ void W3MayaAnimUtil::blendPos(QJsonArray& posArray, int targetFrames) {
         posArray = resArray;
         return;
     }
+    resArray.append( posArray.first() );
 
-    double partSize = (targetFrames - 1) / (frames - 1);
-    double currentPartSize = 0;
+    double partSize = (targetFrames - 1.0) / (frames - 1.0);
+    double currentPartSize = 0.0;
+    qDebug() << QString("blendPos.partSize = %1").arg(partSize);
     int j = 0;
     double X1, Y1, Z1;
     double X2, Y2, Z2;
     for (int i = 2; i < targetFrames; i += 1) {
         currentPartSize += 1.0;
+        //qDebug() << QString("blendPos.frame: %1, currentPartSize = %1").arg(currentPartSize);
         if (currentPartSize > partSize) {
             j += 1;
             currentPartSize -= partSize;
         }
         double k = currentPartSize / partSize;
-        qDebug() << QString("blendPos.frame: %1, k = %2").arg(i).arg(k);
+        //qDebug() << QString("blendPos.frame: %1, k = %2, currentPartSize = %3").arg(i).arg(k).arg(currentPartSize);
         k = qMin(1.0, qMax(0.0, k));
         // [j..j+1]
         objToXYZ(posArray[j].toObject(),       X1, Y1, Z1);
@@ -813,15 +855,18 @@ void W3MayaAnimUtil::blendPos(QJsonArray& posArray, int targetFrames) {
         interpolatePos(k, X1, Y1, Z1, X2, Y2, Z2);
         resArray.append( objXYZ(X1, Y1, Z1) );
     }
+    qDebug() << QString("blendPos.lastK = %1 (must be around 1.0)").arg((currentPartSize + 1.0) / partSize);
     resArray.append( posArray.last() );
     posArray = resArray;
     return;
 }
 void W3MayaAnimUtil::blendRot(QJsonArray& rotArray, int targetFrames) {
     QJsonArray resArray;
-    resArray.append( rotArray.first() );
     int frames = rotArray.count();
     qDebug() << QString("blendRot [%1] -> [%2]").arg(frames).arg(targetFrames);
+    if (frames > targetFrames) {
+        addLog(QString("[ERROR] BlendPos: can't bake! posArray size (%1) is bigger than required (%2).").arg(frames).arg(targetFrames), logError);
+    }
     if (frames == targetFrames)
         return;
     if (frames == 1) {
@@ -831,9 +876,11 @@ void W3MayaAnimUtil::blendRot(QJsonArray& rotArray, int targetFrames) {
         rotArray = resArray;
         return;
     }
+    resArray.append( rotArray.first() );
 
-    double partSize = (targetFrames - 1) / (frames - 1);
-    double currentPartSize = 0;
+    double partSize = (targetFrames - 1.0) / (frames - 1.0);
+    qDebug() << QString("blendRot.partSize = %1").arg(partSize);
+    double currentPartSize = 0.0;
     int j = 0;
     double X1, Y1, Z1, W1;
     double X2, Y2, Z2, W2;
@@ -844,7 +891,7 @@ void W3MayaAnimUtil::blendRot(QJsonArray& rotArray, int targetFrames) {
             currentPartSize -= partSize;
         }
         double k = currentPartSize / partSize;
-        qDebug() << QString("blendRot.frame: %1, k = %2").arg(i).arg(k);
+        //qDebug() << QString("blendRot.frame: %1, k = %2, currentPartSize = %3").arg(i).arg(k).arg(currentPartSize);
         k = qMin(1.0, qMax(0.0, k));
         // [j..j+1]
         objToXYZW(rotArray[j].toObject(),       X1, Y1, Z1, W1);
@@ -852,6 +899,7 @@ void W3MayaAnimUtil::blendRot(QJsonArray& rotArray, int targetFrames) {
         interpolateRot(k, X1, Y1, Z1, W1, X2, Y2, Z2, W2);
         resArray.append( objXYZW(X1, Y1, Z1, W1) );
     }
+    qDebug() << QString("blendRot.lastK = %1 (must be around 1.0)").arg((currentPartSize + 1.0) / partSize);
     resArray.append( rotArray.last() );
     rotArray = resArray;
     return;
@@ -2462,17 +2510,27 @@ void W3MayaAnimUtil::onClicked_MergeProcess() {
     editBakeBones(animObjS, true, true, false);
     QJsonObject animBuffS = animObjS.value("animBuffer").toObject();
     QJsonArray animBonesS = animBuffS.value("bones").toArray();
-    QMap<QString, QJsonObject> boneByNameS;
+    QMap<QString, QJsonObject> boneByNameF, boneByNameS;
 
-    for (int i = 0; i < animBonesS.size(); i += 1) {
+    for (int i = 0; i < animBonesS.count(); i += 1) {
         QString boneNameS = animBonesS[i].toObject().value("BoneName").toString();
         boneByNameS[boneNameS] = animBonesS[i].toObject();
     }
-
-    for (int i = 0; i < animBonesF.size(); i += 1) {
+    for (int i = 0; i < animBonesF.count(); i += 1) {
         QString boneNameF = animBonesF[i].toObject().value("BoneName").toString();
-        if ( boneNameF == "RootMotion" )
-            continue;
+        boneByNameF[boneNameF] = animBonesF[i].toObject();
+    }
+    if (!boneByNameF.contains("RootMotion")) {
+        editAddEmptyBone(animBonesF, "RootMotion");
+        boneByNameF["RootMotion"] = animBonesF.last().toObject();
+    }
+    if (!boneByNameS.contains("RootMotion")) {
+        editAddEmptyBone(animBonesS, "RootMotion");
+        boneByNameS["RootMotion"] = animBonesS.last().toObject();
+    }
+
+    for (int i = 0; i < animBonesF.count(); i += 1) {
+        QString boneNameF = animBonesF[i].toObject().value("BoneName").toString();
         if ( !boneByNameS.contains(boneNameF) ) {
             addLog(QString("Can't find bone %1 in source anim!").arg(boneNameF), logError);
             continue;
@@ -2482,7 +2540,7 @@ void W3MayaAnimUtil::onClicked_MergeProcess() {
     // for every bone
     for (int j = 0; j < animBonesF.count(); j += 1) {
         QString boneNameF = animBonesF[j].toObject().value("BoneName").toString();
-        if ( boneNameF == "RootMotion" )
+        if ( !isBlend && boneNameF == "RootMotion" )
             continue;
 
         QJsonObject boneF = animBonesF[j].toObject();
@@ -2503,7 +2561,7 @@ void W3MayaAnimUtil::onClicked_MergeProcess() {
             double incrK = 1.0 / mergeDuration;
             for (int frame = mergeStart; frame < mergeStart + mergeDuration - 1; frame += 1) {
                 K += incrK;
-                //qDebug() << QString("bone %1, frame %2, interpol: K = %3").arg(boneNameF).arg(frame).arg(K);
+                qDebug() << QString("bone %1, frame %2, interpol: K = %3").arg(boneNameF).arg(frame).arg(K);
                 /* pos */
                 objToXYZ(posArrF.at(frame - 1).toObject(), pX1, pY1, pZ1);
                 objToXYZ(posArrS.at(frame - mergeStart).toObject(), pX2, pY2, pZ2);
@@ -2516,6 +2574,20 @@ void W3MayaAnimUtil::onClicked_MergeProcess() {
                 objToXYZW(rotArrS.at(frame - mergeStart).toObject(), pX2, pY2, pZ2, pW2);
                 interpolateRot(K, pX1, pY1, pZ1, pW1, pX2, pY2, pZ2, pW2);
                 rotArrF[frame - 1] = objXYZW(pX1, pY1, pZ1, pW1);
+            }
+            // the last one (frame == mergeStart + mergeDuration - 1): K = 1.0 vvv
+            // add remaining SecondAnim frames (if they exist)
+            for (int frame = mergeStart + mergeDuration - 1; frame < mergeStart + posArrS.count(); frame += 1) {
+                qDebug() << QString("bone %1, frame %2, remaining (K = 1.0)").arg(boneNameF).arg(frame);
+                if (posArrF.count() < frame)
+                    posArrF.append( posArrS[frame - mergeStart] );
+                else
+                    posArrF[frame - 1] = posArrS[frame - mergeStart];
+
+                if (rotArrF.count() < frame)
+                    rotArrF.append( rotArrS[frame - mergeStart] );
+               else
+                    rotArrF[frame - 1] = rotArrS[frame - mergeStart];
             }
         } else if (ui->comboMergeType->currentIndex() == 1 /* SUM */) {
             // SUM
@@ -2579,6 +2651,7 @@ void W3MayaAnimUtil::onClicked_MergeProcess() {
                 rotArrF[frame - 1] = objXYZW(sumQ.x(), sumQ.y(), sumQ.z(), sumQ.scalar());
             }
             if (ui->checkMergeCropToSecond->isChecked()) {
+                addLog(QString("\t[MERGE] Cropping anim from %1 to %2 frames.").arg(posArrF.count()).arg(framesS));
                 while (posArrF.count() > framesS) {
                     posArrF.pop_back();
                 }
@@ -2586,6 +2659,8 @@ void W3MayaAnimUtil::onClicked_MergeProcess() {
                     rotArrF.pop_back();
                 }
                 qDebug() << "pop to: " << framesS;
+            } else {
+                addLog(QString("\t[MERGE] Cropping option is disabled, leaving %1 frames.").arg(posArrF.count()));
             }
         } else if (ui->comboMergeType->currentIndex() == 2 /* SUBTRACT */) {
             // SUBTRACT [mergeStart; mergeStart + mergeDuration - 1]
@@ -2621,22 +2696,6 @@ void W3MayaAnimUtil::onClicked_MergeProcess() {
                     subQ = QQuaternion::fromEulerAngles(eulerMerged - eulerPose);
                 subQ.normalize();
                 rotArrF[frame - 1] = objXYZW(subQ.x(), subQ.y(), subQ.z(), subQ.scalar());
-            }
-        }
-        if (isBlend) {
-            // the last one (frame == mergeStart + mergeDuration - 1): K = 1.0 vvv
-            // add remaining SecondAnim frames (if they exist)
-            for (int frame = mergeStart + mergeDuration - 1; frame < mergeStart + posArrS.count(); frame += 1) {
-                //qDebug() << QString("bone %1, frame %2, remaining").arg(boneNameF).arg(frame);
-                if (posArrF.count() < frame)
-                    posArrF.append( posArrS[frame - mergeStart] );
-                else
-                    posArrF[frame - 1] = posArrS[frame - mergeStart];
-
-                if (rotArrF.count() < frame)
-                    rotArrF.append( rotArrS[frame - mergeStart] );
-               else
-                    rotArrF[frame - 1] = rotArrS[frame - mergeStart];
             }
         }
         // else do nothing
@@ -2709,4 +2768,3 @@ W3MayaAnimUtil::~W3MayaAnimUtil()
 {
     delete ui;
 }
-
