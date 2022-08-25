@@ -1,5 +1,6 @@
 #include "W3MayaAnimUtil.h"
 #include "ui_W3MayaAnimUtil.h"
+#include <QScreen>
 #include <QScrollBar>
 #include <QMessageBox>
 #include <QFileInfo>
@@ -59,22 +60,7 @@ W3MayaAnimUtil::W3MayaAnimUtil(QWidget *parent)
     connect(ui->comboMergeType, SIGNAL(currentIndexChanged(int)), this, SLOT(onChanged_MergeType(int)));
     connect(ui->buttonMergeLastHalfSec, SIGNAL(clicked(bool)), this, SLOT(onClicked_BlendHalfSec()));
 
-    // test
-    /*QQuaternion pose = QQuaternion(0.00195332617,
-                    -0.00195332617,
-                    -0.7071041,
-                     -0.7071041);
-    QQuaternion add = QQuaternion(0.872241557,
-                      0.08888464,
-                      -0.0800938457,
-                      -0.4742142);
-    QQuaternion Q = pose * add;
-    QQuaternion add2 = pose.inverted() * Q;
-    qDebug() << QString("pose: %1, add: %2, Q: %3, add2: %4")
-                .arg(vec3ToString(pose.toEulerAngles()))
-                .arg(vec3ToString(add.toEulerAngles()))
-                .arg(vec3ToString(Q.toEulerAngles()))
-                .arg(vec3ToString(add2.toEulerAngles()));*/
+    resize(this->width(), QGuiApplication::primaryScreen()->geometry().height() * 0.8);
 }
 
 double W3MayaAnimUtil::mReductionSensitivity() {
