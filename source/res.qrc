@@ -1,6 +1,18 @@
 <RCC>
     <qresource prefix="/">
-        <file>icon.ico</file>
         <file>Merge_scheme.jpg</file>
+        <file>icons/add.png</file>
+        <file>icons/clone.png</file>
+        <file>icons/icon2.ico</file>
+        <file>icons/remove.png</file>
+        <file>icons/change.png</file>
+        <file>icons/load.png</file>
+        <file>icons/merge.png</file>
+        <file>icons/save.png</file>
+        <file>icons/save_multi.png</file>
+        <file>icons/apply.png</file>
+        <file>icons/edit.png</file>
+        <file>icons/maya.png</file>
+        <file>icons/wolf.png</file>
     </qresource>
 </RCC>
