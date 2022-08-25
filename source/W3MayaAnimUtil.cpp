@@ -7,7 +7,7 @@
 
 #define upn(val, start, end) for(int val = start; val <= end; ++val)
 #define JRef QJsonValueRef
-#define VERSION "v2.0"
+#define VERSION "v2.1.1"
 
 W3MayaAnimUtil::W3MayaAnimUtil(QWidget *parent)
     : QMainWindow(parent)
@@ -2633,7 +2633,7 @@ void W3MayaAnimUtil::onClicked_MergeProcess() {
                     rotArrF[frame - 1] = rotArrS[frame - mergeStart];
             }
         } else if (ui->comboMergeType->currentIndex() == 1 /* SUM */) {
-            // SUM
+            // SUM [1; framesS] doing stuff in F
             for (int frame = 1; frame <= framesS; frame += 1) {
                 qDebug() << QString("SUM: bone %1, frame %2").arg(boneNameF).arg(frame);
                 /* pos */
@@ -2706,31 +2706,31 @@ void W3MayaAnimUtil::onClicked_MergeProcess() {
                 addLog(QString("\t[MERGE] Cropping option is disabled, leaving %1 frames.").arg(posArrF.count()));
             }
         } else if (ui->comboMergeType->currentIndex() == 2 /* SUBTRACT */) {
-            // SUBTRACT [mergeStart; mergeStart + mergeDuration - 1]
+            // SUBTRACT [1; framesS], doing stuff in S
             for (int frame = 1; frame <= framesS; frame += 1) {
                 qDebug() << QString("SUBTRACT: bone %1, frame %2").arg(boneNameF).arg(frame);
                 /* pos */
-                objToXYZ(posArrS.at(frame - 1).toObject(), pX1, pY1, pZ1);
-                objToXYZ(posArrF.at(frame - 1).toObject(), pX2, pY2, pZ2);
+                objToXYZ(posArrF.at(frame - 1).toObject(), pX1, pY1, pZ1);
+                objToXYZ(posArrS.at(frame - 1).toObject(), pX2, pY2, pZ2);
 
                 if (ui->checkMergeSumInversePos->isChecked()) {
-                    pX1 += pX2;
-                    pY1 += pY2;
-                    pZ1 += pZ2;
+                    pX2 += pX1;
+                    pY2 += pY1;
+                    pZ2 += pZ1;
                 } else {
-                    pX1 -= pX2;
-                    pY1 -= pY2;
-                    pZ1 -= pZ2;
+                    pX2 -= pX1;
+                    pY2 -= pY1;
+                    pZ2 -= pZ1;
                 }
 
-                posArrF[frame - 1] = objXYZ(pX1, pY1, pZ1);
+                posArrS[frame - 1] = objXYZ(pX2, pY2, pZ2);
 
                 /* rot */
-                objToXYZW(rotArrS.at(frame - 1).toObject(), pX1, pY1, pZ1, pW1);
-                objToXYZW(rotArrF.at(frame - 1).toObject(), pX2, pY2, pZ2, pW2);
+                objToXYZW(rotArrF.at(frame - 1).toObject(), pX1, pY1, pZ1, pW1);
+                objToXYZW(rotArrS.at(frame - 1).toObject(), pX2, pY2, pZ2, pW2);
 
-                QVector3D eulerMerged = QQuaternion(pW1, pX1, pY1, pZ1).toEulerAngles();
-                QVector3D eulerPose = QQuaternion(pW2, pX2, pY2, pZ2).toEulerAngles();
+                QVector3D eulerMerged = QQuaternion(pW2, pX2, pY2, pZ2).toEulerAngles();
+                QVector3D eulerPose = QQuaternion(pW1, pX1, pY1, pZ1).toEulerAngles();
 
                 QQuaternion subQ;
                 if (ui->checkMergeSumInverseRot->isChecked())
@@ -2738,13 +2738,15 @@ void W3MayaAnimUtil::onClicked_MergeProcess() {
                 else
                     subQ = QQuaternion::fromEulerAngles(eulerMerged - eulerPose);
                 subQ.normalize();
-                rotArrF[frame - 1] = objXYZW(subQ.x(), subQ.y(), subQ.z(), subQ.scalar());
+                rotArrS[frame - 1] = objXYZW(subQ.x(), subQ.y(), subQ.z(), subQ.scalar());
             }
+            posArrF = posArrS;
+            rotArrF = rotArrS;
         }
         // else do nothing
 
-        if (framesTotal != posArrF.count()) {
-            qDebug() << QString("!!! Inconsistence! framesTotal = %1, posArr count = %2").arg(framesTotal).arg(posArrF.count());
+        if (framesTotal != posArrF.count() || framesTotal != rotArrF.count()) {
+            addLog(QString("!!! Inconsistence! bone = %1, framesTotal = %2, posArr = %3, rotArr = %4").arg(boneNameF).arg(framesTotal).arg(posArrF.count()).arg(rotArrF.count()), logError);
         }
         boneF["position_numFrames"] = framesTotal;
         boneF["rotation_numFrames"] = framesTotal;
@@ -2782,7 +2784,12 @@ void W3MayaAnimUtil::onClicked_MergeProcess() {
     }
 
     if (ui->checkMergeEventsSort->isChecked()) {
-        editSortEvents(eventsArrayF);
+        if (isSubtract) {
+            editSortEvents(eventsArrayS);
+            eventsArrayF = eventsArrayS;
+        } else {
+            editSortEvents(eventsArrayF);
+        }
     }
 
     // save
@@ -2793,6 +2800,8 @@ void W3MayaAnimUtil::onClicked_MergeProcess() {
         animObjF["name"] = m_secondAnimName;
     animObjF["duration"] = framesToSec(framesTotal - 1);
     animObjF["animBuffer"] = animBuffF;
+
+    addLog(QString("\t[MERGE] Resulting anim: numFrames = %1, duration = %2 s, name = %3").arg(framesTotal).arg(framesToSec(framesTotal - 1)).arg(animObjF["name"].toString()));
 
     /* optimize */
     if (ui->checkMergeOptimize->isChecked()) {
