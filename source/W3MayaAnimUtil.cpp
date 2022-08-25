@@ -51,6 +51,19 @@ W3MayaAnimUtil::W3MayaAnimUtil(QWidget *parent)
     connect(ui->buttonEditApplyAll, SIGNAL(clicked(bool)), this, SLOT(onClicked_EditApplyAll()));
     connect(ui->groupEditCut, SIGNAL(clicked(bool)), this, SLOT(onChecked_EditCut(bool)));
 
+    /* EVENTS EDIT */
+    connect(ui->listEvents, SIGNAL(currentRowChanged(int)), this, SLOT(onChanged_eventRow(int)));
+    connect(ui->listEventsContent, SIGNAL(currentRowChanged(int)), this, SLOT(onChanged_eventContentRow(int)));
+    connect(ui->buttonResetEvents, SIGNAL(clicked(bool)), this, SLOT(onClicked_eventsReset()));
+    connect(ui->buttonApplyEvents, SIGNAL(clicked(bool)), this, SLOT(onClicked_eventsApply()));
+
+    connect(ui->buttonEventsType, SIGNAL(clicked(bool)), this, SLOT(onClicked_eventsSetType()));
+    connect(ui->buttonEventsAdd, SIGNAL(clicked(bool)), this, SLOT(onClicked_eventsAdd()));
+    connect(ui->buttonEventsClone, SIGNAL(clicked(bool)), this, SLOT(onClicked_eventsClone()));
+    connect(ui->buttonEventsRemove, SIGNAL(clicked(bool)), this, SLOT(onClicked_eventsRemove()));
+
+
+
     /* MERGE */
     connect(ui->buttonMergeLoad, SIGNAL(clicked(bool)), this, SLOT(onClicked_LoadMergeJson()));
     connect(ui->buttonMergeHelp, SIGNAL(clicked(bool)), this, SLOT(onClicked_MergePictureHelp()));
@@ -147,8 +160,8 @@ double W3MayaAnimUtil::getEventStartTime(QJsonObject eventObj) {
             return contentEntry.value("val").toDouble();
         }
     }
-    qDebug() << QString("Can't find event startTime! Type: %1").arg(eventObj.value("Type").toString());
-    return -1.0;
+    //qDebug() << QString("Can't find event startTime! Type: %1").arg(eventObj.value("Type").toString());
+    return 0.0;
 }
 void W3MayaAnimUtil::setEventStartTime(QJsonObject& eventObj, double newTime) {
     QJsonArray contentArr = eventObj.value("Content").toArray();
@@ -625,7 +638,10 @@ void W3MayaAnimUtil::onChanged_EditEnd(int endFrame) {
     }
 }
 void W3MayaAnimUtil::onChanged_EditCurrentAnim(int newAnimIndex) {
+    m_animEvents = QJsonArray();
+    m_eventIndex = 0;
     if (newAnimIndex < 0) {
+        eventsLoad();
         setCurrentAnimInfo(-1, -1, -1, -1, false, false);
         return;
     }
@@ -636,14 +652,18 @@ void W3MayaAnimUtil::onChanged_EditCurrentAnim(int newAnimIndex) {
     bool rootMotion = false;
     bool motionExtraction = false;
     QJsonObject animObj = QJsonObject();
+
     int eventsCount = 0;
     if (animSet) {
         animObj = jsonRoot.value("animations").toArray().at(m_animIndex).toObject().value("animation").toObject();
-        eventsCount = jsonRoot.value("animations").toArray().at(m_animIndex).toObject().value("entries").toArray().count();
+        m_animEvents = jsonRoot.value("animations").toArray().at(m_animIndex).toObject().value("entries").toArray();
     } else {
         animObj = jsonRoot.value("animation").toObject();
-        eventsCount = jsonRoot.value("entries").toArray().count();
+        m_animEvents = jsonRoot.value("entries").toArray();
+
     }
+    eventsCount = m_animEvents.count();
+    eventsLoad();
 
     motionExtraction = animObj.contains("motionExtraction")
                     && !animObj.value("motionExtraction").toObject().isEmpty();
@@ -671,6 +691,73 @@ void W3MayaAnimUtil::onChanged_EditCurrentAnim(int newAnimIndex) {
     ui->spinMergeStart->setMaximum(m_framesCount);
     onChanged_MergeStart();
 }
+
+/* EVENTS */
+void W3MayaAnimUtil::eventsLoad() {
+    ui->listEvents->clear();
+    m_eventIndex = 0;
+
+    if ( !m_animEvents.isEmpty() ) {
+        int entryNum = 0;
+        upn(i, 0, m_animEvents.count() - 1) {
+            QJsonObject eventObj = m_animEvents.at(i).toObject();
+            QString type = eventObj.value("Type").toString();
+            double startTime = getEventStartTime(eventObj);
+            double durationTime = getEventParam(eventObj, "duration", QVariant(-1.0)).toDouble();
+            if (durationTime > 0.0)
+                ui->listEvents->addItem( QString("%1 #%2 [%3 - %4 s]").arg(type).arg(entryNum).arg(startTime, 0, 'f', 3).arg(startTime + durationTime, 0, 'f', 3) );
+            else
+                ui->listEvents->addItem( QString("%1 #%2 [%3 s]").arg(type).arg(entryNum).arg(startTime, 0, 'f', 3) );
+            entryNum += 1;
+        }
+        ui->listEventsContent->setCurrentRow(0);
+    }
+}
+QVariant W3MayaAnimUtil::getEventParam(QJsonObject eventObj, QString paramName, QVariant defaultValue) {
+    QJsonArray contentArr = eventObj.value("Content").toArray();
+    upn(j, 0, contentArr.count() - 1) {
+        QJsonObject contentEntry = contentArr.at(j).toObject();
+        if (contentEntry.value("Name") == paramName) {
+            return contentEntry.value("val").toVariant();
+        }
+    }
+    qDebug() << QString("Can't find event %1! Type: %2").arg(paramName).arg(eventObj.value("Type").toString());
+    return defaultValue;
+}
+void W3MayaAnimUtil::onChanged_eventRow(int newRow) {
+    ui->listEventsContent->clear();
+    qDebug() << QString("onChanged_eventRow: %1").arg(newRow);
+    if (newRow < m_animEvents.count() && newRow >= 0) {
+        m_eventIndex = newRow;
+        QJsonArray contentArr = m_animEvents.at(m_eventIndex).toObject().value("Content").toArray();
+        //entryContentNum = 0;
+        if ( !contentArr.isEmpty() ) {
+            upn(i, 0, contentArr.count() - 1) {
+                QJsonObject contentEntry = contentArr.at(i).toObject();
+                QString entryName = contentEntry.value("Name").toString();
+                QString entryType = contentEntry.value("Type").toString();
+                QVariant value = QVariant("<unknown type>");
+                if (entryType == "Float") {
+                    value = contentEntry.value("val").toDouble();
+                } else if (entryType == "Bool") {
+                    value = contentEntry.value("val").toBool();
+                } else if (entryType == "StringAnsi") {
+                    value = contentEntry.value("val").toString();
+                } else if (entryType == "CName") {
+                    value = contentEntry.value("Value").toString();
+                }
+
+                ui->listEventsContent->addItem( QString("%1 (%2) = %3").arg(entryName).arg(entryType).arg(value.toString()) );
+                //entryContentNum += 1;
+            }
+        }
+        ui->listEventsContent->setCurrentRow(0);
+    }
+}
+void W3MayaAnimUtil::onChanged_eventContentRow(int newRow) {
+
+}
+
 bool W3MayaAnimUtil::loadW3Data() {
     // make cleanup here!
     /* extra nr */
@@ -2435,7 +2522,7 @@ void W3MayaAnimUtil::onUpdate_MergeInfo() {
                                           .arg(m_secondAnimBones)
                                           .arg(m_secondAnimEvents)
                                           .arg(m_secondAnimFrames)
-                                          .arg(m_secondAnimDuration, 0, 'f', 2)
+                                          .arg(m_secondAnimDuration, 0, 'f', 3)
                                           .arg(m_secondAnimRootMotion ? "#2a7e3e" : "#ff0000")
                                           .arg(m_secondAnimMotionExtraction ? "#2a7e3e" : "#ff0000") );
     } else

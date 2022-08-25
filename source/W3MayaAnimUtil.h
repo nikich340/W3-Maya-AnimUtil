@@ -95,6 +95,17 @@ private:
     int m_animIndex;
     void applyEdits();
 
+    /* EVENTS EDIT */
+    const QStringList m_animMainEvents = {  "CExtAnimEvent",
+                                            "CExtAnimDurationEvent",
+                                            "CExtAnimAttackEvent",
+                                         };
+    void eventsLoad();
+    QVariant getEventParam(QJsonObject eventObj, QString paramName, QVariant defaultValue = QVariant());
+    int m_eventIndex = -1;
+    int m_eventContentIndex = -1;
+    QJsonArray m_animEvents = QJsonArray();
+
     /* extra nr */
     QVector<QString> m_animNames;
     QVector<int> m_animFrames;
@@ -159,6 +170,17 @@ private slots:
     void onClicked_EditApply();
     void onClicked_EditApplyAll();
     void onClicked_EditGroupOptimize(bool checked);
+
+    /* EVENTS EDIT */
+    void onChanged_eventRow(int newRow);
+    void onChanged_eventContentRow(int newRow);
+    // entries
+    void onClicked_eventsReset();
+    void onClicked_eventsApply();
+    void onClicked_eventsAdd();
+    void onClicked_eventsClone();
+    void onClicked_eventsRemove();
+    void onClicked_eventsSetType();
 
     /* MERGE */
     void onClicked_LoadMergeJson();

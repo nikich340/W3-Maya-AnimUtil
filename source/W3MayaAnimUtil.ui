@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>967</width>
+    <width>1101</width>
     <height>1100</height>
    </rect>
   </property>
@@ -73,10 +73,14 @@
           </font>
          </property>
          <property name="styleSheet">
-          <string notr="true">background-color: rgb(195, 222, 225);</string>
+          <string notr="true"/>
          </property>
          <property name="text">
           <string>Load anim .json</string>
+         </property>
+         <property name="icon">
+          <iconset resource="res.qrc">
+           <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
          </property>
         </widget>
        </item>
@@ -152,7 +156,7 @@
       <property name="movable">
        <bool>true</bool>
       </property>
-      <widget class="QWidget" name="tabWidgetPage1" native="true">
+      <widget class="QWidget" name="tabWidgetPage1">
        <attribute name="title">
         <string>[ANIM] Edit</string>
        </attribute>
@@ -194,6 +198,10 @@
              </property>
              <property name="text">
               <string>APPLY (current)</string>
+             </property>
+             <property name="icon">
+              <iconset resource="res.qrc">
+               <normaloff>:/icons/apply.png</normaloff>:/icons/apply.png</iconset>
              </property>
             </widget>
            </item>
@@ -489,7 +497,619 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tabWidgetPage4" native="true">
+      <widget class="QWidget" name="tab">
+       <property name="font">
+        <font>
+         <family>Roboto</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <attribute name="title">
+        <string>[EVENTS] Edit</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_11">
+        <property name="leftMargin">
+         <number>6</number>
+        </property>
+        <property name="topMargin">
+         <number>6</number>
+        </property>
+        <property name="rightMargin">
+         <number>6</number>
+        </property>
+        <property name="bottomMargin">
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QWidget" name="widget_15" native="true">
+          <layout class="QGridLayout" name="gridLayout_5">
+           <property name="leftMargin">
+            <number>4</number>
+           </property>
+           <property name="topMargin">
+            <number>4</number>
+           </property>
+           <property name="rightMargin">
+            <number>4</number>
+           </property>
+           <property name="bottomMargin">
+            <number>4</number>
+           </property>
+           <property name="spacing">
+            <number>6</number>
+           </property>
+           <item row="0" column="4">
+            <widget class="QListWidget" name="listEventsContent">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="3">
+            <widget class="QLabel" name="labelEventsValue">
+             <property name="font">
+              <font>
+               <family>Arial</family>
+               <pointsize>9</pointsize>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Var Value:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="4" rowspan="2">
+            <widget class="QStackedWidget" name="stackEventsValue">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="currentIndex">
+              <number>5</number>
+             </property>
+             <widget class="QWidget" name="pageBool">
+              <layout class="QVBoxLayout" name="verticalLayout_13">
+               <property name="leftMargin">
+                <number>6</number>
+               </property>
+               <property name="topMargin">
+                <number>6</number>
+               </property>
+               <property name="rightMargin">
+                <number>6</number>
+               </property>
+               <property name="bottomMargin">
+                <number>6</number>
+               </property>
+               <item>
+                <widget class="QCheckBox" name="checkEventsValueBool">
+                 <property name="text">
+                  <string>false</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="pageInt">
+              <layout class="QVBoxLayout" name="verticalLayout_15">
+               <property name="leftMargin">
+                <number>6</number>
+               </property>
+               <property name="topMargin">
+                <number>6</number>
+               </property>
+               <property name="rightMargin">
+                <number>6</number>
+               </property>
+               <property name="bottomMargin">
+                <number>6</number>
+               </property>
+               <item>
+                <widget class="QSpinBox" name="spinEventsValueInt">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="pageString">
+              <layout class="QVBoxLayout" name="verticalLayout_12">
+               <property name="leftMargin">
+                <number>6</number>
+               </property>
+               <property name="topMargin">
+                <number>6</number>
+               </property>
+               <property name="rightMargin">
+                <number>6</number>
+               </property>
+               <property name="bottomMargin">
+                <number>6</number>
+               </property>
+               <item>
+                <widget class="QLineEdit" name="lineEventsValueString"/>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="pageArrayString">
+              <layout class="QVBoxLayout" name="verticalLayout_16">
+               <property name="leftMargin">
+                <number>6</number>
+               </property>
+               <property name="topMargin">
+                <number>6</number>
+               </property>
+               <property name="rightMargin">
+                <number>6</number>
+               </property>
+               <property name="bottomMargin">
+                <number>6</number>
+               </property>
+               <item>
+                <widget class="QPlainTextEdit" name="editEventsValueArrayString">
+                 <property name="sizeAdjustPolicy">
+                  <enum>QAbstractScrollArea::AdjustToContents</enum>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="pageFloat">
+              <layout class="QVBoxLayout" name="verticalLayout_14">
+               <property name="leftMargin">
+                <number>6</number>
+               </property>
+               <property name="topMargin">
+                <number>6</number>
+               </property>
+               <property name="rightMargin">
+                <number>6</number>
+               </property>
+               <property name="bottomMargin">
+                <number>6</number>
+               </property>
+               <item>
+                <widget class="QDoubleSpinBox" name="spinEventsValueFloat"/>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="pageAttackData">
+              <layout class="QVBoxLayout" name="verticalLayout_17">
+               <property name="spacing">
+                <number>0</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <widget class="QWidget" name="widget_18" native="true">
+                 <layout class="QGridLayout" name="gridLayout_6">
+                  <property name="leftMargin">
+                   <number>4</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>4</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>4</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>4</number>
+                  </property>
+                  <property name="spacing">
+                   <number>4</number>
+                  </property>
+                  <item row="1" column="6">
+                   <widget class="QCheckBox" name="checkBox_6">
+                    <property name="text">
+                     <string>hitFX:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="7" column="6">
+                   <widget class="QCheckBox" name="checkBox_9">
+                    <property name="text">
+                     <string>hitBackParriedFX:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="4">
+                   <widget class="QCheckBox" name="checkBox_3">
+                    <property name="text">
+                     <string>false</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="4">
+                   <widget class="QSpinBox" name="spinBox_2"/>
+                  </item>
+                  <item row="8" column="7">
+                   <widget class="QCheckBox" name="checkBox_16">
+                    <property name="text">
+                     <string>false</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="0">
+                   <widget class="QLabel" name="label_8">
+                    <property name="text">
+                     <string>soundAttackType:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QLineEdit" name="lineEdit"/>
+                  </item>
+                  <item row="8" column="6">
+                   <widget class="QCheckBox" name="checkBox_15">
+                    <property name="text">
+                     <string>Damage_Friendly:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="7" column="1">
+                   <widget class="QLineEdit" name="lineEdit_8"/>
+                  </item>
+                  <item row="3" column="4">
+                   <widget class="QCheckBox" name="checkBox_11">
+                    <property name="text">
+                     <string>false</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="7">
+                   <widget class="QLineEdit" name="lineEdit_6"/>
+                  </item>
+                  <item row="5" column="6">
+                   <widget class="QCheckBox" name="checkBox_8">
+                    <property name="text">
+                     <string>hitParriedFX:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="7">
+                   <widget class="QLineEdit" name="lineEdit_5"/>
+                  </item>
+                  <item row="3" column="3">
+                   <widget class="QCheckBox" name="checkBox_10">
+                    <property name="text">
+                     <string>canBeDodged:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="1">
+                   <widget class="QLineEdit" name="lineEdit_2"/>
+                  </item>
+                  <item row="7" column="7">
+                   <widget class="QLineEdit" name="lineEdit_7"/>
+                  </item>
+                  <item row="7" column="4">
+                   <widget class="QSpinBox" name="spinBox_3"/>
+                  </item>
+                  <item row="8" column="4">
+                   <widget class="QCheckBox" name="checkBox_14">
+                    <property name="text">
+                     <string>false</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="7" column="0">
+                   <widget class="QCheckBox" name="checkBox_12">
+                    <property name="text">
+                     <string>weaponSlot:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="1">
+                   <widget class="QLineEdit" name="lineEdit_3"/>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_7">
+                    <property name="text">
+                     <string>attackName:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="3">
+                   <widget class="QCheckBox" name="checkBox_2">
+                    <property name="text">
+                     <string>Can_Parry_Attack:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="6">
+                   <widget class="QCheckBox" name="checkBox_7">
+                    <property name="text">
+                     <string>hitBackFX:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="3">
+                   <widget class="QCheckBox" name="checkBox_4">
+                    <property name="text">
+                     <string>swingType:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="8" column="3">
+                   <widget class="QCheckBox" name="checkBox_13">
+                    <property name="text">
+                     <string>Damage_Neutral:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="7">
+                   <widget class="QLineEdit" name="lineEdit_4"/>
+                  </item>
+                  <item row="8" column="1">
+                   <widget class="QSpinBox" name="spinBox"/>
+                  </item>
+                  <item row="7" column="3">
+                   <widget class="QCheckBox" name="checkBox_5">
+                    <property name="text">
+                     <string>swingDir:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="label_6">
+                    <property name="text">
+                     <string>rangeName:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="8" column="0">
+                   <widget class="QCheckBox" name="checkBox">
+                    <property name="text">
+                     <string>hitReactionType:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="2" rowspan="8">
+                   <widget class="Line" name="line_2">
+                    <property name="frameShadow">
+                     <enum>QFrame::Sunken</enum>
+                    </property>
+                    <property name="lineWidth">
+                     <number>4</number>
+                    </property>
+                    <property name="midLineWidth">
+                     <number>2</number>
+                    </property>
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="5" rowspan="8">
+                   <widget class="Line" name="line_3">
+                    <property name="lineWidth">
+                     <number>4</number>
+                    </property>
+                    <property name="midLineWidth">
+                     <number>2</number>
+                    </property>
+                    <property name="orientation">
+                     <enum>Qt::Vertical</enum>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+           <item row="6" column="0" colspan="3">
+            <widget class="QPushButton" name="buttonResetEvents">
+             <property name="text">
+              <string>Reset all edits</string>
+             </property>
+             <property name="icon">
+              <iconset resource="res.qrc">
+               <normaloff>:/icons/change.png</normaloff>:/icons/change.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="4">
+            <widget class="QWidget" name="widget_17" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_12">
+              <property name="spacing">
+               <number>6</number>
+              </property>
+              <property name="leftMargin">
+               <number>4</number>
+              </property>
+              <property name="topMargin">
+               <number>4</number>
+              </property>
+              <property name="rightMargin">
+               <number>4</number>
+              </property>
+              <property name="bottomMargin">
+               <number>4</number>
+              </property>
+              <item>
+               <widget class="QPushButton" name="pushButton">
+                <property name="text">
+                 <string>Add var</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="res.qrc">
+                  <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_4">
+                <property name="text">
+                 <string>Remove var</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="res.qrc">
+                  <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="2" column="4">
+            <widget class="QComboBox" name="comboBox_2"/>
+           </item>
+           <item row="2" column="3">
+            <widget class="QLabel" name="label_4">
+             <property name="font">
+              <font>
+               <family>Arial</family>
+               <pointsize>9</pointsize>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Var Type:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="4">
+            <widget class="QPushButton" name="buttonApplyEvents">
+             <property name="text">
+              <string>Apply all edits to anim</string>
+             </property>
+             <property name="icon">
+              <iconset resource="res.qrc">
+               <normaloff>:/icons/apply.png</normaloff>:/icons/apply.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0" colspan="3">
+            <widget class="QWidget" name="widget_16" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_11">
+              <property name="spacing">
+               <number>6</number>
+              </property>
+              <property name="leftMargin">
+               <number>6</number>
+              </property>
+              <property name="topMargin">
+               <number>6</number>
+              </property>
+              <property name="rightMargin">
+               <number>6</number>
+              </property>
+              <property name="bottomMargin">
+               <number>6</number>
+              </property>
+              <item>
+               <widget class="QPushButton" name="buttonEventsAdd">
+                <property name="text">
+                 <string>Add</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="res.qrc">
+                  <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="buttonEventsClone">
+                <property name="text">
+                 <string>Clone</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="res.qrc">
+                  <normaloff>:/icons/clone.png</normaloff>:/icons/clone.png</iconset>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="buttonEventsRemove">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="text">
+                 <string>Remove</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="res.qrc">
+                  <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="labelEventsType">
+             <property name="font">
+              <font>
+               <family>Arial</family>
+               <pointsize>9</pointsize>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Type:</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1" colspan="2">
+            <widget class="QComboBox" name="comboEventsType">
+             <property name="editable">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1" colspan="2">
+            <widget class="QPushButton" name="buttonEventsType">
+             <property name="text">
+              <string>Set type to current event</string>
+             </property>
+             <property name="icon">
+              <iconset resource="res.qrc">
+               <normaloff>:/icons/edit.png</normaloff>:/icons/edit.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0" rowspan="2" colspan="4">
+            <widget class="QListWidget" name="listEvents">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tabWidgetPage4">
        <attribute name="title">
         <string>[ANIM] Merge</string>
        </attribute>
@@ -548,6 +1168,16 @@
             <widget class="QPushButton" name="buttonMergeLoad">
              <property name="text">
               <string>Load 2nd anim</string>
+             </property>
+             <property name="icon">
+              <iconset resource="res.qrc">
+               <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>22</width>
+               <height>22</height>
+              </size>
              </property>
             </widget>
            </item>
@@ -727,10 +1357,20 @@ color: rgb(255, 255, 255);</string>
               <bool>false</bool>
              </property>
              <property name="styleSheet">
-              <string notr="true">background-color: rgb(130, 220, 225);</string>
+              <string notr="true"/>
              </property>
              <property name="text">
               <string>Merge</string>
+             </property>
+             <property name="icon">
+              <iconset resource="res.qrc">
+               <normaloff>:/icons/merge.png</normaloff>:/icons/merge.png</iconset>
+             </property>
+             <property name="iconSize">
+              <size>
+               <width>22</width>
+               <height>22</height>
+              </size>
              </property>
              <property name="checkable">
               <bool>false</bool>
@@ -759,7 +1399,7 @@ color: rgb(255, 255, 255);</string>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tabWidgetPage2" native="true">
+      <widget class="QWidget" name="tabWidgetPage2">
        <attribute name="title">
         <string>[ANIM] WKit -&gt; Maya</string>
        </attribute>
@@ -800,6 +1440,10 @@ color: rgb(255, 255, 255);</string>
                 </property>
                 <property name="text">
                  <string>START</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="res.qrc">
+                  <normaloff>:/icons/maya.png</normaloff>:/icons/maya.png</iconset>
                 </property>
                </widget>
               </item>
@@ -991,7 +1635,7 @@ color: rgb(255, 255, 255);</string>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tabWidgetPage3" native="true">
+      <widget class="QWidget" name="tabWidgetPage3">
        <attribute name="title">
         <string>[ANIM] Maya -&gt; WKit</string>
        </attribute>
@@ -1027,6 +1671,10 @@ color: rgb(255, 255, 255);</string>
                 <property name="text">
                  <string>RootMotion bone -&gt; motionExtraction</string>
                 </property>
+                <property name="icon">
+                 <iconset resource="res.qrc">
+                  <normaloff>:/icons/wolf.png</normaloff>:/icons/wolf.png</iconset>
+                </property>
                </widget>
               </item>
               <item>
@@ -1040,6 +1688,10 @@ color: rgb(255, 255, 255);</string>
                <widget class="QPushButton" name="buttonLoadEventsSource">
                 <property name="text">
                  <string>Load animEvents .json source AND motion</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="res.qrc">
+                  <normaloff>:/icons/load.png</normaloff>:/icons/load.png</iconset>
                 </property>
                </widget>
               </item>
@@ -1203,7 +1855,7 @@ color: rgb(255, 255, 255);</string>
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="tabWidgetPage5" native="true">
+      <widget class="QWidget" name="tabWidgetPage5">
        <attribute name="title">
         <string>[CUTSCENE]</string>
        </attribute>
@@ -1227,6 +1879,10 @@ color: rgb(255, 255, 255);</string>
             <widget class="QPushButton" name="buttonPatchCutscene">
              <property name="text">
               <string>Patch json with json anim</string>
+             </property>
+             <property name="icon">
+              <iconset resource="res.qrc">
+               <normaloff>:/icons/wolf.png</normaloff>:/icons/wolf.png</iconset>
              </property>
             </widget>
            </item>
@@ -1255,6 +1911,10 @@ color: rgb(255, 255, 255);</string>
              <property name="text">
               <string>Extract animations from json</string>
              </property>
+             <property name="icon">
+              <iconset resource="res.qrc">
+               <normaloff>:/icons/save_multi.png</normaloff>:/icons/save_multi.png</iconset>
+             </property>
             </widget>
            </item>
            <item row="0" column="1">
@@ -1272,6 +1932,19 @@ color: rgb(255, 255, 255);</string>
         </item>
        </layout>
       </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="Line" name="line">
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="lineWidth">
+       <number>5</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
      </widget>
     </item>
     <item>
@@ -1337,12 +2010,20 @@ p, li { white-space: pre-wrap; }
          <property name="text">
           <string>Save anim .json</string>
          </property>
+         <property name="icon">
+          <iconset resource="res.qrc">
+           <normaloff>:/icons/save.png</normaloff>:/icons/save.png</iconset>
+         </property>
         </widget>
        </item>
        <item>
         <widget class="QPushButton" name="buttonSaveSplit">
          <property name="text">
           <string>Save animset as separate .json's</string>
+         </property>
+         <property name="icon">
+          <iconset resource="res.qrc">
+           <normaloff>:/icons/save_multi.png</normaloff>:/icons/save_multi.png</iconset>
          </property>
         </widget>
        </item>
@@ -1352,6 +2033,8 @@ p, li { white-space: pre-wrap; }
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
  <connections/>
 </ui>
