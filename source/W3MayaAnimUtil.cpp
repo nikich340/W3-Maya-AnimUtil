@@ -9,14 +9,15 @@
 #define upn(val, start, end) for(int val = start; val <= end; ++val)
 #define JRef QJsonValueRef
 #define VERSION "v2.1.1"
+#define MAU W3MayaAnimUtil
 
-W3MayaAnimUtil::W3MayaAnimUtil(QWidget *parent)
+MAU::MAU(QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::W3MayaAnimUtil)
+    , ui(new Ui::MAU)
 {
     ui->setupUi(this);
     //ui->textLog->setFontPointSize(20);
-    ui->textLog->setHtml("Welcome to <span style=\"font-weight:700;\">W3MayaAnimUtil " + QString(VERSION " (" __DATE__ ")") + "</span>!<br>Made by <span style=\"color:#6f00a6;font-weight:700;\">nikich340</span> for better the Witcher 3  modding experiene.<br><br>Click \"Load anim .json\" to start");
+    ui->textLog->setHtml("Welcome to <span style=\"font-weight:700;\">MAU " + QString(VERSION " (" __DATE__ ")") + "</span>!<br>Made by <span style=\"color:#6f00a6;font-weight:700;\">nikich340</span> for better the Witcher 3  modding experiene.<br><br>Click \"Load anim .json\" to start");
     ui->spinSensivity->setMinimum(0.0000000001);
     ui->spinSensivity->setSingleStep(0.00001);
     ui->spinSensivity->setValue(0.00001);
@@ -76,10 +77,10 @@ W3MayaAnimUtil::W3MayaAnimUtil(QWidget *parent)
     resize(this->width(), QGuiApplication::primaryScreen()->geometry().height() * 0.8);
 }
 
-double W3MayaAnimUtil::mReductionSensitivity() {
+double MAU::mReductionSensitivity() {
     return ui->spinSensivity->value();
 }
-void W3MayaAnimUtil::addLog(QString text, LogType type) {
+void MAU::addLog(QString text, LogType type) {
     qDebug() << text;
     QColor color;
     QString stype;
@@ -112,7 +113,7 @@ void W3MayaAnimUtil::addLog(QString text, LogType type) {
     ui->textLog->verticalScrollBar()->setValue( ui->textLog->verticalScrollBar()->maximum() );
 }
 
-bool W3MayaAnimUtil::loadJsonFile(QString filePath) {
+bool MAU::loadJsonFile(QString filePath) {
     jsonFile.setFileName(filePath);
     if ( !jsonFile.open(QIODevice::ReadOnly | QIODevice::Text) ) {
         addLog("Can't open file in read-only text mode: " + filePath, logError);
@@ -152,7 +153,7 @@ bool W3MayaAnimUtil::loadJsonFile(QString filePath) {
     }
 }
 
-double W3MayaAnimUtil::getEventStartTime(QJsonObject eventObj) {
+double MAU::getEventStartTime(QJsonObject eventObj) {
     QJsonArray contentArr = eventObj.value("Content").toArray();
     upn(j, 0, contentArr.count() - 1) {
         QJsonObject contentEntry = contentArr.at(j).toObject();
@@ -163,7 +164,7 @@ double W3MayaAnimUtil::getEventStartTime(QJsonObject eventObj) {
     //qDebug() << QString("Can't find event startTime! Type: %1").arg(eventObj.value("Type").toString());
     return 0.0;
 }
-void W3MayaAnimUtil::setEventStartTime(QJsonObject& eventObj, double newTime) {
+void MAU::setEventStartTime(QJsonObject& eventObj, double newTime) {
     QJsonArray contentArr = eventObj.value("Content").toArray();
 
     upn(j, 0, contentArr.count() - 1) {
@@ -176,7 +177,7 @@ void W3MayaAnimUtil::setEventStartTime(QJsonObject& eventObj, double newTime) {
     }
     eventObj["Content"] = contentArr;
 }
-void W3MayaAnimUtil::onClicked_Load() {
+void MAU::onClicked_Load() {
     if (hasChanges && QMessageBox::Yes != QMessageBox::question(this, "Attention!", "Currently loaded .json has some unsaved changes. Do you want to discard them and load new file?")) {
         return;
     }
@@ -189,7 +190,7 @@ void W3MayaAnimUtil::onClicked_Load() {
     }
     loadJsonFile(filePath);
 }
-void W3MayaAnimUtil::setCurrentAnimInfo(int bones, int events, int frames, double duration, bool rootMotion, bool motionExtraction) {
+void MAU::setCurrentAnimInfo(int bones, int events, int frames, double duration, bool rootMotion, bool motionExtraction) {
     if (frames == -1 && duration < 0) {
         ui->labelEditInfo->setText("<html><head/><body><p><span style=\"font-weight:700;\">Bones</span>: -. <span style=\"font-weight:700;\">Events</span>: -. <span style=\"font-weight:700;\">Duration</span>: - frames (- s), <span style=\"color:#ff0000;\">RootMotion</span>, <span style=\"color:#ff0000;\">motionExtraction</span><span style=\"color:#000000;\">. </span><span style=\"font-weight:700; color:#000000;\">Anim name</span><span style=\"color:#000000;\">: </span></p></body></html>");
         ui->spinEditStart->setValue(-1);
@@ -217,7 +218,7 @@ void W3MayaAnimUtil::setCurrentAnimInfo(int bones, int events, int frames, doubl
         ui->buttonEditApplyAll->setEnabled(true);
     }
 }
-void W3MayaAnimUtil::applyEdits() {
+void MAU::applyEdits() {
     QJsonArray animsObj = QJsonArray();
     QJsonObject animRootObj = QJsonObject();
     QJsonObject animObj = QJsonObject();
@@ -286,7 +287,7 @@ void W3MayaAnimUtil::applyEdits() {
     onChanged_EditCurrentAnim(m_animIndex);
 }
 
-void W3MayaAnimUtil::editRenameAnim(QJsonObject& animObj, QJsonArray& eventsArray, QString newName) {
+void MAU::editRenameAnim(QJsonObject& animObj, QJsonArray& eventsArray, QString newName) {
     addLog(QString("\t[EDIT] Rename anim to: %1.")
            .arg(newName));
     animObj["name"] = newName;
@@ -307,7 +308,7 @@ void W3MayaAnimUtil::editRenameAnim(QJsonObject& animObj, QJsonArray& eventsArra
     }
 }
 
-void W3MayaAnimUtil::editSetCDPRDuration(QJsonObject& animObj) {
+void MAU::editSetCDPRDuration(QJsonObject& animObj) {
     QJsonObject animBuff = animObj.value("animBuffer").toObject();
     int animFrames = animBuff.value("numFrames").toInt();
     addLog(QString("\t[EDIT] Set anim and animBuffer duration = %1 s.")
@@ -319,7 +320,7 @@ void W3MayaAnimUtil::editSetCDPRDuration(QJsonObject& animObj) {
     m_animDurations[m_animIndex] = framesToSec(animFrames - 1);
 }
 
-void W3MayaAnimUtil::editSortEvents(QJsonArray& eventsArray) {
+void MAU::editSortEvents(QJsonArray& eventsArray) {
     addLog(QString("\t[EDIT] Sort events by startTime: %1 entries.")
            .arg(eventsArray.count()));
     QJsonArray newEventsArray = QJsonArray();
@@ -341,7 +342,7 @@ void W3MayaAnimUtil::editSortEvents(QJsonArray& eventsArray) {
     eventsArray = newEventsArray;
 }
 
-void W3MayaAnimUtil::editCropAnim(QJsonObject& animObj, QJsonArray& eventsArray, bool cropEvents, int startFrame, int durationFrames) {
+void MAU::editCropAnim(QJsonObject& animObj, QJsonArray& eventsArray, bool cropEvents, int startFrame, int durationFrames) {
     addLog(QString("\t[EDIT] Crop anim frames to: [%1 - %2].")
            .arg(startFrame)
            .arg(durationFrames));
@@ -406,7 +407,7 @@ void W3MayaAnimUtil::editCropAnim(QJsonObject& animObj, QJsonArray& eventsArray,
            .arg( framesToSec(durationFrames - 1) ));
 }
 
-void W3MayaAnimUtil::editAddEmptyBoneFrames(QJsonArray& bonesArr, QString boneName, int numFrames) {
+void MAU::editAddEmptyBoneFrames(QJsonArray& bonesArr, QString boneName, int numFrames) {
     int last_index = 0;
     if (!bonesArr.isEmpty()) {
         last_index = bonesArr.last().toObject().value("index").toInt();
@@ -436,7 +437,7 @@ void W3MayaAnimUtil::editAddEmptyBoneFrames(QJsonArray& bonesArr, QString boneNa
     bonesArr.append(newBoneObj);
 }
 
-void W3MayaAnimUtil::editBakeBones(QJsonObject& animObj, bool bakePos, bool bakeRot, bool bakeScale) {
+void MAU::editBakeBones(QJsonObject& animObj, bool bakePos, bool bakeRot, bool bakeScale) {
     QJsonObject animBuff = animObj.value("animBuffer").toObject();
     int animFrames = animBuff.value("numFrames").toInt();
     QJsonArray animBones = animBuff.value("bones").toArray();
@@ -483,7 +484,7 @@ void W3MayaAnimUtil::editBakeBones(QJsonObject& animObj, bool bakePos, bool bake
     animObj["animBuffer"] = animBuff;
 }
 
-bool W3MayaAnimUtil::editOptimizeBone(QJsonObject& boneObj, bool optimizePos, bool optimizeRot, bool optimizeScale) {
+bool MAU::editOptimizeBone(QJsonObject& boneObj, bool optimizePos, bool optimizeRot, bool optimizeScale) {
     int posNum = boneObj["position_numFrames"].toInt();
     int rotNum = boneObj["rotation_numFrames"].toInt();
     int scaleNum = boneObj["scale_numFrames"].toInt();
@@ -547,7 +548,7 @@ bool W3MayaAnimUtil::editOptimizeBone(QJsonObject& boneObj, bool optimizePos, bo
     return (optimizePos || optimizeRot || optimizeScale);
 }
 
-int W3MayaAnimUtil::editOptimizeBones(QJsonObject& animObj, bool optimizePos, bool optimizeRot, bool optimizeScale) {
+int MAU::editOptimizeBones(QJsonObject& animObj, bool optimizePos, bool optimizeRot, bool optimizeScale) {
     QJsonObject bufferObj = animObj["animBuffer"].toObject();
     QJsonArray bonesArray = bufferObj["bones"].toArray();
     int optimized = 0;
@@ -570,7 +571,7 @@ int W3MayaAnimUtil::editOptimizeBones(QJsonObject& animObj, bool optimizePos, bo
     return optimized;
 }
 
-void W3MayaAnimUtil::onChecked_EditCut(bool checked) {
+void MAU::onChecked_EditCut(bool checked) {
     if (checked) {
         if (!ui->groupEditBake->isChecked())
             ui->groupEditBake->setChecked(true);
@@ -582,17 +583,17 @@ void W3MayaAnimUtil::onChecked_EditCut(bool checked) {
         ui->groupEditBake->setEnabled(true);
     }
 }
-void W3MayaAnimUtil::onClicked_EditGroupOptimize(bool checked) {
+void MAU::onClicked_EditGroupOptimize(bool checked) {
     if (checked) {
         ui->checkEditOptimizePos->setChecked(true);
         ui->checkEditOptimizeRot->setChecked(true);
         ui->checkEditOptimizeScale->setChecked(true);
     }
 }
-void W3MayaAnimUtil::onClicked_EditApply() {
+void MAU::onClicked_EditApply() {
     applyEdits();
 }
-void W3MayaAnimUtil::onClicked_EditApplyAll() {
+void MAU::onClicked_EditApplyAll() {
     if (animSet) {
         ui->progressBar->setValue(0);
         for (int i = 0; i < m_animNames.count(); i += 1) {
@@ -610,7 +611,7 @@ void W3MayaAnimUtil::onClicked_EditApplyAll() {
         applyEdits();
     }
 }
-void W3MayaAnimUtil::onChanged_EditStart(int startFrame) {
+void MAU::onChanged_EditStart(int startFrame) {
     if (startFrame < 0) {
         ui->labelEditStart->setText("Start (- s) (frame):");
     } else {
@@ -619,7 +620,7 @@ void W3MayaAnimUtil::onChanged_EditStart(int startFrame) {
         ui->spinEditDuration->setMaximum(m_framesCount - startFrame + 1);
     }
 }
-void W3MayaAnimUtil::onChanged_EditDuration(int durFrames) {
+void MAU::onChanged_EditDuration(int durFrames) {
     if (durFrames < 0) {
         ui->labelEditDuration->setText("Duration (- s) frames:");
     } else {
@@ -628,7 +629,7 @@ void W3MayaAnimUtil::onChanged_EditDuration(int durFrames) {
         ui->spinEditEnd->setValue(ui->spinEditStart->value() + durFrames - 1);
     }
 }
-void W3MayaAnimUtil::onChanged_EditEnd(int endFrame) {
+void MAU::onChanged_EditEnd(int endFrame) {
     if (endFrame < 0) {
         ui->labelEditEnd->setText("End (- s) frame:");
     } else {
@@ -637,7 +638,7 @@ void W3MayaAnimUtil::onChanged_EditEnd(int endFrame) {
         ui->spinEditDuration->setValue(endFrame - ui->spinEditStart->value() + 1);
     }
 }
-void W3MayaAnimUtil::onChanged_EditCurrentAnim(int newAnimIndex) {
+void MAU::onChanged_EditCurrentAnim(int newAnimIndex) {
     m_animEvents = QJsonArray();
     m_eventIndex = 0;
     if (newAnimIndex < 0) {
@@ -693,7 +694,7 @@ void W3MayaAnimUtil::onChanged_EditCurrentAnim(int newAnimIndex) {
 }
 
 /* EVENTS */
-void W3MayaAnimUtil::eventsLoad() {
+void MAU::eventsLoad() {
     ui->listEvents->clear();
     m_eventIndex = 0;
 
@@ -713,7 +714,7 @@ void W3MayaAnimUtil::eventsLoad() {
         ui->listEventsContent->setCurrentRow(0);
     }
 }
-QVariant W3MayaAnimUtil::getEventParam(QJsonObject eventObj, QString paramName, QVariant defaultValue) {
+QVariant MAU::getEventParam(QJsonObject eventObj, QString paramName, QVariant defaultValue) {
     QJsonArray contentArr = eventObj.value("Content").toArray();
     upn(j, 0, contentArr.count() - 1) {
         QJsonObject contentEntry = contentArr.at(j).toObject();
@@ -724,7 +725,7 @@ QVariant W3MayaAnimUtil::getEventParam(QJsonObject eventObj, QString paramName, 
     qDebug() << QString("Can't find event %1! Type: %2").arg(paramName).arg(eventObj.value("Type").toString());
     return defaultValue;
 }
-void W3MayaAnimUtil::onChanged_eventRow(int newRow) {
+void MAU::onChanged_eventRow(int newRow) {
     ui->listEventsContent->clear();
     qDebug() << QString("onChanged_eventRow: %1").arg(newRow);
     if (newRow < m_animEvents.count() && newRow >= 0) {
@@ -754,11 +755,11 @@ void W3MayaAnimUtil::onChanged_eventRow(int newRow) {
         ui->listEventsContent->setCurrentRow(0);
     }
 }
-void W3MayaAnimUtil::onChanged_eventContentRow(int newRow) {
+void MAU::onChanged_eventContentRow(int newRow) {
 
 }
 
-bool W3MayaAnimUtil::loadW3Data() {
+bool MAU::loadW3Data() {
     // make cleanup here!
     /* extra nr */
     m_animNames.clear();
@@ -842,7 +843,7 @@ bool W3MayaAnimUtil::loadW3Data() {
         return false;
     }
 }
-void W3MayaAnimUtil::onClicked_Save() {
+void MAU::onClicked_Save() {
     if ( jsonRoot.empty() ) {
         addLog( QString("Seems that no file was loaded!"), logError );
         return;
@@ -859,7 +860,7 @@ void W3MayaAnimUtil::onClicked_Save() {
     jsonFile.close();
     addLog( QString("[OK] File saved: %1").arg(jsonFile.fileName()), logFinish );
 }
-void W3MayaAnimUtil::onClicked_SaveSplit() {
+void MAU::onClicked_SaveSplit() {
     if ( jsonRoot.contains("animations") ) {
         QJsonArray animArray = jsonRoot.value("animations").toArray();
         if (animArray.count() > 0) {
@@ -911,34 +912,34 @@ void W3MayaAnimUtil::onClicked_SaveSplit() {
     }
 }
 
-double W3MayaAnimUtil::framesToSec(int frames, int fps) {
+double MAU::framesToSec(int frames, int fps) {
     return double(frames) / fps;
 }
 
-int W3MayaAnimUtil::secToFrames(double sec, int fps) {
+int MAU::secToFrames(double sec, int fps) {
     return int(sec * fps + 0.05);
 }
-QJsonObject W3MayaAnimUtil::objXYZ(double X, double Y, double Z) const {
+QJsonObject MAU::objXYZ(double X, double Y, double Z) const {
     QJsonObject ret;
     ret["x"] = QJsonValue(X);
     ret["y"] = QJsonValue(Y);
     ret["z"] = QJsonValue(Z);
     return ret;
 }
-void W3MayaAnimUtil::objToXYZ(QJsonObject obj, double& X, double& Y, double& Z) const {
+void MAU::objToXYZ(QJsonObject obj, double& X, double& Y, double& Z) const {
     if (obj.isEmpty())
         qDebug() << "Empty!!";
     X = obj["x"].toDouble();
     Y = obj["y"].toDouble();
     Z = obj["z"].toDouble();
 }
-void W3MayaAnimUtil::objToXYZW(QJsonObject obj, double& X, double& Y, double& Z, double& W) const {
+void MAU::objToXYZW(QJsonObject obj, double& X, double& Y, double& Z, double& W) const {
     X = obj["X"].toDouble();
     Y = obj["Y"].toDouble();
     Z = obj["Z"].toDouble();
     W = obj["W"].toDouble();
 }
-QJsonObject W3MayaAnimUtil::objXYZW(double X, double Y, double Z, double W) const {
+QJsonObject MAU::objXYZW(double X, double Y, double Z, double W) const {
     QJsonObject ret;
     ret["X"] = QJsonValue(X);
     ret["Y"] = QJsonValue(Y);
@@ -946,16 +947,16 @@ QJsonObject W3MayaAnimUtil::objXYZW(double X, double Y, double Z, double W) cons
     ret["W"] = QJsonValue(W);
     return ret;
 }
-QJsonObject W3MayaAnimUtil::objQuanternion(double Pitch, double Yaw, double Roll) const {
+QJsonObject MAU::objQuanternion(double Pitch, double Yaw, double Roll) const {
     QVector4D vec4 = QQuaternion::fromEulerAngles(QVector3D(Pitch, Yaw, Roll)).toVector4D();
     return objXYZW( vec4.x(), vec4.y(), vec4.z(), vec4.w() );
 }
-void W3MayaAnimUtil::interpolatePos(double k, double& X1, double& Y1, double& Z1, double X2, double Y2, double Z2) {
+void MAU::interpolatePos(double k, double& X1, double& Y1, double& Z1, double X2, double Y2, double Z2) {
     X1 = X1 * (1.0 - k) + X2 * k;
     Y1 = Y1 * (1.0 - k) + Y2 * k;
     Z1 = Z1 * (1.0 - k) + Z2 * k;
 }
-void W3MayaAnimUtil::interpolateRot(double k, double& X1, double& Y1, double& Z1, double& W1, double X2, double Y2, double Z2, double W2) {
+void MAU::interpolateRot(double k, double& X1, double& Y1, double& Z1, double& W1, double X2, double Y2, double Z2, double W2) {
     QQuaternion q1 = QQuaternion(W1, X1, Y1, Z1);
     QQuaternion q2 = QQuaternion(W2, X2, Y2, Z2);
     q1 = QQuaternion::nlerp(q1, q2, k);
@@ -964,7 +965,7 @@ void W3MayaAnimUtil::interpolateRot(double k, double& X1, double& Y1, double& Z1
     Z1 = q1.z();
     W1 = q1.scalar();
 }
-void W3MayaAnimUtil::blendMotion(QVector<double>& motion, int animFrames, const QVector<int>& framePoints) {
+void MAU::blendMotion(QVector<double>& motion, int animFrames, const QVector<int>& framePoints) {
     if (motion.isEmpty()) {
         motion.fill(0, animFrames + 1);
         return;
@@ -995,7 +996,7 @@ void W3MayaAnimUtil::blendMotion(QVector<double>& motion, int animFrames, const 
     }
     motion = res;
 }
-void W3MayaAnimUtil::blendPos(QJsonArray& posArray, int targetFrames) {
+void MAU::blendPos(QJsonArray& posArray, int targetFrames) {
     QJsonArray resArray;
     int frames = posArray.count();
     qDebug() << QString("blendPos [%1] -> [%2]").arg(frames).arg(targetFrames);
@@ -1040,7 +1041,7 @@ void W3MayaAnimUtil::blendPos(QJsonArray& posArray, int targetFrames) {
     posArray = resArray;
     return;
 }
-void W3MayaAnimUtil::blendRot(QJsonArray& rotArray, int targetFrames) {
+void MAU::blendRot(QJsonArray& rotArray, int targetFrames) {
     QJsonArray resArray;
     int frames = rotArray.count();
     qDebug() << QString("blendRot [%1] -> [%2]").arg(frames).arg(targetFrames);
@@ -1085,7 +1086,7 @@ void W3MayaAnimUtil::blendRot(QJsonArray& rotArray, int targetFrames) {
     return;
 }
 
-bool W3MayaAnimUtil::isAdditiveAnim(QJsonObject animObj) {
+bool MAU::isAdditiveAnim(QJsonObject animObj) {
     QString animName = animObj["name"].toString();
 
     bool isAdditive = additiveNames.contains(animName);
@@ -1131,7 +1132,7 @@ bool W3MayaAnimUtil::isAdditiveAnim(QJsonObject animObj) {
     return isAdditive;
 }
 
-bool W3MayaAnimUtil::applyMotionToBone(QJsonValueRef ref) {
+bool MAU::applyMotionToBone(QJsonValueRef ref) {
     QJsonObject animObj = ref.toObject();
     if (animObj.isEmpty()) {
         addLog("Empty anim object, skipping.", logError);
@@ -1434,7 +1435,7 @@ bool W3MayaAnimUtil::applyMotionToBone(QJsonValueRef ref) {
     
     return true;
 }
-void W3MayaAnimUtil::onClicked_applyMotionToBone() {
+void MAU::onClicked_applyMotionToBone() {
     eTimer.start();
     ui->progressBar->setValue(0);
 
@@ -1480,7 +1481,7 @@ void W3MayaAnimUtil::onClicked_applyMotionToBone() {
     }
 }
 
-bool W3MayaAnimUtil::extractMotionFromBone(QJsonValueRef ref) {
+bool MAU::extractMotionFromBone(QJsonValueRef ref) {
     QJsonObject animObj = ref.toObject();
     if (animObj.isEmpty()) {
         addLog("Empty anim object, skipping.", logError);
@@ -1848,7 +1849,7 @@ bool W3MayaAnimUtil::extractMotionFromBone(QJsonValueRef ref) {
     ref = animObj;
     return true;
 }
-void W3MayaAnimUtil::onClicked_extractMotionFromBone() {
+void MAU::onClicked_extractMotionFromBone() {
     eTimer.start();
     if (!batchMode)
         ui->progressBar->setValue(0);
@@ -1898,7 +1899,7 @@ void W3MayaAnimUtil::onClicked_extractMotionFromBone() {
             ui->progressBar->setValue(100);
     }
 }
-void W3MayaAnimUtil::onClicked_extractMotionFromBoneBatch() {
+void MAU::onClicked_extractMotionFromBoneBatch() {
     batchMode = true;
     ui->progressBar->setValue(0);
     //additiveNames.clear();
@@ -1958,7 +1959,7 @@ void W3MayaAnimUtil::onClicked_extractMotionFromBoneBatch() {
     batchMode = false;
 }
 
-bool W3MayaAnimUtil::loadJsonAnimEvents(QString filePath) {
+bool MAU::loadJsonAnimEvents(QString filePath) {
     jsonFileEvents.setFileName(filePath);
     if ( !jsonFileEvents.open(QIODevice::ReadOnly | QIODevice::Text) ) {
         addLog("Can't open file in read-only text mode: " + filePath, logError);
@@ -2042,7 +2043,7 @@ bool W3MayaAnimUtil::loadJsonAnimEvents(QString filePath) {
 
     return true;
 }
-void W3MayaAnimUtil::onClicked_loadAnimEventsSource() {
+void MAU::onClicked_loadAnimEventsSource() {
     QString filePath = QFileDialog::getOpenFileName(this, "Open animEvents json", "", "JSON Files (*.json)");
     if (filePath.isEmpty()) {
         addLog("Loading file canceled by user", logWarning);
@@ -2061,7 +2062,7 @@ void W3MayaAnimUtil::onClicked_loadAnimEventsSource() {
     }
 }
 
-bool W3MayaAnimUtil::loadJsonMotion(QString filePath) {
+bool MAU::loadJsonMotion(QString filePath) {
     jsonFileMotion.setFileName(filePath);
     if ( !jsonFileMotion.open(QIODevice::ReadOnly | QIODevice::Text) ) {
         addLog("Can't open file in read-only text mode: " + filePath, logError);
@@ -2144,7 +2145,7 @@ bool W3MayaAnimUtil::loadJsonMotion(QString filePath) {
 
     return true;
 }
-void W3MayaAnimUtil::onClicked_loadMotionSource() {
+void MAU::onClicked_loadMotionSource() {
     QString filePath = QFileDialog::getOpenFileName(this, "Open external motion json", "", "JSON Files (*.json)");
     if (filePath.isEmpty()) {
         addLog("Loading file canceled by user", logWarning);
@@ -2157,7 +2158,7 @@ void W3MayaAnimUtil::onClicked_loadMotionSource() {
     }
 }
 
-void W3MayaAnimUtil::onClicked_loadTxtDump() {
+void MAU::onClicked_loadTxtDump() {
     QString filePath = QFileDialog::getOpenFileName(this, "Open text dump from wkit", "", "TEXT Files (*.txt)");
     if (filePath.isEmpty()) {
         addLog("Loading file canceled by user", logWarning);
@@ -2181,7 +2182,7 @@ void W3MayaAnimUtil::onClicked_loadTxtDump() {
     }
 }
 
-void W3MayaAnimUtil::onClicked_PrintInfo() {
+void MAU::onClicked_PrintInfo() {
     batchMode = true;
     onlyPrint = true;
     ui->progressBar->setValue(0);
@@ -2239,7 +2240,7 @@ void W3MayaAnimUtil::onClicked_PrintInfo() {
     onlyPrint = false;
 }
 
-QJsonArray W3MayaAnimUtil::extractAnimParts(QJsonValueRef ref) {
+QJsonArray MAU::extractAnimParts(QJsonValueRef ref) {
     bool mergeParts = ui->checkExtractCutsceneMerge->isChecked();
     QJsonArray resultArray = QJsonArray();
 
@@ -2288,7 +2289,7 @@ QJsonArray W3MayaAnimUtil::extractAnimParts(QJsonValueRef ref) {
     }
     return resultArray;
 }
-void W3MayaAnimUtil::onClicked_extractPartsCutscene() {
+void MAU::onClicked_extractPartsCutscene() {
     eTimer.start();
     ui->progressBar->setValue(0);
 
@@ -2334,7 +2335,7 @@ void W3MayaAnimUtil::onClicked_extractPartsCutscene() {
     addLog( QString("[OK] Anim parts extracted: %1").arg(jsonFileParts.fileName()), logFinish );
 }
 
-void W3MayaAnimUtil::patchAnimParts(QString jsonPath, QJsonValueRef animArrayRef) {
+void MAU::patchAnimParts(QString jsonPath, QJsonValueRef animArrayRef) {
     addLog("[PATCH CS] Processing anim json: " + jsonPath);
     QFile animFile(jsonPath);
     if ( !animFile.open(QFile::ReadOnly) ) {
@@ -2397,7 +2398,7 @@ void W3MayaAnimUtil::patchAnimParts(QString jsonPath, QJsonValueRef animArrayRef
     }
     animArrayRef = animArray;
 }
-void W3MayaAnimUtil::onClicked_patchPartsCutscene() {
+void MAU::onClicked_patchPartsCutscene() {
     ui->progressBar->setValue(0);
 
     QString dirName = QFileDialog::getExistingDirectory(this, tr("Choose directory with anim jsons"),
@@ -2421,15 +2422,15 @@ void W3MayaAnimUtil::onClicked_patchPartsCutscene() {
     }
 }
 
-void W3MayaAnimUtil::onChanged_MergeStart() {
+void MAU::onChanged_MergeStart() {
     ui->spinMergeDuration->setMaximum( qMin(m_framesCount - ui->spinMergeStart->value() + 1, m_secondAnimFrames) );
     ui->labelMergeStart->setText(QString("Merge start (%1 s) frame:").arg(framesToSec(ui->spinMergeStart->value() - 1)));
 }
-void W3MayaAnimUtil::onChanged_MergeDuration() {
+void MAU::onChanged_MergeDuration() {
     ui->labelMergeDuration->setText(QString("Merge duration (%1 s) frames:").arg(framesToSec(ui->spinMergeDuration->value())));
 }
 
-void W3MayaAnimUtil::saveMergedJson(QJsonObject root, QString suffix) {
+void MAU::saveMergedJson(QJsonObject root, QString suffix) {
     QString animName = root.value("animation").toObject().value("name").toString();
     QString newFileName = QFileInfo(m_mergeFilePath).absolutePath() + "/" + animName + "_" + suffix + "_";
     int idx = 0;
@@ -2449,7 +2450,7 @@ void W3MayaAnimUtil::saveMergedJson(QJsonObject root, QString suffix) {
 
     addLog( QString("[OK] Merged anim %1 saved to: %2").arg(animName).arg(mergedFile.fileName()), logFinish );
 }
-bool W3MayaAnimUtil::loadMergeJson(QString filePath) {
+bool MAU::loadMergeJson(QString filePath) {
     m_secondAnimFrames = -1;
     jsonFileMerge.setFileName(filePath);
     if ( !jsonFileMerge.open(QIODevice::ReadOnly | QIODevice::Text) ) {
@@ -2500,7 +2501,7 @@ bool W3MayaAnimUtil::loadMergeJson(QString filePath) {
     //onUpdate_MergeInfo();
     return true;
 }
-void W3MayaAnimUtil::onClicked_LoadMergeJson() {
+void MAU::onClicked_LoadMergeJson() {
     QString filePath = QFileDialog::getOpenFileName(this, "Select 2nd anim json for merge", "", "JSON Files (*.json)");
     if (filePath.isEmpty()) {
         addLog("Loading file canceled by user", logWarning);
@@ -2515,7 +2516,7 @@ void W3MayaAnimUtil::onClicked_LoadMergeJson() {
     }
     onUpdate_MergeInfo();
 }
-void W3MayaAnimUtil::onUpdate_MergeInfo() {
+void MAU::onUpdate_MergeInfo() {
     if (m_secondAnimFrames != -1) {
         ui->labelMergeSecondInfo->setText(QString("<html><head/><body><p><span style=\"font-weight:700;\">[2nd anim]</span>: %1. <span style=\"font-weight:700;\">Bones</span>: %2. <span style=\"font-weight:700;\">Events</span>: %3. <span style=\"font-weight:700;\">Duration</span>: %4 frames (%5 s), <span style=\"color:%6;\">RootMotion</span>, <span style=\"color:%7;\">motionExtraction</span>.</p></body></html>")
                                           .arg(m_secondAnimName)
@@ -2535,16 +2536,16 @@ void W3MayaAnimUtil::onUpdate_MergeInfo() {
         ui->buttonMergeDo->setEnabled(true);
     }
 }
-void W3MayaAnimUtil::onClicked_MergePictureHelp() {
+void MAU::onClicked_MergePictureHelp() {
     QPixmap pic(":/Merge_scheme.jpg");
     pLabelInfo->setPixmap(pic);
     pLabelInfo->show();
 }
-void W3MayaAnimUtil::onClicked_BlendHalfSec() {
+void MAU::onClicked_BlendHalfSec() {
     ui->spinMergeStart->setValue( qMax(1, m_animFrames[m_animIndex] - 15) );
     ui->spinMergeDuration->setValue( qMin(ui->spinMergeDuration->maximum(), 15) );
 }
-void W3MayaAnimUtil::onChanged_MergeType(int index) {
+void MAU::onChanged_MergeType(int index) {
     if (index == 0) {
         ui->checkMergeSumInversePos->setEnabled(false);
         ui->checkMergeSumInverseRot->setEnabled(false);
@@ -2576,7 +2577,7 @@ void W3MayaAnimUtil::onChanged_MergeType(int index) {
         ui->comboMergeEvents->setEnabled(true);
     }
 }
-void W3MayaAnimUtil::onClicked_MergeProcess() {
+void MAU::onClicked_MergeProcess() {
     int framesF = m_framesCount;
     int framesS = m_secondAnimFrames;
     int mergeStart = ui->spinMergeStart->value();
@@ -2894,7 +2895,7 @@ void W3MayaAnimUtil::onClicked_MergeProcess() {
     addLog("[OK] Merge done.", logFinish);
 }
 
-W3MayaAnimUtil::~W3MayaAnimUtil()
+MAU::~MAU()
 {
     delete ui;
 }
