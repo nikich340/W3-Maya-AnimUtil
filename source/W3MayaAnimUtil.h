@@ -2,6 +2,7 @@
 #define W3MAYAANIMUTIL_H
 
 #include <QMainWindow>
+#include <QCheckBox>
 #include <QLabel>
 #include <QElapsedTimer>
 #include <QStringList>
@@ -12,6 +13,9 @@
 #include <QJsonValue>
 #include <QJsonParseError>
 #include <QQuaternion>
+
+#define JSO QJsonObject
+#define JSA QJsonArray
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class W3MayaAnimUtil; }
@@ -50,6 +54,9 @@ private:
     const double mW3AngleKoefficient = - 8.07; // picked up experimentally, real value is in [8.05 - 8.10]
     bool animSet = false;
     int m_framesCount = -1;
+    int m_numBones = -1;
+    bool m_hasMotionExtraction = false;
+    bool m_hasRootMotion = false;
     bool hasChanges = false;
     bool batchMode = false;
     bool onlyPrint = false;
@@ -81,6 +88,7 @@ private:
     bool extractMotionFromBone(QJsonValueRef bufferRef);
 
     /* GENERAL EDIT */
+    bool m_eventsAcceptSignals = true;
     double getEventStartTime(QJsonObject eventObj);
     void setEventStartTime(QJsonObject& eventObj, double newTime);
     void setCurrentAnimInfo(int bones, int events, int frames, double duration, bool rootMotion, bool motionExtraction);
@@ -96,14 +104,36 @@ private:
     void applyEdits();
 
     /* EVENTS EDIT */
-    const QStringList m_animMainEvents = {  "CExtAnimEvent",
-                                            "CExtAnimDurationEvent",
-                                            "CExtAnimAttackEvent",
+    QHash<QString, QWidget*> m_mapControlledBy;
+    QHash<QString, QWidget*> m_mapControls;
+    void addEventsVarControl(QWidget* controller, QWidget* obj) {
+        m_mapControlledBy[ controller->objectName() ] = obj;
+        m_mapControls[ obj->objectName() ] = controller;
+    }
+    JSO defaultEntry(QString name, QString type);
+    const QStringList m_knownVarTypes = {   "Bool",
+                                            "Int32",
+                                            "Float",
+                                            "CName",
+                                            "StringAnsi",
+                                            "array:2,0,StringAnsi",
+                                            "SEnumVariant",
+                                            "CPreAttackEventData"
                                          };
+    QStringList m_knownEventTypes = {  "CExtAnimEvent",
+                                       "CExtAnimDurationEvent",
+                                       "CExtAnimEffectEvent",
+                                       "CExtAnimEffectDurationEvent",
+                                       "CExtAnimAttackEvent",
+                                    };
     void eventsLoad();
+    JSO varToEntry(QString entryName, QVariant val, QString customType = QString());
+    QVariant entryToVar(JSO entry);
     QVariant getEventParam(QJsonObject eventObj, QString paramName, QVariant defaultValue = QVariant());
-    int m_eventIndex = -1;
-    int m_eventContentIndex = -1;
+    void eventsUpdateContentData(QHash<QString, QVariant>& map, QCheckBox* pController, QString key, QString type);
+    void eventsLoadContentData(QHash<QString, QVariant>& map, QCheckBox* pController, QString key, QString type);
+    void eventsUpdateLabel(int eventIndex, bool add = false);
+    void eventsUpdateContentLabel(int eventIndex, int index, bool add = false);
     QJsonArray m_animEvents = QJsonArray();
 
     /* extra nr */
@@ -172,6 +202,8 @@ private slots:
     void onClicked_EditGroupOptimize(bool checked);
 
     /* EVENTS EDIT */
+    void onChecked_DynamicLabel(bool checked);
+    void onChecked_ToggleVar(bool checked);
     void onChanged_eventRow(int newRow);
     void onChanged_eventContentRow(int newRow);
     // entries
@@ -181,6 +213,12 @@ private slots:
     void onClicked_eventsClone();
     void onClicked_eventsRemove();
     void onClicked_eventsSetType();
+
+    void onClicked_eventsVarSetType();
+    void onClicked_eventsVarRename();
+    void onClicked_eventsVarAdd();
+    void onClicked_eventsVarRemove();
+    void onChanged_eventsVarAny();
 
     /* MERGE */
     void onClicked_LoadMergeJson();

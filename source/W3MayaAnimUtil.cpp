@@ -53,6 +53,34 @@ MAU::MAU(QWidget *parent)
     connect(ui->groupEditCut, SIGNAL(clicked(bool)), this, SLOT(onChecked_EditCut(bool)));
 
     /* EVENTS EDIT */
+    ui->comboEventsType->addItems(m_knownEventTypes);
+    ui->comboEventsVarType->addItems(m_knownVarTypes);
+    ui->stackEventsValue->widget(0)->setProperty("type", QString("Bool"));
+    ui->stackEventsValue->widget(1)->setProperty("type", QString("Int32"));
+    ui->stackEventsValue->widget(2)->setProperty("type", QString("Float"));
+    ui->stackEventsValue->widget(3)->setProperty("type", QString("String"));
+    ui->stackEventsValue->widget(4)->setProperty("type", QString("array:2,0,StringAnsi"));
+    ui->stackEventsValue->widget(5)->setProperty("type", QString("SEnumVariant"));
+    ui->stackEventsValue->widget(6)->setProperty("type", QString("CPreAttackEventData"));
+
+    addEventsVarControl(ui->checkEventsVarEnumType, ui->lineEventsEnumType);
+    addEventsVarControl(ui->checkEventsVarEnumValue, ui->spinEventsEnumValue);
+    addEventsVarControl(ui->checkEventsVarAttackName, ui->lineEventsAttackName);
+    addEventsVarControl(ui->checkEventsVarAttackWeaponSlot, ui->lineEventsAttackWeaponSlot);
+    addEventsVarControl(ui->checkEventsVarAttackSwingType, ui->spinEventsAttackSwingType);
+    addEventsVarControl(ui->checkEventsVarAttackSwingDir, ui->spinEventsAttackSwingDir);
+    addEventsVarControl(ui->checkEventsVarAttackSound, ui->lineEventsAttackSound);
+    addEventsVarControl(ui->checkEventsVarAttackRange, ui->lineEventsAttackRange);
+    addEventsVarControl(ui->checkEventsVarAttackHitReaction, ui->spinEventsAttackHitReaction);
+    addEventsVarControl(ui->checkEventsVarAttackCanParry, ui->checkEventsAttackCanParry);
+    addEventsVarControl(ui->checkEventsVarAttackCanBeDodged, ui->checkEventsAttackCanBeDodged);
+    addEventsVarControl(ui->checkEventsVarAttackDamageNeutral, ui->checkEventsAttackDamageNeutral);
+    addEventsVarControl(ui->checkEventsVarAttackDamageFriendly, ui->checkEventsAttackDamageFriendly);
+    addEventsVarControl(ui->checkEventsVarAttackHitFx, ui->lineEventsAttackHitFx);
+    addEventsVarControl(ui->checkEventsVarAttackHitParriedFx, ui->lineEventsAttackHitParriedFx);
+    addEventsVarControl(ui->checkEventsVarAttackHitBackFx, ui->lineEventsAttackHitBackFx);
+    addEventsVarControl(ui->checkEventsVarAttackHitBackParriedFx, ui->lineEventsAttackHitBackParriedFx);
+
     connect(ui->listEvents, SIGNAL(currentRowChanged(int)), this, SLOT(onChanged_eventRow(int)));
     connect(ui->listEventsContent, SIGNAL(currentRowChanged(int)), this, SLOT(onChanged_eventContentRow(int)));
     connect(ui->buttonResetEvents, SIGNAL(clicked(bool)), this, SLOT(onClicked_eventsReset()));
@@ -63,7 +91,11 @@ MAU::MAU(QWidget *parent)
     connect(ui->buttonEventsClone, SIGNAL(clicked(bool)), this, SLOT(onClicked_eventsClone()));
     connect(ui->buttonEventsRemove, SIGNAL(clicked(bool)), this, SLOT(onClicked_eventsRemove()));
 
-
+    connect(ui->buttonEventsVarRename, SIGNAL(clicked(bool)), this, SLOT(onClicked_eventsVarRename()));
+    connect(ui->buttonEventsVarType, SIGNAL(clicked(bool)), this, SLOT(onClicked_eventsVarSetType()));
+    connect(ui->buttonEventsVarAdd, SIGNAL(clicked(bool)), this, SLOT(onClicked_eventsVarAdd()));
+    connect(ui->buttonEventsVarRemove, SIGNAL(clicked(bool)), this, SLOT(onClicked_eventsVarRemove()));
+    // all value changes are set via form -> onChanged_eventsVarAny()
 
     /* MERGE */
     connect(ui->buttonMergeLoad, SIGNAL(clicked(bool)), this, SLOT(onClicked_LoadMergeJson()));
@@ -74,7 +106,7 @@ MAU::MAU(QWidget *parent)
     connect(ui->comboMergeType, SIGNAL(currentIndexChanged(int)), this, SLOT(onChanged_MergeType(int)));
     connect(ui->buttonMergeLastHalfSec, SIGNAL(clicked(bool)), this, SLOT(onClicked_BlendHalfSec()));
 
-    resize(this->width(), QGuiApplication::primaryScreen()->geometry().height() * 0.8);
+    resize(QGuiApplication::primaryScreen()->geometry().width() * 0.75, QGuiApplication::primaryScreen()->geometry().height() * 0.8);
 }
 
 double MAU::mReductionSensitivity() {
@@ -640,21 +672,18 @@ void MAU::onChanged_EditEnd(int endFrame) {
 }
 void MAU::onChanged_EditCurrentAnim(int newAnimIndex) {
     m_animEvents = QJsonArray();
-    m_eventIndex = 0;
     if (newAnimIndex < 0) {
         eventsLoad();
+        ui->widgetEventsEdit->setEnabled(false);
         setCurrentAnimInfo(-1, -1, -1, -1, false, false);
         return;
     }
     m_animIndex = newAnimIndex;
-    QString animName = m_animNames[m_animIndex];
     int animFrames = m_animFrames[m_animIndex];
     double animDuration = m_animDurations[m_animIndex];
-    bool rootMotion = false;
-    bool motionExtraction = false;
+    m_hasRootMotion = false;
     QJsonObject animObj = QJsonObject();
 
-    int eventsCount = 0;
     if (animSet) {
         animObj = jsonRoot.value("animations").toArray().at(m_animIndex).toObject().value("animation").toObject();
         m_animEvents = jsonRoot.value("animations").toArray().at(m_animIndex).toObject().value("entries").toArray();
@@ -663,21 +692,20 @@ void MAU::onChanged_EditCurrentAnim(int newAnimIndex) {
         m_animEvents = jsonRoot.value("entries").toArray();
 
     }
-    eventsCount = m_animEvents.count();
-    eventsLoad();
 
-    motionExtraction = animObj.contains("motionExtraction")
+    m_hasMotionExtraction = animObj.contains("motionExtraction")
                     && !animObj.value("motionExtraction").toObject().isEmpty();
     QJsonArray bonesArr = animObj.value("animBuffer").toObject().value("bones").toArray();
+	m_numBones = bonesArr.count();
     for (auto boneVal : bonesArr) {
         QString boneName = boneVal.toObject().value("BoneName").toString();
         //qDebug() << "boneName: " << boneName;
         if (boneName == "RootMotion") {
-            rootMotion = true;
+            m_hasRootMotion = true;
             break;
         }
     }
-    if (rootMotion) {
+    if (m_hasRootMotion) {
         ui->checkEditAddRootMotion->setChecked(false);
         ui->checkEditAddRootMotion->setEnabled(false);
     } else {
@@ -687,31 +715,156 @@ void MAU::onChanged_EditCurrentAnim(int newAnimIndex) {
     ui->spinEditDuration->setMaximum(animFrames);
     ui->spinEditEnd->setMaximum(animFrames);
     m_framesCount = animFrames;
-    setCurrentAnimInfo(bonesArr.count(), eventsCount, animFrames, animDuration, rootMotion, motionExtraction);
+    ui->widgetEventsEdit->setEnabled(true);
+    eventsLoad();
+    setCurrentAnimInfo(m_numBones, m_animEvents.count(), animFrames, animDuration, m_hasRootMotion, m_hasMotionExtraction);
 
     ui->spinMergeStart->setMaximum(m_framesCount);
     onChanged_MergeStart();
 }
 
 /* EVENTS */
+JSO MAU::varToEntry(QString entryName, QVariant val, QString customType) {
+    JSO entry = JSO();
+    entry["Name"] = entryName;
+    switch (val.type()) {
+        case QMetaType::Bool:
+        {
+            entry["Type"] = "Bool";
+            entry["val"] = val.toBool();
+        }
+            break;
+        case QMetaType::Int:
+        {
+            entry["Type"] = "Int32";
+            entry["val"] = val.toInt();
+        }
+            break;
+        case QMetaType::Double:
+        {
+            entry["Type"] = "Float";
+            entry["val"] = val.toDouble();
+        }
+            break;
+        case QMetaType::QString:
+        {
+            if (customType.toUpper() == "CNAME") {
+                entry["Type"] = "CName";
+                entry["Value"] = val.toString();
+            } else {
+                entry["Type"] = "StringAnsi";
+                entry["val"] = val.toString();
+            }
+        }
+            break;
+        case QMetaType::QStringList:
+        {
+            entry["Type"] = "array:2,0,StringAnsi";
+            JSA valArray = JSA();
+            for (QString s : val.toStringList()) {
+                valArray.append( s );
+            }
+            entry["Array"] = valArray;
+        }
+            break;
+        default:
+        {
+            QVector< QPair<QString, QString> > mapKeys = QVector< QPair<QString, QString> >();
+            QHash<QString, QVariant> map = val.value< QHash<QString, QVariant> >();
+            JSA dataArr = JSA();
+
+            if (customType == "SEnumVariant") {
+                mapKeys = {
+                    QPair<QString, QString>("enumType", "CName"),
+                    QPair<QString, QString>("enumValue", "Int32")
+                };
+            } else if (customType == "CPreAttackEventData") {
+                mapKeys = {
+                    QPair<QString, QString>("attackName", "CName"),
+                    QPair<QString, QString>("weaponSlot", "CName"),
+                    QPair<QString, QString>("hitReactionType", "Int32"),
+                    QPair<QString, QString>("rangeName", "CName"),
+                    QPair<QString, QString>("Damage_Friendly", "Bool"),
+                    QPair<QString, QString>("Damage_Neutral", "Bool"),
+                    QPair<QString, QString>("Damage_Hostile", "Bool"),
+                    QPair<QString, QString>("Can_Parry_Attack", "Bool"),
+                    QPair<QString, QString>("hitFX", "CName"),
+                    QPair<QString, QString>("hitBackFX", "CName"),
+                    QPair<QString, QString>("hitParriedFX", "CName"),
+                    QPair<QString, QString>("hitBackParriedFX", "CName"),
+                    QPair<QString, QString>("swingType", "Int32"),
+                    QPair<QString, QString>("swingDir", "Int32"),
+                    QPair<QString, QString>("soundAttackType", "CName"),
+                    QPair<QString, QString>("canBeDodged", "Bool"),
+                    QPair<QString, QString>("cameraAnimOnMissedHit", "CName"),
+                };
+            } else {
+                qDebug() << QString("varToEntry: Unknown type %2 for %1!").arg(entryName).arg(val.typeName());
+                return JSO();
+            }
+            for (QPair<QString, QString> p : mapKeys) {
+                if (map.contains(p.first)) {
+                    dataArr.append( varToEntry(p.first, map.value(p.first), p.second) );
+                }
+            }
+            entry["Content"] = dataArr;
+            entry["Name"] = entryName;
+            entry["Type"] = customType;
+        }
+            break;
+    }
+    return entry;
+}
+QVariant MAU::entryToVar(JSO entry) {
+    if ( !entry.contains("Type") ) {
+        qDebug() << "entryToVar: entry type not found! Name: " << entry.value("Name").toString();;
+        return QVariant();
+    }
+    QString type = entry.value("Type").toString();
+    if (type == "Bool") {
+        return entry.value("val").toBool();
+    } else if (type == "Int32") {
+        return entry.value("val").toInt();
+    } else if (type == "Float") {
+        return entry.value("val").toDouble();
+    } else if (type == "CName") {
+        return entry.value("Value").toString();
+    } else if (type == "StringAnsi") {
+        return entry.value("val").toString();
+    } else if (type == "array:2,0,StringAnsi") {
+        QStringList ret = QStringList();
+        JSA array = entry.value("Array").toArray();
+        upn(i, 0, array.count()) {
+            ret.append( array.at(i).toString() );
+        }
+        return ret;
+    } else if (type == "SEnumVariant" || type == "CPreAttackEventData") {
+        QHash<QString, QVariant> ret = QHash<QString, QVariant>();
+        JSA array = entry.value("Content").toArray();
+
+        upn(i, 0, array.count() - 1) {
+            JSO arrObj = array.at(i).toObject();
+            QString name = arrObj.value("Name").toString();
+
+            ret.insert( name, entryToVar(arrObj) );
+        }
+        return ret;
+    } else {
+        qDebug() << QString("entryToVar: Unknown type %1!").arg(type);
+        return QVariant();
+    }
+}
 void MAU::eventsLoad() {
     ui->listEvents->clear();
-    m_eventIndex = 0;
 
     if ( !m_animEvents.isEmpty() ) {
-        int entryNum = 0;
         upn(i, 0, m_animEvents.count() - 1) {
-            QJsonObject eventObj = m_animEvents.at(i).toObject();
-            QString type = eventObj.value("Type").toString();
-            double startTime = getEventStartTime(eventObj);
-            double durationTime = getEventParam(eventObj, "duration", QVariant(-1.0)).toDouble();
-            if (durationTime > 0.0)
-                ui->listEvents->addItem( QString("%1 #%2 [%3 - %4 s]").arg(type).arg(entryNum).arg(startTime, 0, 'f', 3).arg(startTime + durationTime, 0, 'f', 3) );
-            else
-                ui->listEvents->addItem( QString("%1 #%2 [%3 s]").arg(type).arg(entryNum).arg(startTime, 0, 'f', 3) );
-            entryNum += 1;
+            eventsUpdateLabel(i, true);
         }
-        ui->listEventsContent->setCurrentRow(0);
+        ui->listEvents->setCurrentRow(0);
+        //ui->buttonApplyEvents->setEnabled(true);
+    } else {
+        //ui->buttonApplyEvents->setEnabled(false);
     }
 }
 QVariant MAU::getEventParam(QJsonObject eventObj, QString paramName, QVariant defaultValue) {
@@ -725,40 +878,444 @@ QVariant MAU::getEventParam(QJsonObject eventObj, QString paramName, QVariant de
     qDebug() << QString("Can't find event %1! Type: %2").arg(paramName).arg(eventObj.value("Type").toString());
     return defaultValue;
 }
+void MAU::eventsUpdateLabel(int eventIndex, bool add) {
+    if (eventIndex < 0)
+        return;
+    if (add) {
+        ui->listEvents->addItem("-");
+        eventIndex = ui->listEvents->count() - 1;
+    }
+    if (eventIndex < ui->listEvents->count()) {
+        QJsonObject eventObj = m_animEvents.at(eventIndex).toObject();
+        QString type = eventObj.value("Type").toString();
+        if ( !m_knownEventTypes.contains(type) ) {
+            m_knownEventTypes.append(type);
+            ui->comboEventsType->addItem(type);
+        }
+        double startTime = getEventStartTime(eventObj);
+        double durationTime = getEventParam(eventObj, "duration", QVariant(-1.0)).toDouble();
+
+        if (durationTime > 0.0)
+            ui->listEvents->item(eventIndex)->setText( QString("%1 #%2 [%3 - %4 s]").arg(type).arg(eventIndex).arg(startTime, 0, 'f', 3).arg(startTime + durationTime, 0, 'f', 3) );
+        else
+            ui->listEvents->item(eventIndex)->setText( QString("%1 #%2 [%3 s]").arg(type).arg(eventIndex).arg(startTime, 0, 'f', 3) );
+    }
+}
+void MAU::eventsUpdateContentLabel(int eventIndex, int index, bool add) {
+    if (index < 0 || eventIndex < 0)
+        return;
+    if (add) {
+        ui->listEventsContent->addItem("-");
+        index = ui->listEventsContent->count() - 1;
+    }
+    //qDebug() << QString("eventsUpdateContentLabel: evIndex = %1, index = %2, add = %3").arg(eventIndex).arg(index).arg(add);
+    if (index < ui->listEventsContent->count() && eventIndex < m_animEvents.count()) {
+        JSO contentEntry = m_animEvents.at(eventIndex).toObject().value("Content").toArray().at(index).toObject();
+        QString entryName = contentEntry.value("Name").toString();
+        QString entryType = contentEntry.value("Type").toString();
+        QVariant value = entryToVar(contentEntry);
+        //qDebug() << QString("eventsUpdateContentLabel: entryType = %1").arg(entryType);
+        if ( !value.canConvert(QMetaType::QString) ) {
+            value = QString("<complex value>");
+        }
+
+        ui->listEventsContent->item(index)->setText( QString("%1 (%2) = %3").arg(entryName).arg(entryType).arg(value.toString()) );
+    }
+}
+JSO MAU::defaultEntry(QString name, QString type) {
+    JSO contentEntry = JSO();
+    if (type == "Bool") {
+        contentEntry = varToEntry(name, false);
+    } else if (type == "Int32") {
+        contentEntry = varToEntry(name, 0);
+    } else if (type == "Float") {
+        contentEntry = varToEntry(name, 0.0);
+    } else if (type == "StringAnsi") {
+        contentEntry = varToEntry(name, "");
+    } else if (type == "CName") {
+        contentEntry = varToEntry(name, "", "CName");
+    } else if (type == "array:2,0,StringAnsi") {
+        contentEntry = varToEntry( name, QStringList({""}) );
+    } else if (type == "SEnumVariant") {
+       QHash<QString, QVariant> map = QHash<QString, QVariant>();
+       map["enumType"] = QString("ERotationRate");
+       contentEntry = varToEntry( name, QVariant::fromValue(map), "SEnumVariant" );
+    } else if (type == "CPreAttackEventData") {
+        QHash<QString, QVariant> map = QHash<QString, QVariant>();
+        map["attackName"] = QString("attackHeavy");
+        map["rangeName"] = QString("basic_strike");
+        map["soundAttackType"] = QString("monster_big_bite");
+        map["hitReactionType"] = 1;
+        contentEntry = varToEntry( name, QVariant::fromValue(map), "CPreAttackEventData" );
+    }
+    return contentEntry;
+}
+
+// EVENTS slots
+void MAU::onChecked_DynamicLabel(bool checked) {
+    QCheckBox* box = qobject_cast<QCheckBox*>(sender());
+    if (box != nullptr) {
+        if (checked)
+            box->setText("true");
+        else
+            box->setText("false");
+    }
+}
+void MAU::onChecked_ToggleVar(bool checked) {
+    QString controllerName = sender()->objectName();
+    if ( !m_mapControlledBy.contains(controllerName) ) {
+        qDebug() << QString("onChecked_ToggleVar[%1]: %2. Can't find control!").arg(checked).arg(sender()->objectName());
+        return;
+    }
+    m_mapControlledBy[ controllerName ]->setEnabled(checked);
+}
+void MAU::onClicked_eventsReset() {
+    m_animEvents = QJsonArray();
+    if (m_animIndex >= 0) {
+        if (animSet) {
+            m_animEvents = jsonRoot.value("animations").toArray().at(m_animIndex).toObject().value("entries").toArray();
+        } else {
+            m_animEvents = jsonRoot.value("entries").toArray();
+        }
+    }
+    eventsLoad();
+}
+void MAU::onClicked_eventsApply() {
+    if (m_animIndex >= 0) {
+        if (animSet) {
+            JSA animArray = jsonRoot.value("animations").toArray();
+            JSO animRootObj = animArray.at(m_animIndex).toObject();
+            animRootObj["entries"] = m_animEvents;
+            animArray[m_animIndex] = animRootObj;
+            jsonRoot["animations"] = animArray;
+        } else {
+            jsonRoot["entries"] = m_animEvents;
+        }
+        addLog(QString("[EVENTS] Applied all changes to anim %1. Event entries: %2.")
+               .arg(m_animNames[m_animIndex])
+               .arg(m_animEvents.count()));
+        setCurrentAnimInfo(m_numBones, m_animEvents.count(), m_animFrames[m_animIndex], m_animDurations[m_animIndex], m_hasRootMotion, m_hasMotionExtraction);
+    }
+}
+void MAU::onClicked_eventsAdd() {
+    JSO eventObj = JSO();
+    JSA contentArr = JSA();
+
+    QString type = ui->comboEventsType->currentText();
+    // generic CExtAnimEvent
+    contentArr.append( varToEntry("eventName", "-", "CName") );
+    contentArr.append( varToEntry("startTime", 0.0) );
+    contentArr.append( varToEntry("animationName", m_animNames[m_animIndex], "CName") );
+    if (type.endsWith("DurationEvent")) {
+        contentArr.append( varToEntry("duration", qMax(0.01, m_animDurations[m_animIndex] - framesToSec(1))) );
+        contentArr.append( varToEntry("alwaysFiresEnd", false) );
+    } else if (type.startsWith("CExtAnimEffect")) {
+        contentArr.append( varToEntry("effectName", "", "CName") );
+    }
+    // TODO!!!
+
+    eventObj["Content"] = contentArr;
+    eventObj["Name"] = type;
+    eventObj["Type"] = type;
+    m_animEvents.append(eventObj);
+
+    eventsUpdateLabel(m_animEvents.count(), true);
+    onChanged_eventRow(m_animEvents.count() - 1);
+}
+void MAU::onClicked_eventsClone() {
+    int index = ui->listEvents->currentRow();
+    JSO eventObj = m_animEvents.at(index).toObject();
+    m_animEvents.append(eventObj);
+
+    eventsUpdateLabel(m_animEvents.count(), true);
+    onChanged_eventRow(m_animEvents.count() - 1);
+}
+void MAU::onClicked_eventsRemove() {
+    int index = ui->listEvents->currentRow();
+    m_animEvents.removeAt(index);
+    eventsLoad(); // reload
+}
 void MAU::onChanged_eventRow(int newRow) {
     ui->listEventsContent->clear();
-    qDebug() << QString("onChanged_eventRow: %1").arg(newRow);
-    if (newRow < m_animEvents.count() && newRow >= 0) {
-        m_eventIndex = newRow;
-        QJsonArray contentArr = m_animEvents.at(m_eventIndex).toObject().value("Content").toArray();
-        //entryContentNum = 0;
+    //qDebug() << QString("onChanged_eventRow: %1").arg(newRow);
+    if (newRow < 0)
+        return;
+    if (newRow < m_animEvents.count()) {
+        JSO eventObj = m_animEvents.at(newRow).toObject();
+        QString type = eventObj.value("Type").toString();
+
+        JSA contentArr = eventObj.value("Content").toArray();
         if ( !contentArr.isEmpty() ) {
             upn(i, 0, contentArr.count() - 1) {
-                QJsonObject contentEntry = contentArr.at(i).toObject();
-                QString entryName = contentEntry.value("Name").toString();
-                QString entryType = contentEntry.value("Type").toString();
-                QVariant value = QVariant("<unknown type>");
-                if (entryType == "Float") {
-                    value = contentEntry.value("val").toDouble();
-                } else if (entryType == "Bool") {
-                    value = contentEntry.value("val").toBool();
-                } else if (entryType == "StringAnsi") {
-                    value = contentEntry.value("val").toString();
-                } else if (entryType == "CName") {
-                    value = contentEntry.value("Value").toString();
-                }
-
-                ui->listEventsContent->addItem( QString("%1 (%2) = %3").arg(entryName).arg(entryType).arg(value.toString()) );
-                //entryContentNum += 1;
+                eventsUpdateContentLabel(newRow, i, true);
             }
         }
+        ui->comboEventsType->setCurrentText(type);
         ui->listEventsContent->setCurrentRow(0);
     }
 }
-void MAU::onChanged_eventContentRow(int newRow) {
+void MAU::eventsUpdateContentData(QHash<QString, QVariant>& map, QCheckBox* pController, QString key, QString type) {
+    QVariant val = QVariant();
+    QWidget* pElement = m_mapControlledBy[pController->objectName()];
+    Q_ASSERT(pElement);
+    if (!map.contains(key)) {
+        pController->setChecked(false);
+        pElement->setEnabled(false);
+        return;
+    }
+    val = map.value(key);
+    map.remove(key);
+    pController->setChecked(true);
+    pElement->setEnabled(true);
 
+    if (type == "Bool") {
+        qobject_cast<QCheckBox*>(pElement)->setChecked( val.toBool() );
+    } else if (type == "Int32") {
+        qobject_cast<QSpinBox*>(pElement)->setValue( val.toInt() );
+    //} else if (type == "Enum") {
+    //    qobject_cast<QComboBox*>(pElement)->setCurrentIndex( val.toInt() );
+    } else if (type == "Float") {
+        qobject_cast<QDoubleSpinBox*>(pElement)->setValue( val.toFloat() );
+    } else if (type == "StringAnsi" || type == "CName") {
+        qobject_cast<QLineEdit*>(pElement)->setText( val.toString() );
+    } else {
+        qDebug() << QString("eventsUpdateContentData: unknown type %1 for key %2").arg(type).arg(key);
+    }
+}
+void MAU::eventsLoadContentData(QHash<QString, QVariant>& map, QCheckBox* pController, QString key, QString type) {
+    if ( !pController->isChecked() )
+        return;
+
+    QWidget* pElement = m_mapControlledBy[pController->objectName()];
+    Q_ASSERT(pElement);
+    if (type == "Bool") {
+        map[key] = qobject_cast<QCheckBox*>(pElement)->isChecked();
+    } else if (type == "Int32") {
+        map[key] = qobject_cast<QSpinBox*>(pElement)->value();
+    } else if (type == "Float") {
+        map[key] = qobject_cast<QDoubleSpinBox*>(pElement)->value();
+    } else if (type == "StringAnsi" || type == "CName") {
+        map[key] = qobject_cast<QLineEdit*>(pElement)->text();
+    } else {
+        qDebug() << QString("eventsLoadContentData: unknown type %1 for key %2").arg(type).arg(key);
+    }
+}
+void MAU::onChanged_eventContentRow(int newRow) {
+    if (newRow < 0)
+        return;
+    int eventIndex = ui->listEvents->currentRow();
+    JSA contentArr = m_animEvents.at(eventIndex).toObject().value("Content").toArray();
+    if (newRow < contentArr.count()) {
+        JSO contentEntry = contentArr.at(newRow).toObject();
+        QString entryName = contentEntry.value("Name").toString();
+        QString entryType = contentEntry.value("Type").toString();
+        QVariant value = entryToVar( contentEntry );
+
+        m_eventsAcceptSignals = false;
+        ui->lineEventsVarName->setText(entryName);
+        ui->comboEventsVarType->setCurrentText(entryType);
+        if (entryType == "Bool") {
+            ui->stackEventsValue->setCurrentIndex(0);
+            ui->checkEventsValueBool->setChecked( value.toBool() );
+        } else if (entryType == "Int32") {
+            ui->stackEventsValue->setCurrentIndex(1);
+            ui->spinEventsValueInt->setValue( value.toInt() );
+        } else if (entryType == "Float") {
+            ui->stackEventsValue->setCurrentIndex(2);
+            if (entryName == "startTime" || entryName == "duration") {
+                ui->spinEventsValueFloat->setMinimum(0.0);
+                ui->spinEventsValueFloat->setMaximum(m_animDurations[m_animIndex]);
+                ui->spinEventsValueFloat->setSingleStep( framesToSec(1) );
+            } else {
+                ui->spinEventsValueFloat->setMinimum(-999999);
+                ui->spinEventsValueFloat->setMaximum(999999);
+                ui->spinEventsValueFloat->setSingleStep( 0.1 );
+            }
+            ui->spinEventsValueFloat->setValue( value.toDouble() );
+        } else if (entryType == "StringAnsi" || entryType == "CName") {
+            ui->stackEventsValue->setCurrentIndex(3);
+            ui->lineEventsValueString->setText( value.toString() );
+        } else if (entryType == "array:2,0,StringAnsi") {
+            ui->stackEventsValue->setCurrentIndex(4);
+            ui->editEventsValueArrayString->setPlainText( value.toStringList().join("\n") );
+        } else if (entryType == "SEnumVariant") {
+            ui->stackEventsValue->setCurrentIndex(5);
+            QHash<QString, QVariant> map = value.value< QHash<QString, QVariant> >();
+
+            eventsUpdateContentData(map, ui->checkEventsVarEnumType, "enumType", "CName");
+            eventsUpdateContentData(map, ui->checkEventsVarEnumValue, "enumValue", "Int32");
+        } else if (entryType == "CPreAttackEventData") {
+            ui->stackEventsValue->setCurrentIndex(6);
+            QHash<QString, QVariant> map = value.value< QHash<QString, QVariant> >();
+
+            eventsUpdateContentData(map, ui->checkEventsVarAttackName, "attackName", "CName");
+            eventsUpdateContentData(map, ui->checkEventsVarAttackRange, "rangeName", "CName");
+            eventsUpdateContentData(map, ui->checkEventsVarAttackWeaponSlot, "weaponSlot", "CName");
+            eventsUpdateContentData(map, ui->checkEventsVarAttackHitReaction, "hitReactionType", "Int32");
+            eventsUpdateContentData(map, ui->checkEventsVarAttackDamageFriendly, "Damage_Friendly", "Bool");
+            eventsUpdateContentData(map, ui->checkEventsVarAttackDamageNeutral, "Damage_Neutral", "Bool");
+            eventsUpdateContentData(map, ui->checkEventsVarAttackCanParry, "Can_Parry_Attack", "Bool");
+            eventsUpdateContentData(map, ui->checkEventsVarAttackHitFx, "hitFX", "CName");
+            eventsUpdateContentData(map, ui->checkEventsVarAttackHitBackFx, "hitBackFX", "CName");
+            eventsUpdateContentData(map, ui->checkEventsVarAttackHitParriedFx, "hitParriedFX", "CName");
+            eventsUpdateContentData(map, ui->checkEventsVarAttackHitBackParriedFx, "hitBackParriedFX", "CName");
+            eventsUpdateContentData(map, ui->checkEventsVarAttackSwingType, "swingType", "Int32");
+            eventsUpdateContentData(map, ui->checkEventsVarAttackSwingDir, "swingDir", "Int32");
+            eventsUpdateContentData(map, ui->checkEventsVarAttackSound, "soundAttackType", "CName");
+            eventsUpdateContentData(map, ui->checkEventsVarAttackCanBeDodged, "canBeDodged", "Bool");
+        }
+
+        m_eventsAcceptSignals = true;
+        qDebug() << QString("onChanged_eventContentRow: %1, var %2 (%3)").arg(newRow).arg(entryName).arg(entryType);
+    }
+}
+void MAU::onClicked_eventsVarRename() {
+    int index = ui->listEventsContent->currentRow();
+    int eventIndex = ui->listEvents->currentRow();
+    QString newName = ui->lineEventsVarName->text();
+
+    JSO eventObj = m_animEvents.at(eventIndex).toObject();
+    JSA contentArr = eventObj.value("Content").toArray();
+    JSO contentEntry = contentArr.at(index).toObject();
+
+    contentEntry["Name"] = newName;
+    contentArr[index] = contentEntry;
+    eventObj["Content"] = contentArr;
+    m_animEvents[eventIndex] = eventObj;
+    eventsUpdateContentLabel(eventIndex, index, false);
+}
+void MAU::onClicked_eventsSetType() {
+    QString newType = ui->comboEventsType->currentText();
+    int eventIndex = ui->listEvents->currentRow();
+
+    JSO eventObj = m_animEvents.at(eventIndex).toObject();
+    eventObj["Type"] = newType;
+    eventObj["Name"] = newType;
+    m_animEvents[eventIndex] = eventObj;
+    eventsUpdateLabel(eventIndex, false);
 }
 
+void MAU::onClicked_eventsVarSetType() {
+    //qDebug() << QString("onClicked_eventsVarSetType: %1").arg(sender()->objectName());
+    int eventIndex = ui->listEvents->currentRow();
+    int index = ui->listEventsContent->currentRow();
+
+    if (eventIndex < 0 || eventIndex >= m_animEvents.count())
+        return;
+    JSO eventObj = m_animEvents.at(eventIndex).toObject();
+    JSA contentArr = eventObj.value("Content").toArray();
+    JSO contentEntry = contentArr[index].toObject();
+
+    QString name = contentEntry["Name"].toString();
+    QString oldType = contentEntry["Type"].toString();
+    QString newType = ui->comboEventsVarType->currentText();
+    if (oldType == newType)
+        return;
+
+    contentArr[index] = defaultEntry(name, newType);
+    eventObj["Content"] = contentArr;
+    m_animEvents[eventIndex] = eventObj;
+
+    eventsUpdateContentLabel(eventIndex, index, false);
+    onChanged_eventContentRow(index);
+}
+void MAU::onClicked_eventsVarAdd() {
+    //qDebug() << QString("onClicked_eventsVarAdd: %1").arg(sender()->objectName());
+    int eventIndex = ui->listEvents->currentRow();
+
+    if (eventIndex < 0 || eventIndex >= m_animEvents.count())
+        return;
+    JSO eventObj = m_animEvents.at(eventIndex).toObject();
+    JSA contentArr = eventObj.value("Content").toArray();
+
+    QString type = ui->comboEventsVarType->currentText();
+    QString name = ui->lineEventsVarName->text();
+    JSO contentEntry = defaultEntry(name, type);
+    contentArr.append(contentEntry);
+    eventObj["Content"] = contentArr;
+    m_animEvents[eventIndex] = eventObj;
+
+    int index = contentArr.count() - 1;
+    eventsUpdateContentLabel(eventIndex, index, true);
+}
+void MAU::onClicked_eventsVarRemove() {
+    //qDebug() << QString("onClicked_eventsVarRemove: %1").arg(sender()->objectName());
+    int eventIndex = ui->listEvents->currentRow();
+    int index = ui->listEventsContent->currentRow();
+
+    if (eventIndex < 0 || eventIndex >= m_animEvents.count())
+        return;
+    JSO eventObj = m_animEvents.at(eventIndex).toObject();
+    JSA contentArr = eventObj.value("Content").toArray();
+    contentArr.removeAt(index);
+    eventObj["Content"] = contentArr;
+    m_animEvents[eventIndex] = eventObj;
+    onChanged_eventRow(eventIndex);
+}
+void MAU::onChanged_eventsVarAny() {
+    if (!m_eventsAcceptSignals)
+        return;
+    //qDebug() << QString("onChanged_eventsVarAny: %1").arg(sender()->objectName());
+    int eventIndex = ui->listEvents->currentRow();
+    int index = ui->listEventsContent->currentRow();
+
+    if (eventIndex < 0 || eventIndex >= m_animEvents.count())
+        return;
+    JSO eventObj = m_animEvents.at(eventIndex).toObject();
+    JSA contentArr = eventObj.value("Content").toArray();
+    JSO contentEntry = contentArr[index].toObject();
+    QString entryName = contentEntry["Name"].toString();
+    QString entryType = contentEntry["Type"].toString();
+
+    if (entryType == "Bool") {
+        contentEntry = varToEntry( entryName, ui->checkEventsValueBool->isChecked() );
+    } else if (entryType == "Int32") {
+        contentEntry = varToEntry( entryName, ui->spinEventsValueInt->value() );
+    } else if (entryType == "Float") {
+        contentEntry = varToEntry( entryName, ui->spinEventsValueFloat->value() );
+    } else if (entryType == "StringAnsi" || entryType == "CName") {
+        contentEntry = varToEntry( entryName, ui->lineEventsValueString->text(), entryType );
+    } else if (entryType == "array:2,0,StringAnsi") {
+        contentEntry = varToEntry( entryName, ui->editEventsValueArrayString->toPlainText().split("\n"), entryType );
+    } else if (entryType == "SEnumVariant") {
+        ui->stackEventsValue->setCurrentIndex(5);
+        QHash<QString, QVariant> map = QHash<QString, QVariant>();
+
+        eventsLoadContentData(map, ui->checkEventsVarEnumType, "enumType", "CName");
+        eventsLoadContentData(map, ui->checkEventsVarEnumValue, "enumValue", "Int32");
+        contentEntry = varToEntry( entryName, QVariant::fromValue(map), entryType );
+    } else if (entryType == "CPreAttackEventData") {
+        ui->stackEventsValue->setCurrentIndex(6);
+        QHash<QString, QVariant> map = QHash<QString, QVariant>();
+
+        eventsLoadContentData(map, ui->checkEventsVarAttackName, "attackName", "CName");
+        eventsLoadContentData(map, ui->checkEventsVarAttackRange, "rangeName", "CName");
+        eventsLoadContentData(map, ui->checkEventsVarAttackWeaponSlot, "weaponSlot", "CName");
+        eventsLoadContentData(map, ui->checkEventsVarAttackHitReaction, "hitReactionType", "Int32");
+        eventsLoadContentData(map, ui->checkEventsVarAttackDamageFriendly, "Damage_Friendly", "Bool");
+        eventsLoadContentData(map, ui->checkEventsVarAttackDamageNeutral, "Damage_Neutral", "Bool");
+        eventsLoadContentData(map, ui->checkEventsVarAttackCanParry, "Can_Parry_Attack", "Bool");
+        eventsLoadContentData(map, ui->checkEventsVarAttackHitFx, "hitFX", "CName");
+        eventsLoadContentData(map, ui->checkEventsVarAttackHitBackFx, "hitBackFX", "CName");
+        eventsLoadContentData(map, ui->checkEventsVarAttackHitParriedFx, "hitParriedFX", "CName");
+        eventsLoadContentData(map, ui->checkEventsVarAttackHitBackParriedFx, "hitBackParriedFX", "CName");
+        eventsLoadContentData(map, ui->checkEventsVarAttackSwingType, "swingType", "Int32");
+        eventsLoadContentData(map, ui->checkEventsVarAttackSwingDir, "swingDir", "Int32");
+        eventsLoadContentData(map, ui->checkEventsVarAttackSound, "soundAttackType", "CName");
+        eventsLoadContentData(map, ui->checkEventsVarAttackCanBeDodged, "canBeDodged", "Bool");
+        contentEntry = varToEntry( entryName, QVariant::fromValue(map), entryType );
+    }
+
+    contentArr[index] = contentEntry;
+    eventObj["Content"] = contentArr;
+    m_animEvents[eventIndex] = eventObj;
+
+    eventsUpdateContentLabel(eventIndex, index, false);
+    if ((entryName == "startTime" || entryName == "duration") && entryType == "Float") {
+        eventsUpdateLabel(eventIndex, false);
+    }
+}
+/* JSON loading */
 bool MAU::loadW3Data() {
     // make cleanup here!
     /* extra nr */
@@ -1095,7 +1652,7 @@ bool MAU::isAdditiveAnim(QJsonObject animObj) {
     if ( !isAdditive ) {
         QJsonObject bufferObj = animObj["animBuffer"].toObject();
         QJsonArray bonesArray = bufferObj["bones"].toArray();
-        int nullMotionBones = 0;
+        //int nullMotionBones = 0;
         int testAllBones = 0;
         int testAbsBones = 0;
         double avPos = 0.0;
@@ -1103,15 +1660,15 @@ bool MAU::isAdditiveAnim(QJsonObject animObj) {
         upn(i, 0, bonesArray.size() - 1) {
             QJsonObject tempObj = bonesArray[i].toObject();
             QString boneName = tempObj.value("BoneName").toString();
-            int posNum = tempObj["position_numFrames"].toInt();
-            int rotNum = tempObj["rotation_numFrames"].toInt();
-            int scaleNum = tempObj["scale_numFrames"].toInt();
+            //int posNum = tempObj["position_numFrames"].toInt();
+            //int rotNum = tempObj["rotation_numFrames"].toInt();
+            //int scaleNum = tempObj["scale_numFrames"].toInt();
 
             QJsonObject tpos = tempObj["positionFrames"].toArray().at(0).toObject();
             QJsonObject trot = tempObj["rotationFrames"].toArray().at(0).toObject();
             double sumPos = qAbs(tpos.value("x").toDouble()) + qAbs(tpos.value("y").toDouble()) + qAbs(tpos.value("z").toDouble());
-            double sumRot = qAbs(trot.value("X").toDouble()) + qAbs(trot.value("Y").toDouble()) + qAbs(trot.value("Z").toDouble());
-            double diffW = qAbs( qAbs(trot.value("W").toDouble()) - 1.0 );
+            //double sumRot = qAbs(trot.value("X").toDouble()) + qAbs(trot.value("Y").toDouble()) + qAbs(trot.value("Z").toDouble());
+            //double diffW = qAbs( qAbs(trot.value("W").toDouble()) - 1.0 );
 
             ++testAllBones;
             if (sumPos < 0.000001) {
@@ -1157,7 +1714,7 @@ bool MAU::applyMotionToBone(QJsonValueRef ref) {
         return false;
     }
 
-    double animDuration = animObj["duration"].toDouble();
+    //double animDuration = animObj["duration"].toDouble();
     QJsonObject bufferObj = animObj["animBuffer"].toObject();
     QJsonArray bonesArray = bufferObj["bones"].toArray();
     if ( bonesArray.isEmpty() ) {
@@ -2262,9 +2819,9 @@ QJsonArray MAU::extractAnimParts(QJsonValueRef ref) {
         animObj.remove("motionExtraction");
     }
 
-    double animDuration = animObj["duration"].toDouble();
+    //double animDuration = animObj["duration"].toDouble();
     QJsonObject bufferObj = animObj["animBuffer"].toObject();
-    int numFrames = bufferObj["numFrames"].toInt();
+    //int numFrames = bufferObj["numFrames"].toInt();
     QJsonArray firstFrames = bufferObj["firstFrames"].toArray();
     QJsonArray parts = bufferObj["parts"].toArray();
 

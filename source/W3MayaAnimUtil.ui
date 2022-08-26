@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1101</width>
+    <width>1153</width>
     <height>1100</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="font">
    <font>
@@ -521,7 +527,10 @@
          <number>6</number>
         </property>
         <item>
-         <widget class="QWidget" name="widget_15" native="true">
+         <widget class="QWidget" name="widgetEventsEdit" native="true">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <layout class="QGridLayout" name="gridLayout_5">
            <property name="leftMargin">
             <number>4</number>
@@ -538,17 +547,201 @@
            <property name="spacing">
             <number>6</number>
            </property>
-           <item row="0" column="4">
-            <widget class="QListWidget" name="listEventsContent">
+           <item row="1" column="3" colspan="2">
+            <widget class="QWidget" name="widget_17" native="true">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_12">
+              <property name="spacing">
+               <number>6</number>
+              </property>
+              <property name="leftMargin">
+               <number>4</number>
+              </property>
+              <property name="topMargin">
+               <number>4</number>
+              </property>
+              <property name="rightMargin">
+               <number>4</number>
+              </property>
+              <property name="bottomMargin">
+               <number>4</number>
+              </property>
+              <item>
+               <widget class="QPushButton" name="buttonEventsVarAdd">
+                <property name="text">
+                 <string>Add var</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="res.qrc">
+                  <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="buttonEventsVarRemove">
+                <property name="text">
+                 <string>Remove var</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="res.qrc">
+                  <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="buttonEventsVarRename">
+                <property name="font">
+                 <font>
+                  <family>Roboto</family>
+                  <pointsize>9</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Rename Var:</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="res.qrc">
+                  <normaloff>:/icons/edit.png</normaloff>:/icons/edit.png</iconset>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLineEdit" name="lineEventsVarName"/>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="5" column="0" rowspan="2">
+            <widget class="QWidget" name="widget_15" native="true">
+             <layout class="QGridLayout" name="gridLayout_7">
+              <property name="leftMargin">
+               <number>4</number>
+              </property>
+              <property name="topMargin">
+               <number>4</number>
+              </property>
+              <property name="rightMargin">
+               <number>4</number>
+              </property>
+              <property name="bottomMargin">
+               <number>4</number>
+              </property>
+              <property name="spacing">
+               <number>6</number>
+              </property>
+              <item row="1" column="1">
+               <widget class="QPushButton" name="buttonEventsType">
+                <property name="text">
+                 <string>Set type to current event</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="res.qrc">
+                  <normaloff>:/icons/edit.png</normaloff>:/icons/edit.png</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QComboBox" name="comboEventsType">
+                <property name="editable">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="labelEventsType">
+                <property name="font">
+                 <font>
+                  <family>Arial</family>
+                  <pointsize>9</pointsize>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Type:</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="3" column="4">
+            <widget class="QPushButton" name="buttonEventsVarType">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Set type to current var</string>
+             </property>
+             <property name="icon">
+              <iconset resource="res.qrc">
+               <normaloff>:/icons/edit.png</normaloff>:/icons/edit.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="3" colspan="2">
+            <widget class="QPushButton" name="buttonApplyEvents">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Apply all edits to anim</string>
+             </property>
+             <property name="icon">
+              <iconset resource="res.qrc">
+               <normaloff>:/icons/apply.png</normaloff>:/icons/apply.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="3">
+            <widget class="QComboBox" name="comboEventsVarType">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
             </widget>
            </item>
-           <item row="4" column="3">
+           <item row="8" column="0" colspan="2">
+            <widget class="QPushButton" name="buttonResetEvents">
+             <property name="text">
+              <string>Reset all edits</string>
+             </property>
+             <property name="icon">
+              <iconset resource="res.qrc">
+               <normaloff>:/icons/change.png</normaloff>:/icons/change.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QLabel" name="label_4">
+             <property name="font">
+              <font>
+               <family>Arial</family>
+               <pointsize>9</pointsize>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Var Type:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="2" rowspan="2">
             <widget class="QLabel" name="labelEventsValue">
              <property name="font">
               <font>
@@ -562,16 +755,70 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="4" rowspan="2">
-            <widget class="QStackedWidget" name="stackEventsValue">
+           <item row="3" column="0">
+            <widget class="QWidget" name="widget_16" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_11">
+              <property name="spacing">
+               <number>6</number>
+              </property>
+              <property name="leftMargin">
+               <number>6</number>
+              </property>
+              <property name="topMargin">
+               <number>6</number>
+              </property>
+              <property name="rightMargin">
+               <number>6</number>
+              </property>
+              <property name="bottomMargin">
+               <number>6</number>
+              </property>
+              <item>
+               <widget class="QPushButton" name="buttonEventsAdd">
+                <property name="text">
+                 <string>Add</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="res.qrc">
+                  <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="buttonEventsClone">
+                <property name="text">
+                 <string>Clone</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="res.qrc">
+                  <normaloff>:/icons/clone.png</normaloff>:/icons/clone.png</iconset>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="buttonEventsRemove">
+                <property name="text">
+                 <string>Remove</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="res.qrc">
+                  <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="5" column="3" rowspan="2" colspan="2">
+            <widget class="QResizableStackedWidget" name="stackEventsValue">
              <property name="sizePolicy">
-              <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
              <property name="currentIndex">
-              <number>5</number>
+              <number>2</number>
              </property>
              <widget class="QWidget" name="pageBool">
               <layout class="QVBoxLayout" name="verticalLayout_13">
@@ -611,12 +858,37 @@
                 <number>6</number>
                </property>
                <item>
-                <widget class="QSpinBox" name="spinEventsValueInt">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
+                <widget class="QSpinBox" name="spinEventsValueInt"/>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="pageFloat">
+              <layout class="QVBoxLayout" name="verticalLayout_14">
+               <property name="leftMargin">
+                <number>6</number>
+               </property>
+               <property name="topMargin">
+                <number>6</number>
+               </property>
+               <property name="rightMargin">
+                <number>6</number>
+               </property>
+               <property name="bottomMargin">
+                <number>6</number>
+               </property>
+               <item>
+                <widget class="QDoubleSpinBox" name="spinEventsValueFloat">
+                 <property name="decimals">
+                  <number>5</number>
+                 </property>
+                 <property name="minimum">
+                  <double>-100000.000000000000000</double>
+                 </property>
+                 <property name="maximum">
+                  <double>100000.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.100000000000000</double>
                  </property>
                 </widget>
                </item>
@@ -664,26 +936,77 @@
                </item>
               </layout>
              </widget>
-             <widget class="QWidget" name="pageFloat">
-              <layout class="QVBoxLayout" name="verticalLayout_14">
-               <property name="leftMargin">
+             <widget class="QWidget" name="pageEnumVariant">
+              <layout class="QVBoxLayout" name="verticalLayout_18">
+               <property name="spacing">
                 <number>6</number>
+               </property>
+               <property name="leftMargin">
+                <number>4</number>
                </property>
                <property name="topMargin">
-                <number>6</number>
+                <number>4</number>
                </property>
                <property name="rightMargin">
-                <number>6</number>
+                <number>4</number>
                </property>
                <property name="bottomMargin">
-                <number>6</number>
+                <number>4</number>
                </property>
                <item>
-                <widget class="QDoubleSpinBox" name="spinEventsValueFloat"/>
+                <widget class="QWidget" name="widget_19" native="true">
+                 <layout class="QGridLayout" name="gridLayout_8">
+                  <property name="leftMargin">
+                   <number>6</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>6</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>6</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>6</number>
+                  </property>
+                  <property name="spacing">
+                   <number>6</number>
+                  </property>
+                  <item row="2" column="0">
+                   <widget class="QCheckBox" name="checkEventsVarEnumValue">
+                    <property name="text">
+                     <string>enumValue:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="2">
+                   <widget class="QSpinBox" name="spinEventsEnumValue"/>
+                  </item>
+                  <item row="1" column="2">
+                   <widget class="QLineEdit" name="lineEventsEnumType">
+                    <property name="placeholderText">
+                     <string>ERotationRate</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QCheckBox" name="checkEventsVarEnumType">
+                    <property name="text">
+                     <string>enumType:</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
                </item>
               </layout>
              </widget>
              <widget class="QWidget" name="pageAttackData">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
               <layout class="QVBoxLayout" name="verticalLayout_17">
                <property name="spacing">
                 <number>0</number>
@@ -719,166 +1042,149 @@
                    <number>4</number>
                   </property>
                   <item row="1" column="6">
-                   <widget class="QCheckBox" name="checkBox_6">
+                   <widget class="QCheckBox" name="checkEventsVarAttackHitFx">
                     <property name="text">
                      <string>hitFX:</string>
                     </property>
                    </widget>
                   </item>
                   <item row="7" column="6">
-                   <widget class="QCheckBox" name="checkBox_9">
+                   <widget class="QCheckBox" name="checkEventsVarAttackHitBackParriedFx">
                     <property name="text">
                      <string>hitBackParriedFX:</string>
                     </property>
                    </widget>
                   </item>
                   <item row="1" column="4">
-                   <widget class="QCheckBox" name="checkBox_3">
+                   <widget class="QCheckBox" name="checkEventsAttackCanParry">
                     <property name="text">
                      <string>false</string>
                     </property>
                    </widget>
                   </item>
                   <item row="5" column="4">
-                   <widget class="QSpinBox" name="spinBox_2"/>
+                   <widget class="QSpinBox" name="spinEventsAttackSwingType"/>
                   </item>
                   <item row="8" column="7">
-                   <widget class="QCheckBox" name="checkBox_16">
+                   <widget class="QCheckBox" name="checkEventsAttackDamageFriendly">
                     <property name="text">
                      <string>false</string>
                     </property>
                    </widget>
                   </item>
-                  <item row="5" column="0">
-                   <widget class="QLabel" name="label_8">
-                    <property name="text">
-                     <string>soundAttackType:</string>
-                    </property>
-                   </widget>
-                  </item>
                   <item row="1" column="1">
-                   <widget class="QLineEdit" name="lineEdit"/>
+                   <widget class="QLineEdit" name="lineEventsAttackName"/>
                   </item>
                   <item row="8" column="6">
-                   <widget class="QCheckBox" name="checkBox_15">
+                   <widget class="QCheckBox" name="checkEventsVarAttackDamageFriendly">
                     <property name="text">
                      <string>Damage_Friendly:</string>
                     </property>
                    </widget>
                   </item>
                   <item row="7" column="1">
-                   <widget class="QLineEdit" name="lineEdit_8"/>
+                   <widget class="QLineEdit" name="lineEventsAttackWeaponSlot"/>
                   </item>
                   <item row="3" column="4">
-                   <widget class="QCheckBox" name="checkBox_11">
+                   <widget class="QCheckBox" name="checkEventsAttackCanBeDodged">
                     <property name="text">
                      <string>false</string>
                     </property>
                    </widget>
                   </item>
                   <item row="5" column="7">
-                   <widget class="QLineEdit" name="lineEdit_6"/>
+                   <widget class="QLineEdit" name="lineEventsAttackHitParriedFx"/>
                   </item>
                   <item row="5" column="6">
-                   <widget class="QCheckBox" name="checkBox_8">
+                   <widget class="QCheckBox" name="checkEventsVarAttackHitParriedFx">
                     <property name="text">
                      <string>hitParriedFX:</string>
                     </property>
                    </widget>
                   </item>
                   <item row="3" column="7">
-                   <widget class="QLineEdit" name="lineEdit_5"/>
+                   <widget class="QLineEdit" name="lineEventsAttackHitBackFx"/>
                   </item>
                   <item row="3" column="3">
-                   <widget class="QCheckBox" name="checkBox_10">
+                   <widget class="QCheckBox" name="checkEventsVarAttackCanBeDodged">
                     <property name="text">
                      <string>canBeDodged:</string>
                     </property>
                    </widget>
                   </item>
                   <item row="3" column="1">
-                   <widget class="QLineEdit" name="lineEdit_2"/>
+                   <widget class="QLineEdit" name="lineEventsAttackRange"/>
                   </item>
                   <item row="7" column="7">
-                   <widget class="QLineEdit" name="lineEdit_7"/>
+                   <widget class="QLineEdit" name="lineEventsAttackHitBackParriedFx"/>
                   </item>
                   <item row="7" column="4">
-                   <widget class="QSpinBox" name="spinBox_3"/>
+                   <widget class="QSpinBox" name="spinEventsAttackSwingDir"/>
                   </item>
                   <item row="8" column="4">
-                   <widget class="QCheckBox" name="checkBox_14">
+                   <widget class="QCheckBox" name="checkEventsAttackDamageNeutral">
                     <property name="text">
                      <string>false</string>
                     </property>
                    </widget>
                   </item>
                   <item row="7" column="0">
-                   <widget class="QCheckBox" name="checkBox_12">
+                   <widget class="QCheckBox" name="checkEventsVarAttackWeaponSlot">
                     <property name="text">
                      <string>weaponSlot:</string>
                     </property>
                    </widget>
                   </item>
                   <item row="5" column="1">
-                   <widget class="QLineEdit" name="lineEdit_3"/>
-                  </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="label_7">
-                    <property name="text">
-                     <string>attackName:</string>
-                    </property>
-                   </widget>
+                   <widget class="QLineEdit" name="lineEventsAttackSound"/>
                   </item>
                   <item row="1" column="3">
-                   <widget class="QCheckBox" name="checkBox_2">
+                   <widget class="QCheckBox" name="checkEventsVarAttackCanParry">
                     <property name="text">
                      <string>Can_Parry_Attack:</string>
                     </property>
                    </widget>
                   </item>
                   <item row="3" column="6">
-                   <widget class="QCheckBox" name="checkBox_7">
+                   <widget class="QCheckBox" name="checkEventsVarAttackHitBackFx">
                     <property name="text">
                      <string>hitBackFX:</string>
                     </property>
                    </widget>
                   </item>
                   <item row="5" column="3">
-                   <widget class="QCheckBox" name="checkBox_4">
+                   <widget class="QCheckBox" name="checkEventsVarAttackSwingType">
                     <property name="text">
                      <string>swingType:</string>
                     </property>
                    </widget>
                   </item>
                   <item row="8" column="3">
-                   <widget class="QCheckBox" name="checkBox_13">
+                   <widget class="QCheckBox" name="checkEventsVarAttackDamageNeutral">
                     <property name="text">
                      <string>Damage_Neutral:</string>
                     </property>
                    </widget>
                   </item>
                   <item row="1" column="7">
-                   <widget class="QLineEdit" name="lineEdit_4"/>
+                   <widget class="QLineEdit" name="lineEventsAttackHitFx"/>
                   </item>
                   <item row="8" column="1">
-                   <widget class="QSpinBox" name="spinBox"/>
+                   <widget class="QSpinBox" name="spinEventsAttackHitReaction">
+                    <property name="suffix">
+                     <string/>
+                    </property>
+                   </widget>
                   </item>
                   <item row="7" column="3">
-                   <widget class="QCheckBox" name="checkBox_5">
+                   <widget class="QCheckBox" name="checkEventsVarAttackSwingDir">
                     <property name="text">
                      <string>swingDir:</string>
                     </property>
                    </widget>
                   </item>
-                  <item row="3" column="0">
-                   <widget class="QLabel" name="label_6">
-                    <property name="text">
-                     <string>rangeName:</string>
-                    </property>
-                   </widget>
-                  </item>
                   <item row="8" column="0">
-                   <widget class="QCheckBox" name="checkBox">
+                   <widget class="QCheckBox" name="checkEventsVarAttackHitReaction">
                     <property name="text">
                      <string>hitReactionType:</string>
                     </property>
@@ -913,6 +1219,27 @@
                     </property>
                    </widget>
                   </item>
+                  <item row="5" column="0">
+                   <widget class="QCheckBox" name="checkEventsVarAttackSound">
+                    <property name="text">
+                     <string>soundAttackType:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="0">
+                   <widget class="QCheckBox" name="checkEventsVarAttackRange">
+                    <property name="text">
+                     <string>rangeName:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QCheckBox" name="checkEventsVarAttackName">
+                    <property name="text">
+                     <string>attackName:</string>
+                    </property>
+                   </widget>
+                  </item>
                  </layout>
                 </widget>
                </item>
@@ -920,181 +1247,30 @@
              </widget>
             </widget>
            </item>
-           <item row="6" column="0" colspan="3">
-            <widget class="QPushButton" name="buttonResetEvents">
-             <property name="text">
-              <string>Reset all edits</string>
-             </property>
-             <property name="icon">
-              <iconset resource="res.qrc">
-               <normaloff>:/icons/change.png</normaloff>:/icons/change.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="4">
-            <widget class="QWidget" name="widget_17" native="true">
-             <layout class="QHBoxLayout" name="horizontalLayout_12">
-              <property name="spacing">
-               <number>6</number>
-              </property>
-              <property name="leftMargin">
-               <number>4</number>
-              </property>
-              <property name="topMargin">
-               <number>4</number>
-              </property>
-              <property name="rightMargin">
-               <number>4</number>
-              </property>
-              <property name="bottomMargin">
-               <number>4</number>
-              </property>
-              <item>
-               <widget class="QPushButton" name="pushButton">
-                <property name="text">
-                 <string>Add var</string>
-                </property>
-                <property name="icon">
-                 <iconset resource="res.qrc">
-                  <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton_4">
-                <property name="text">
-                 <string>Remove var</string>
-                </property>
-                <property name="icon">
-                 <iconset resource="res.qrc">
-                  <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="2" column="4">
-            <widget class="QComboBox" name="comboBox_2"/>
-           </item>
-           <item row="2" column="3">
-            <widget class="QLabel" name="label_4">
-             <property name="font">
-              <font>
-               <family>Arial</family>
-               <pointsize>9</pointsize>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>Var Type:</string>
+           <item row="0" column="3" colspan="2">
+            <widget class="QListWidget" name="listEventsContent">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
              </property>
             </widget>
            </item>
-           <item row="6" column="4">
-            <widget class="QPushButton" name="buttonApplyEvents">
-             <property name="text">
-              <string>Apply all edits to anim</string>
+           <item row="3" column="1" rowspan="4">
+            <widget class="Line" name="line_4">
+             <property name="frameShadow">
+              <enum>QFrame::Plain</enum>
              </property>
-             <property name="icon">
-              <iconset resource="res.qrc">
-               <normaloff>:/icons/apply.png</normaloff>:/icons/apply.png</iconset>
+             <property name="lineWidth">
+              <number>1</number>
              </property>
-            </widget>
-           </item>
-           <item row="4" column="0" colspan="3">
-            <widget class="QWidget" name="widget_16" native="true">
-             <layout class="QHBoxLayout" name="horizontalLayout_11">
-              <property name="spacing">
-               <number>6</number>
-              </property>
-              <property name="leftMargin">
-               <number>6</number>
-              </property>
-              <property name="topMargin">
-               <number>6</number>
-              </property>
-              <property name="rightMargin">
-               <number>6</number>
-              </property>
-              <property name="bottomMargin">
-               <number>6</number>
-              </property>
-              <item>
-               <widget class="QPushButton" name="buttonEventsAdd">
-                <property name="text">
-                 <string>Add</string>
-                </property>
-                <property name="icon">
-                 <iconset resource="res.qrc">
-                  <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="buttonEventsClone">
-                <property name="text">
-                 <string>Clone</string>
-                </property>
-                <property name="icon">
-                 <iconset resource="res.qrc">
-                  <normaloff>:/icons/clone.png</normaloff>:/icons/clone.png</iconset>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="buttonEventsRemove">
-                <property name="enabled">
-                 <bool>true</bool>
-                </property>
-                <property name="text">
-                 <string>Remove</string>
-                </property>
-                <property name="icon">
-                 <iconset resource="res.qrc">
-                  <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="labelEventsType">
-             <property name="font">
-              <font>
-               <family>Arial</family>
-               <pointsize>9</pointsize>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>Type:</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
              </property>
             </widget>
            </item>
-           <item row="2" column="1" colspan="2">
-            <widget class="QComboBox" name="comboEventsType">
-             <property name="editable">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1" colspan="2">
-            <widget class="QPushButton" name="buttonEventsType">
-             <property name="text">
-              <string>Set type to current event</string>
-             </property>
-             <property name="icon">
-              <iconset resource="res.qrc">
-               <normaloff>:/icons/edit.png</normaloff>:/icons/edit.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0" rowspan="2" colspan="4">
+           <item row="0" column="0" rowspan="2" colspan="3">
             <widget class="QListWidget" name="listEvents">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -2033,8 +2209,742 @@ p, li { white-space: pre-wrap; }
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QResizableStackedWidget</class>
+   <extends>QStackedWidget</extends>
+   <header>qresizablestackedwidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="res.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>editEventsValueArrayString</sender>
+   <signal>textChanged()</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>943</x>
+     <y>667</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1098</x>
+     <y>324</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsValueBool</sender>
+   <signal>clicked()</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>446</x>
+     <y>674</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1098</x>
+     <y>531</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsValueBool</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChecked_DynamicLabel(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>867</x>
+     <y>668</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1098</x>
+     <y>431</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsAttackCanParry</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChecked_DynamicLabel(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>801</x>
+     <y>622</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1098</x>
+     <y>516</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsAttackCanBeDodged</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChecked_DynamicLabel(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>802</x>
+     <y>647</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1099</x>
+     <y>482</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsAttackDamageNeutral</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChecked_DynamicLabel(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>800</x>
+     <y>723</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1101</x>
+     <y>386</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsAttackDamageFriendly</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChecked_DynamicLabel(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1074</x>
+     <y>741</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1101</x>
+     <y>351</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEventsEnumType</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>861</x>
+     <y>641</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1097</x>
+     <y>472</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinEventsEnumValue</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>936</x>
+     <y>697</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1097</x>
+     <y>425</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinEventsValueFloat</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>854</x>
+     <y>680</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1097</x>
+     <y>619</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinEventsValueInt</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>718</x>
+     <y>675</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1098</x>
+     <y>558</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEventsValueString</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>918</x>
+     <y>679</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1095</x>
+     <y>614</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEventsAttackName</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>582</x>
+     <y>623</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1096</x>
+     <y>590</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEventsAttackRange</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>600</x>
+     <y>645</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1099</x>
+     <y>667</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEventsAttackSound</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>627</x>
+     <y>686</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1096</x>
+     <y>711</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEventsAttackWeaponSlot</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>608</x>
+     <y>701</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1099</x>
+     <y>750</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinEventsAttackHitReaction</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>627</x>
+     <y>742</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1102</x>
+     <y>785</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsAttackCanParry</sender>
+   <signal>pressed()</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>811</x>
+     <y>617</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1097</x>
+     <y>661</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsAttackCanParry</sender>
+   <signal>clicked()</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>851</x>
+     <y>629</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1072</x>
+     <y>628</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsAttackCanBeDodged</sender>
+   <signal>clicked()</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>851</x>
+     <y>657</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1055</x>
+     <y>641</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinEventsAttackSwingType</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>851</x>
+     <y>686</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1062</x>
+     <y>678</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spinEventsAttackSwingDir</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>851</x>
+     <y>714</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1067</x>
+     <y>721</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsAttackDamageNeutral</sender>
+   <signal>clicked()</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>851</x>
+     <y>741</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1069</x>
+     <y>760</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEventsAttackHitFx</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1074</x>
+     <y>630</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1068</x>
+     <y>805</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEventsAttackHitBackFx</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1074</x>
+     <y>658</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1064</x>
+     <y>834</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEventsAttackHitParriedFx</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1074</x>
+     <y>686</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1065</x>
+     <y>867</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEventsAttackHitBackParriedFx</sender>
+   <signal>textEdited(QString)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1074</x>
+     <y>714</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1062</x>
+     <y>909</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsAttackDamageFriendly</sender>
+   <signal>clicked()</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1074</x>
+     <y>741</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1065</x>
+     <y>943</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsVarAttackWeaponSlot</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChecked_ToggleVar(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>448</x>
+     <y>707</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1070</x>
+     <y>1047</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsVarAttackHitReaction</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChecked_ToggleVar(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>460</x>
+     <y>729</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1070</x>
+     <y>1027</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsVarAttackCanParry</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChecked_ToggleVar(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>644</x>
+     <y>622</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1046</x>
+     <y>1036</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsVarAttackCanBeDodged</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChecked_ToggleVar(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>671</x>
+     <y>646</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1052</x>
+     <y>1064</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsVarAttackSwingType</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChecked_ToggleVar(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>650</x>
+     <y>676</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1051</x>
+     <y>1010</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsVarAttackSwingDir</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChecked_ToggleVar(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>673</x>
+     <y>705</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1095</x>
+     <y>985</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsVarAttackDamageNeutral</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChecked_ToggleVar(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>683</x>
+     <y>733</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1083</x>
+     <y>1081</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsVarAttackHitFx</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChecked_ToggleVar(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>874</x>
+     <y>616</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1070</x>
+     <y>258</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsVarAttackHitBackFx</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChecked_ToggleVar(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>890</x>
+     <y>647</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1074</x>
+     <y>232</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsVarAttackHitParriedFx</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChecked_ToggleVar(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1007</x>
+     <y>685</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1067</x>
+     <y>211</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsVarAttackHitBackParriedFx</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChecked_ToggleVar(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>919</x>
+     <y>701</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1083</x>
+     <y>277</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsVarAttackDamageFriendly</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChecked_ToggleVar(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>867</x>
+     <y>731</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1067</x>
+     <y>290</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsVarEnumValue</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChecked_ToggleVar(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>462</x>
+     <y>703</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1073</x>
+     <y>551</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsVarEnumType</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChecked_ToggleVar(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>437</x>
+     <y>650</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1124</x>
+     <y>575</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsVarAttackSound</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChecked_ToggleVar(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>464</x>
+     <y>673</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1126</x>
+     <y>963</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsVarAttackRange</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChecked_ToggleVar(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>422</x>
+     <y>646</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1129</x>
+     <y>939</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>checkEventsVarAttackName</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChecked_ToggleVar(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>489</x>
+     <y>614</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1128</x>
+     <y>920</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>onChanged_eventsVarAny()</slot>
+  <slot>onChecked_DynamicLabel(bool)</slot>
+  <slot>onChecked_ToggleVar(bool)</slot>
+ </slots>
 </ui>
