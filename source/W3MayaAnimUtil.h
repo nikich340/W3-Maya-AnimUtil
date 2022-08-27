@@ -13,6 +13,7 @@
 #include <QJsonValue>
 #include <QJsonParseError>
 #include <QQuaternion>
+#include <QSettings>
 
 #define JSO QJsonObject
 #define JSA QJsonArray
@@ -177,6 +178,7 @@ private:
     void patchAnimParts(QString jsonPath, QJsonValueRef animArrayRef);
 
 private slots:
+    void onChanged_GUIStyle(QString newStyle);
     void onClicked_Load();
     void onClicked_Save();
     void onClicked_SaveSplit();

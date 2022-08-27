@@ -177,10 +177,14 @@ bool MAU::loadJsonFile(QString filePath) {
     if ( loadW3Data() ) {
         addLog( QString("[OK] Loaded %1, original file saved as: %1.bak").arg(QFileInfo(filePath).fileName()), logFinish );
         ui->linePath->setText(filePath);
+        ui->buttonSave->setEnabled(true);
+        ui->buttonSaveSplit->setEnabled(true);
         return true;
     } else {
         addLog( QString("Failed to detect data format: %1").arg(QFileInfo(filePath).fileName()), logError );
         ui->linePath->setText("NO CORRECT .JSON LOADED!");
+        ui->buttonSave->setEnabled(false);
+        ui->buttonSaveSplit->setEnabled(false);
         return false;
     }
 }
@@ -208,6 +212,16 @@ void MAU::setEventStartTime(QJsonObject& eventObj, double newTime) {
         }
     }
     eventObj["Content"] = contentArr;
+}
+void MAU::onChanged_GUIStyle(QString newStyle) {
+    if (newStyle == "Windows") {
+        QSettings().setValue("GUIStyle", "windowsvista");
+    } else if (newStyle == "WindowsXP") {
+        QSettings().setValue("GUIStyle", "Windows");
+    } else if (newStyle == "Fusion") {
+        QSettings().setValue("GUIStyle", "Fusion");
+    }
+    addLog(QString("[OK] Set new GUI Style: %1. Please restart application to apply it.").arg(newStyle), logWarning);
 }
 void MAU::onClicked_Load() {
     if (hasChanges && QMessageBox::Yes != QMessageBox::question(this, "Attention!", "Currently loaded .json has some unsaved changes. Do you want to discard them and load new file?")) {
@@ -862,9 +876,6 @@ void MAU::eventsLoad() {
             eventsUpdateLabel(i, true);
         }
         ui->listEvents->setCurrentRow(0);
-        //ui->buttonApplyEvents->setEnabled(true);
-    } else {
-        //ui->buttonApplyEvents->setEnabled(false);
     }
 }
 QVariant MAU::getEventParam(QJsonObject eventObj, QString paramName, QVariant defaultValue) {
@@ -1038,8 +1049,16 @@ void MAU::onClicked_eventsRemove() {
 void MAU::onChanged_eventRow(int newRow) {
     ui->listEventsContent->clear();
     //qDebug() << QString("onChanged_eventRow: %1").arg(newRow);
-    if (newRow < 0)
+    if (newRow < 0) {
+        ui->buttonEventsClone->setEnabled(false);
+        ui->buttonEventsRemove->setEnabled(false);
+        ui->buttonEventsType->setEnabled(false);
         return;
+    }
+    ui->buttonEventsClone->setEnabled(true);
+    ui->buttonEventsRemove->setEnabled(true);
+    ui->buttonEventsType->setEnabled(true);
+
     if (newRow < m_animEvents.count()) {
         JSO eventObj = m_animEvents.at(newRow).toObject();
         QString type = eventObj.value("Type").toString();
@@ -1101,8 +1120,16 @@ void MAU::eventsLoadContentData(QHash<QString, QVariant>& map, QCheckBox* pContr
     }
 }
 void MAU::onChanged_eventContentRow(int newRow) {
-    if (newRow < 0)
+    if (newRow < 0) {
+        ui->buttonEventsVarRemove->setEnabled(false);
+        ui->buttonEventsVarRename->setEnabled(false);
+        ui->buttonEventsVarType->setEnabled(false);
         return;
+    }
+    ui->buttonEventsVarRemove->setEnabled(true);
+    ui->buttonEventsVarRename->setEnabled(true);
+    ui->buttonEventsVarType->setEnabled(true);
+
     int eventIndex = ui->listEvents->currentRow();
     JSA contentArr = m_animEvents.at(eventIndex).toObject().value("Content").toArray();
     if (newRow < contentArr.count()) {

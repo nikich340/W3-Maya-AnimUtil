@@ -1,11 +1,19 @@
 #include "W3MayaAnimUtil.h"
 
 #include <QApplication>
-#include <QFont>
 
 int main(int argc, char *argv[])
 {
-    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    /*"windowsvista"
+    "Windows"
+    "Fusion"*/
+    QApplication::setApplicationName("W3MayaAnimUtil");
+    QApplication::setOrganizationName("nikich340");
+
+    QSettings settings;
+    QApplication::setStyle( QSettings().value("GUIStyle", "windowsvista").toString() );
+
+    QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
     app.setWindowIcon(QIcon(":/icons/icon2.ico"));
 

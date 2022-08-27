@@ -44,6 +44,21 @@
     <item>
      <widget class="QWidget" name="widget" native="true">
       <layout class="QHBoxLayout" name="horizontalLayout">
+       <property name="spacing">
+        <number>6</number>
+       </property>
+       <property name="leftMargin">
+        <number>6</number>
+       </property>
+       <property name="topMargin">
+        <number>6</number>
+       </property>
+       <property name="rightMargin">
+        <number>6</number>
+       </property>
+       <property name="bottomMargin">
+        <number>6</number>
+       </property>
        <item>
         <widget class="QLabel" name="label">
          <property name="font">
@@ -96,6 +111,21 @@
     <item>
      <widget class="QWidget" name="widget_5" native="true">
       <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="spacing">
+        <number>6</number>
+       </property>
+       <property name="leftMargin">
+        <number>6</number>
+       </property>
+       <property name="topMargin">
+        <number>6</number>
+       </property>
+       <property name="rightMargin">
+        <number>6</number>
+       </property>
+       <property name="bottomMargin">
+        <number>6</number>
+       </property>
        <item>
         <widget class="QCheckBox" name="checkBak">
          <property name="text">
@@ -132,12 +162,53 @@
          </property>
         </widget>
        </item>
+       <item>
+        <widget class="QLabel" name="labelGUIStyle">
+         <property name="text">
+          <string>GUI Style:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboGUIStyle">
+         <item>
+          <property name="text">
+           <string>Windows</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Fusion</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>WindowsXP</string>
+          </property>
+         </item>
+        </widget>
+       </item>
       </layout>
      </widget>
     </item>
     <item>
      <widget class="QWidget" name="widget_14" native="true">
       <layout class="QHBoxLayout" name="horizontalLayout_9">
+       <property name="spacing">
+        <number>6</number>
+       </property>
+       <property name="leftMargin">
+        <number>6</number>
+       </property>
+       <property name="topMargin">
+        <number>6</number>
+       </property>
+       <property name="rightMargin">
+        <number>6</number>
+       </property>
+       <property name="bottomMargin">
+        <number>6</number>
+       </property>
        <item>
         <widget class="QLabel" name="labelEditInfo">
          <property name="text">
@@ -529,7 +600,7 @@
         <item>
          <widget class="QWidget" name="widgetEventsEdit" native="true">
           <property name="enabled">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
           <layout class="QGridLayout" name="gridLayout_5">
            <property name="leftMargin">
@@ -584,6 +655,9 @@
               </item>
               <item>
                <widget class="QPushButton" name="buttonEventsVarRemove">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="text">
                  <string>Remove var</string>
                 </property>
@@ -595,6 +669,9 @@
               </item>
               <item>
                <widget class="QPushButton" name="buttonEventsVarRename">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="font">
                  <font>
                   <family>Roboto</family>
@@ -636,6 +713,9 @@
               </property>
               <item row="1" column="1">
                <widget class="QPushButton" name="buttonEventsType">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="text">
                  <string>Set type to current event</string>
                 </property>
@@ -674,6 +754,9 @@
            </item>
            <item row="3" column="4">
             <widget class="QPushButton" name="buttonEventsVarType">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                <horstretch>0</horstretch>
@@ -786,6 +869,9 @@
               </item>
               <item>
                <widget class="QPushButton" name="buttonEventsClone">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="text">
                  <string>Clone</string>
                 </property>
@@ -797,6 +883,9 @@
               </item>
               <item>
                <widget class="QPushButton" name="buttonEventsRemove">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
                 <property name="text">
                  <string>Remove</string>
                 </property>
@@ -2176,8 +2265,26 @@ p, li { white-space: pre-wrap; }
     <item>
      <widget class="QWidget" name="widget_13" native="true">
       <layout class="QHBoxLayout" name="horizontalLayout_7">
+       <property name="spacing">
+        <number>6</number>
+       </property>
+       <property name="leftMargin">
+        <number>6</number>
+       </property>
+       <property name="topMargin">
+        <number>6</number>
+       </property>
+       <property name="rightMargin">
+        <number>6</number>
+       </property>
+       <property name="bottomMargin">
+        <number>6</number>
+       </property>
        <item>
         <widget class="QPushButton" name="buttonSave">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="font">
           <font>
            <pointsize>9</pointsize>
@@ -2193,7 +2300,17 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item>
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="buttonSaveSplit">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>Save animset as separate .json's</string>
          </property>
@@ -2228,8 +2345,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>943</x>
-     <y>667</y>
+     <x>503</x>
+     <y>636</y>
     </hint>
     <hint type="destinationlabel">
      <x>1098</x>
@@ -2244,8 +2361,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>446</x>
-     <y>674</y>
+     <x>503</x>
+     <y>636</y>
     </hint>
     <hint type="destinationlabel">
      <x>1098</x>
@@ -2260,8 +2377,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_DynamicLabel(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>867</x>
-     <y>668</y>
+     <x>503</x>
+     <y>636</y>
     </hint>
     <hint type="destinationlabel">
      <x>1098</x>
@@ -2276,8 +2393,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_DynamicLabel(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>801</x>
-     <y>622</y>
+     <x>472</x>
+     <y>617</y>
     </hint>
     <hint type="destinationlabel">
      <x>1098</x>
@@ -2292,8 +2409,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_DynamicLabel(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>802</x>
-     <y>647</y>
+     <x>472</x>
+     <y>622</y>
     </hint>
     <hint type="destinationlabel">
      <x>1099</x>
@@ -2308,8 +2425,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_DynamicLabel(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>800</x>
-     <y>723</y>
+     <x>472</x>
+     <y>638</y>
     </hint>
     <hint type="destinationlabel">
      <x>1101</x>
@@ -2324,8 +2441,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_DynamicLabel(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1074</x>
-     <y>741</y>
+     <x>507</x>
+     <y>638</y>
     </hint>
     <hint type="destinationlabel">
      <x>1101</x>
@@ -2340,8 +2457,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>861</x>
-     <y>641</y>
+     <x>499</x>
+     <y>624</y>
     </hint>
     <hint type="destinationlabel">
      <x>1097</x>
@@ -2356,8 +2473,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>936</x>
-     <y>697</y>
+     <x>499</x>
+     <y>632</y>
     </hint>
     <hint type="destinationlabel">
      <x>1097</x>
@@ -2388,8 +2505,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>718</x>
-     <y>675</y>
+     <x>503</x>
+     <y>636</y>
     </hint>
     <hint type="destinationlabel">
      <x>1098</x>
@@ -2404,8 +2521,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>918</x>
-     <y>679</y>
+     <x>503</x>
+     <y>636</y>
     </hint>
     <hint type="destinationlabel">
      <x>1095</x>
@@ -2420,8 +2537,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>582</x>
-     <y>623</y>
+     <x>437</x>
+     <y>617</y>
     </hint>
     <hint type="destinationlabel">
      <x>1096</x>
@@ -2436,8 +2553,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>600</x>
-     <y>645</y>
+     <x>437</x>
+     <y>622</y>
     </hint>
     <hint type="destinationlabel">
      <x>1099</x>
@@ -2452,8 +2569,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>627</x>
-     <y>686</y>
+     <x>437</x>
+     <y>628</y>
     </hint>
     <hint type="destinationlabel">
      <x>1096</x>
@@ -2468,8 +2585,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>608</x>
-     <y>701</y>
+     <x>437</x>
+     <y>633</y>
     </hint>
     <hint type="destinationlabel">
      <x>1099</x>
@@ -2484,8 +2601,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>627</x>
-     <y>742</y>
+     <x>437</x>
+     <y>638</y>
     </hint>
     <hint type="destinationlabel">
      <x>1102</x>
@@ -2500,7 +2617,7 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>811</x>
+     <x>472</x>
      <y>617</y>
     </hint>
     <hint type="destinationlabel">
@@ -2516,8 +2633,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>851</x>
-     <y>629</y>
+     <x>472</x>
+     <y>617</y>
     </hint>
     <hint type="destinationlabel">
      <x>1072</x>
@@ -2532,8 +2649,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>851</x>
-     <y>657</y>
+     <x>472</x>
+     <y>622</y>
     </hint>
     <hint type="destinationlabel">
      <x>1055</x>
@@ -2548,8 +2665,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>851</x>
-     <y>686</y>
+     <x>472</x>
+     <y>628</y>
     </hint>
     <hint type="destinationlabel">
      <x>1062</x>
@@ -2564,8 +2681,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>851</x>
-     <y>714</y>
+     <x>472</x>
+     <y>633</y>
     </hint>
     <hint type="destinationlabel">
      <x>1067</x>
@@ -2580,8 +2697,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>851</x>
-     <y>741</y>
+     <x>472</x>
+     <y>638</y>
     </hint>
     <hint type="destinationlabel">
      <x>1069</x>
@@ -2596,8 +2713,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1074</x>
-     <y>630</y>
+     <x>507</x>
+     <y>617</y>
     </hint>
     <hint type="destinationlabel">
      <x>1068</x>
@@ -2612,8 +2729,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1074</x>
-     <y>658</y>
+     <x>507</x>
+     <y>622</y>
     </hint>
     <hint type="destinationlabel">
      <x>1064</x>
@@ -2628,8 +2745,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1074</x>
-     <y>686</y>
+     <x>507</x>
+     <y>628</y>
     </hint>
     <hint type="destinationlabel">
      <x>1065</x>
@@ -2644,8 +2761,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1074</x>
-     <y>714</y>
+     <x>507</x>
+     <y>633</y>
     </hint>
     <hint type="destinationlabel">
      <x>1062</x>
@@ -2660,8 +2777,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1074</x>
-     <y>741</y>
+     <x>507</x>
+     <y>638</y>
     </hint>
     <hint type="destinationlabel">
      <x>1065</x>
@@ -2676,8 +2793,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>448</x>
-     <y>707</y>
+     <x>423</x>
+     <y>633</y>
     </hint>
     <hint type="destinationlabel">
      <x>1070</x>
@@ -2692,8 +2809,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>460</x>
-     <y>729</y>
+     <x>423</x>
+     <y>638</y>
     </hint>
     <hint type="destinationlabel">
      <x>1070</x>
@@ -2708,8 +2825,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>644</x>
-     <y>622</y>
+     <x>458</x>
+     <y>617</y>
     </hint>
     <hint type="destinationlabel">
      <x>1046</x>
@@ -2724,8 +2841,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>671</x>
-     <y>646</y>
+     <x>458</x>
+     <y>622</y>
     </hint>
     <hint type="destinationlabel">
      <x>1052</x>
@@ -2740,8 +2857,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>650</x>
-     <y>676</y>
+     <x>458</x>
+     <y>628</y>
     </hint>
     <hint type="destinationlabel">
      <x>1051</x>
@@ -2756,8 +2873,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>673</x>
-     <y>705</y>
+     <x>458</x>
+     <y>633</y>
     </hint>
     <hint type="destinationlabel">
      <x>1095</x>
@@ -2772,8 +2889,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>683</x>
-     <y>733</y>
+     <x>458</x>
+     <y>638</y>
     </hint>
     <hint type="destinationlabel">
      <x>1083</x>
@@ -2788,8 +2905,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>874</x>
-     <y>616</y>
+     <x>493</x>
+     <y>617</y>
     </hint>
     <hint type="destinationlabel">
      <x>1070</x>
@@ -2804,8 +2921,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>890</x>
-     <y>647</y>
+     <x>493</x>
+     <y>622</y>
     </hint>
     <hint type="destinationlabel">
      <x>1074</x>
@@ -2820,8 +2937,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1007</x>
-     <y>685</y>
+     <x>493</x>
+     <y>628</y>
     </hint>
     <hint type="destinationlabel">
      <x>1067</x>
@@ -2836,8 +2953,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>919</x>
-     <y>701</y>
+     <x>493</x>
+     <y>633</y>
     </hint>
     <hint type="destinationlabel">
      <x>1083</x>
@@ -2852,8 +2969,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>867</x>
-     <y>731</y>
+     <x>493</x>
+     <y>638</y>
     </hint>
     <hint type="destinationlabel">
      <x>1067</x>
@@ -2868,8 +2985,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>462</x>
-     <y>703</y>
+     <x>456</x>
+     <y>632</y>
     </hint>
     <hint type="destinationlabel">
      <x>1073</x>
@@ -2884,8 +3001,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>437</x>
-     <y>650</y>
+     <x>456</x>
+     <y>624</y>
     </hint>
     <hint type="destinationlabel">
      <x>1124</x>
@@ -2900,8 +3017,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>464</x>
-     <y>673</y>
+     <x>423</x>
+     <y>628</y>
     </hint>
     <hint type="destinationlabel">
      <x>1126</x>
@@ -2916,8 +3033,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>422</x>
-     <y>646</y>
+     <x>423</x>
+     <y>622</y>
     </hint>
     <hint type="destinationlabel">
      <x>1129</x>
@@ -2932,12 +3049,28 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>489</x>
-     <y>614</y>
+     <x>423</x>
+     <y>617</y>
     </hint>
     <hint type="destinationlabel">
      <x>1128</x>
      <y>920</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboGUIStyle</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_GUIStyle(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>1106</x>
+     <y>70</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1150</x>
+     <y>117</y>
     </hint>
    </hints>
   </connection>
@@ -2946,5 +3079,6 @@ p, li { white-space: pre-wrap; }
   <slot>onChanged_eventsVarAny()</slot>
   <slot>onChecked_DynamicLabel(bool)</slot>
   <slot>onChecked_ToggleVar(bool)</slot>
+  <slot>onChanged_GUIStyle(QString)</slot>
  </slots>
 </ui>
