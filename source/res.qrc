@@ -14,5 +14,9 @@
         <file>icons/edit.png</file>
         <file>icons/maya.png</file>
         <file>icons/wolf.png</file>
+        <file>icons/pepecomfy.png</file>
+        <file>icons/sort.png</file>
+        <file>icons/motivated.png</file>
+        <file>icons/motivated_small.png</file>
     </qresource>
 </RCC>

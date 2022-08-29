@@ -10,8 +10,8 @@ int main(int argc, char *argv[])
     QApplication::setApplicationName("W3MayaAnimUtil");
     QApplication::setOrganizationName("nikich340");
 
-    QSettings settings;
-    QApplication::setStyle( QSettings().value("GUIStyle", "windowsvista").toString() );
+    if ( QSettings().contains("GUIStyle") )
+        QApplication::setStyle( QSettings().value("GUIStyle", "Fusion").toString() );
 
     QApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);

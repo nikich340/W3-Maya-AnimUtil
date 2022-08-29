@@ -173,7 +173,7 @@
         <widget class="QComboBox" name="comboGUIStyle">
          <item>
           <property name="text">
-           <string>Windows</string>
+           <string>Default</string>
           </property>
          </item>
          <item>
@@ -618,6 +618,117 @@
            <property name="spacing">
             <number>6</number>
            </property>
+           <item row="5" column="0" rowspan="2">
+            <widget class="QWidget" name="widget_15" native="true">
+             <layout class="QGridLayout" name="gridLayout_7">
+              <property name="leftMargin">
+               <number>4</number>
+              </property>
+              <property name="topMargin">
+               <number>4</number>
+              </property>
+              <property name="rightMargin">
+               <number>4</number>
+              </property>
+              <property name="bottomMargin">
+               <number>4</number>
+              </property>
+              <property name="spacing">
+               <number>6</number>
+              </property>
+              <item row="0" column="1">
+               <widget class="QComboBox" name="comboEventsType">
+                <property name="editable">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="labelEventsType">
+                <property name="font">
+                 <font>
+                  <family>Arial</family>
+                  <pointsize>9</pointsize>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Type:</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QPushButton" name="buttonEventsType">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Set type to current event</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="res.qrc">
+                  <normaloff>:/icons/edit.png</normaloff>:/icons/edit.png</iconset>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QPushButton" name="buttonEventsSort">
+                <property name="text">
+                 <string>Sort</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="res.qrc">
+                  <normaloff>:/icons/sort.png</normaloff>:/icons/sort.png</iconset>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="3" column="4">
+            <widget class="QPushButton" name="buttonEventsVarType">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>Set type to current var</string>
+             </property>
+             <property name="icon">
+              <iconset resource="res.qrc">
+               <normaloff>:/icons/edit.png</normaloff>:/icons/edit.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="8" column="0" colspan="2">
+            <widget class="QPushButton" name="buttonResetEvents">
+             <property name="text">
+              <string>Reset all edits</string>
+             </property>
+             <property name="icon">
+              <iconset resource="res.qrc">
+               <normaloff>:/icons/change.png</normaloff>:/icons/change.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="3" colspan="2">
+            <widget class="QListWidget" name="listEventsContent">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
            <item row="1" column="3" colspan="2">
             <widget class="QWidget" name="widget_17" native="true">
              <property name="sizePolicy">
@@ -693,86 +804,7 @@
              </layout>
             </widget>
            </item>
-           <item row="5" column="0" rowspan="2">
-            <widget class="QWidget" name="widget_15" native="true">
-             <layout class="QGridLayout" name="gridLayout_7">
-              <property name="leftMargin">
-               <number>4</number>
-              </property>
-              <property name="topMargin">
-               <number>4</number>
-              </property>
-              <property name="rightMargin">
-               <number>4</number>
-              </property>
-              <property name="bottomMargin">
-               <number>4</number>
-              </property>
-              <property name="spacing">
-               <number>6</number>
-              </property>
-              <item row="1" column="1">
-               <widget class="QPushButton" name="buttonEventsType">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="text">
-                 <string>Set type to current event</string>
-                </property>
-                <property name="icon">
-                 <iconset resource="res.qrc">
-                  <normaloff>:/icons/edit.png</normaloff>:/icons/edit.png</iconset>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QComboBox" name="comboEventsType">
-                <property name="editable">
-                 <bool>true</bool>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QLabel" name="labelEventsType">
-                <property name="font">
-                 <font>
-                  <family>Arial</family>
-                  <pointsize>9</pointsize>
-                  <bold>true</bold>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>Type:</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-           </item>
-           <item row="3" column="4">
-            <widget class="QPushButton" name="buttonEventsVarType">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>Set type to current var</string>
-             </property>
-             <property name="icon">
-              <iconset resource="res.qrc">
-               <normaloff>:/icons/edit.png</normaloff>:/icons/edit.png</iconset>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="3" colspan="2">
+           <item row="8" column="4">
             <widget class="QPushButton" name="buttonApplyEvents">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
@@ -789,113 +821,15 @@
              </property>
             </widget>
            </item>
-           <item row="3" column="3">
-            <widget class="QComboBox" name="comboEventsVarType">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-            </widget>
-           </item>
-           <item row="8" column="0" colspan="2">
-            <widget class="QPushButton" name="buttonResetEvents">
+           <item row="8" column="3">
+            <widget class="QPushButton" name="buttonEventsFixAnimationName">
              <property name="text">
-              <string>Reset all edits</string>
+              <string>Fix animationName in all entries</string>
              </property>
              <property name="icon">
               <iconset resource="res.qrc">
-               <normaloff>:/icons/change.png</normaloff>:/icons/change.png</iconset>
+               <normaloff>:/icons/pepecomfy.png</normaloff>:/icons/pepecomfy.png</iconset>
              </property>
-            </widget>
-           </item>
-           <item row="3" column="2">
-            <widget class="QLabel" name="label_4">
-             <property name="font">
-              <font>
-               <family>Arial</family>
-               <pointsize>9</pointsize>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>Var Type:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="2" rowspan="2">
-            <widget class="QLabel" name="labelEventsValue">
-             <property name="font">
-              <font>
-               <family>Arial</family>
-               <pointsize>9</pointsize>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>Var Value:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QWidget" name="widget_16" native="true">
-             <layout class="QHBoxLayout" name="horizontalLayout_11">
-              <property name="spacing">
-               <number>6</number>
-              </property>
-              <property name="leftMargin">
-               <number>6</number>
-              </property>
-              <property name="topMargin">
-               <number>6</number>
-              </property>
-              <property name="rightMargin">
-               <number>6</number>
-              </property>
-              <property name="bottomMargin">
-               <number>6</number>
-              </property>
-              <item>
-               <widget class="QPushButton" name="buttonEventsAdd">
-                <property name="text">
-                 <string>Add</string>
-                </property>
-                <property name="icon">
-                 <iconset resource="res.qrc">
-                  <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="buttonEventsClone">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="text">
-                 <string>Clone</string>
-                </property>
-                <property name="icon">
-                 <iconset resource="res.qrc">
-                  <normaloff>:/icons/clone.png</normaloff>:/icons/clone.png</iconset>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="buttonEventsRemove">
-                <property name="enabled">
-                 <bool>false</bool>
-                </property>
-                <property name="text">
-                 <string>Remove</string>
-                </property>
-                <property name="icon">
-                 <iconset resource="res.qrc">
-                  <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
-                </property>
-               </widget>
-              </item>
-             </layout>
             </widget>
            </item>
            <item row="5" column="3" rowspan="2" colspan="2">
@@ -907,7 +841,7 @@
               </sizepolicy>
              </property>
              <property name="currentIndex">
-              <number>2</number>
+              <number>7</number>
              </property>
              <widget class="QWidget" name="pageBool">
               <layout class="QVBoxLayout" name="verticalLayout_13">
@@ -1334,15 +1268,100 @@
                </item>
               </layout>
              </widget>
+             <widget class="QWidget" name="pageEnum">
+              <layout class="QVBoxLayout" name="verticalLayout_19">
+               <item>
+                <widget class="QComboBox" name="comboEventsValueEnum"/>
+               </item>
+              </layout>
+             </widget>
             </widget>
            </item>
-           <item row="0" column="3" colspan="2">
-            <widget class="QListWidget" name="listEventsContent">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
+           <item row="3" column="2">
+            <widget class="QLabel" name="label_4">
+             <property name="font">
+              <font>
+               <family>Arial</family>
+               <pointsize>9</pointsize>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Var Type:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QWidget" name="widget_16" native="true">
+             <layout class="QHBoxLayout" name="horizontalLayout_11">
+              <property name="spacing">
+               <number>6</number>
+              </property>
+              <property name="leftMargin">
+               <number>6</number>
+              </property>
+              <property name="topMargin">
+               <number>6</number>
+              </property>
+              <property name="rightMargin">
+               <number>6</number>
+              </property>
+              <property name="bottomMargin">
+               <number>6</number>
+              </property>
+              <item>
+               <widget class="QPushButton" name="buttonEventsAdd">
+                <property name="text">
+                 <string>Add</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="res.qrc">
+                  <normaloff>:/icons/add.png</normaloff>:/icons/add.png</iconset>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="buttonEventsClone">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Clone</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="res.qrc">
+                  <normaloff>:/icons/clone.png</normaloff>:/icons/clone.png</iconset>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="buttonEventsRemove">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Remove</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="res.qrc">
+                  <normaloff>:/icons/remove.png</normaloff>:/icons/remove.png</iconset>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="5" column="2" rowspan="2">
+            <widget class="QLabel" name="labelEventsValue">
+             <property name="font">
+              <font>
+               <family>Arial</family>
+               <pointsize>9</pointsize>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="text">
+              <string>Var Value:</string>
              </property>
             </widget>
            </item>
@@ -1363,6 +1382,16 @@
             <widget class="QListWidget" name="listEvents">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="3">
+            <widget class="QComboBox" name="comboEventsVarType">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
@@ -2251,14 +2280,23 @@ color: rgb(255, 255, 255);</string>
        <bool>true</bool>
       </property>
       <property name="markdown">
-       <string/>
+       <string>Welcome to **W3MayaAnimUtil v2.2 (Aug 30 2022)**.
+Made by **nikich340** for
+better the Witcher 3 modding experiene.
+*
+*Click &quot;Load anim .json&quot; to start.
+
+![image](:/icons/motivated_small.png)
+
+</string>
       </property>
       <property name="html">
        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Welcome to &lt;span style=&quot; font-weight:700;&quot;&gt;W3MayaAnimUtil&lt;/span&gt;&lt;span style=&quot; font-weight:696;&quot;&gt; v2.2 (Aug 30 2022)&lt;/span&gt;.&lt;br /&gt;Made by &lt;span style=&quot; font-weight:696; color:#6f00a6;&quot;&gt;nikich340&lt;/span&gt; for better the Witcher 3 modding experiene.&lt;br /&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;&lt;br /&gt;&lt;/span&gt;Click &amp;quot;Load anim .json&amp;quot; to start.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;img src=&quot;:/icons/motivated_small.png&quot; /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
     </item>
@@ -2521,8 +2559,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>503</x>
-     <y>636</y>
+     <x>913</x>
+     <y>696</y>
     </hint>
     <hint type="destinationlabel">
      <x>1095</x>
@@ -3059,18 +3097,18 @@ p, li { white-space: pre-wrap; }
    </hints>
   </connection>
   <connection>
-   <sender>comboGUIStyle</sender>
+   <sender>comboEventsValueEnum</sender>
    <signal>currentTextChanged(QString)</signal>
    <receiver>W3MayaAnimUtil</receiver>
-   <slot>onChanged_GUIStyle(QString)</slot>
+   <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>1106</x>
-     <y>70</y>
+     <x>1067</x>
+     <y>690</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1150</x>
-     <y>117</y>
+     <x>1151</x>
+     <y>690</y>
     </hint>
    </hints>
   </connection>

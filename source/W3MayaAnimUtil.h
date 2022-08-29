@@ -112,6 +112,13 @@ private:
         m_mapControls[ obj->objectName() ] = controller;
     }
     JSO defaultEntry(QString name, QString type);
+    const QHash<QString, QStringList> m_knownEnumTypes = {
+        { "EItemLatentAction", {"ILA_Draw", "ILA_Holster", "ILA_Switch"} },
+        { "EDropAction", {"DA_DropRightHand", "DA_DropLeftHand", "DA_DropAny"} },
+        { "EAnimEffectAction", {"EA_Start", "EA_Stop"} },
+        { "EItemAction", {"IA_Mount", "IA_MountToHand", "IA_MountToLeftHand", "IA_MountToRightHand", "IA_Unmount"} },
+        { "EItemEffectAction", {"IEA_Start", "IEA_Stop"} },
+    };
     const QStringList m_knownVarTypes = {   "Bool",
                                             "Int32",
                                             "Float",
@@ -123,8 +130,14 @@ private:
                                          };
     QStringList m_knownEventTypes = {  "CExtAnimEvent",
                                        "CExtAnimDurationEvent",
+                                       "CEASEnumEvent",
+                                       "CExtAnimSoundEvent",
+                                       "CExtAnimFootstepEvent",
                                        "CExtAnimEffectEvent",
                                        "CExtAnimEffectDurationEvent",
+                                       "CExtAnimItemEvent",
+                                       "CExtAnimItemEffectEvent",
+                                       "CPreAttackEvent",
                                        "CExtAnimAttackEvent",
                                     };
     void eventsLoad();
@@ -208,6 +221,8 @@ private slots:
     void onChecked_ToggleVar(bool checked);
     void onChanged_eventRow(int newRow);
     void onChanged_eventContentRow(int newRow);
+    void onClicked_eventsSort();
+    void onClicked_fixAnimationNames();
     // entries
     void onClicked_eventsReset();
     void onClicked_eventsApply();

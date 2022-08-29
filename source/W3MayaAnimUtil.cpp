@@ -8,7 +8,7 @@
 
 #define upn(val, start, end) for(int val = start; val <= end; ++val)
 #define JRef QJsonValueRef
-#define VERSION "v2.1.1"
+#define VERSION "v2.2"
 #define MAU W3MayaAnimUtil
 
 MAU::MAU(QWidget *parent)
@@ -17,7 +17,14 @@ MAU::MAU(QWidget *parent)
 {
     ui->setupUi(this);
     //ui->textLog->setFontPointSize(20);
-    ui->textLog->setHtml("Welcome to <span style=\"font-weight:700;\">MAU " + QString(VERSION " (" __DATE__ ")") + "</span>!<br>Made by <span style=\"color:#6f00a6;font-weight:700;\">nikich340</span> for better the Witcher 3  modding experiene.<br><br>Click \"Load anim .json\" to start");
+    ui->textLog->setHtml("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">"
+                         "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">"
+                         "p, li { white-space: pre-wrap; }"
+                         "</style></head><body style=\" font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;\">"
+                         "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Welcome to <span style=\" font-weight:700;\">W3MayaAnimUtil"
+                         + QString(VERSION " (" __DATE__ ")")
+                         + "</span>.<br />Made by <span style=\" font-weight:696; color:#6f00a6;\">nikich340</span> for better the Witcher 3 modding experiene.<br /><span style=\" font-style:italic;\"><br /></span>Click &quot;Load anim .json&quot; to start.</p>"
+                         "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><img src=\":/icons/motivated_small.png\" /></p></body></html>");
     ui->spinSensivity->setMinimum(0.0000000001);
     ui->spinSensivity->setSingleStep(0.00001);
     ui->spinSensivity->setValue(0.00001);
@@ -28,6 +35,15 @@ MAU::MAU(QWidget *parent)
     }
     pLabelInfo = new QLabel();
 
+    if (QSettings().value("GUIStyle", "windowsvista") == "windowsvista") {
+        ui->comboGUIStyle->setCurrentText("Windows");
+    } else if (QSettings().value("GUIStyle", "windowsvista") == "Windows") {
+        ui->comboGUIStyle->setCurrentText("WindowsXP");
+    } else {
+        ui->comboGUIStyle->setCurrentText("Fusion");
+    }
+
+    connect(ui->comboGUIStyle, SIGNAL(currentTextChanged(QString)), this, SLOT(onChanged_GUIStyle(QString)));
     connect(ui->buttonLoad, SIGNAL(clicked(bool)), this, SLOT(onClicked_Load()));
     connect(ui->buttonSave, SIGNAL(clicked(bool)), this, SLOT(onClicked_Save()));
     connect(ui->buttonSaveSplit, SIGNAL(clicked(bool)), this, SLOT(onClicked_SaveSplit()));
@@ -55,6 +71,7 @@ MAU::MAU(QWidget *parent)
     /* EVENTS EDIT */
     ui->comboEventsType->addItems(m_knownEventTypes);
     ui->comboEventsVarType->addItems(m_knownVarTypes);
+    ui->comboEventsVarType->addItems(m_knownEnumTypes.keys());
     ui->stackEventsValue->widget(0)->setProperty("type", QString("Bool"));
     ui->stackEventsValue->widget(1)->setProperty("type", QString("Int32"));
     ui->stackEventsValue->widget(2)->setProperty("type", QString("Float"));
@@ -86,6 +103,8 @@ MAU::MAU(QWidget *parent)
     connect(ui->buttonResetEvents, SIGNAL(clicked(bool)), this, SLOT(onClicked_eventsReset()));
     connect(ui->buttonApplyEvents, SIGNAL(clicked(bool)), this, SLOT(onClicked_eventsApply()));
 
+    connect(ui->buttonEventsSort, SIGNAL(clicked(bool)), this, SLOT(onClicked_eventsSort()));
+    connect(ui->buttonEventsFixAnimationName, SIGNAL(clicked(bool)), this, SLOT(onClicked_fixAnimationNames()));
     connect(ui->buttonEventsType, SIGNAL(clicked(bool)), this, SLOT(onClicked_eventsSetType()));
     connect(ui->buttonEventsAdd, SIGNAL(clicked(bool)), this, SLOT(onClicked_eventsAdd()));
     connect(ui->buttonEventsClone, SIGNAL(clicked(bool)), this, SLOT(onClicked_eventsClone()));
@@ -214,8 +233,8 @@ void MAU::setEventStartTime(QJsonObject& eventObj, double newTime) {
     eventObj["Content"] = contentArr;
 }
 void MAU::onChanged_GUIStyle(QString newStyle) {
-    if (newStyle == "Windows") {
-        QSettings().setValue("GUIStyle", "windowsvista");
+    if (newStyle == "Default") {
+        QSettings().remove("GUIStyle");
     } else if (newStyle == "WindowsXP") {
         QSettings().setValue("GUIStyle", "Windows");
     } else if (newStyle == "Fusion") {
@@ -357,12 +376,18 @@ void MAU::editRenameAnim(QJsonObject& animObj, QJsonArray& eventsArray, QString 
 void MAU::editSetCDPRDuration(QJsonObject& animObj) {
     QJsonObject animBuff = animObj.value("animBuffer").toObject();
     int animFrames = animBuff.value("numFrames").toInt();
+    double durationCDPR = framesToSec(animFrames - 1);
     addLog(QString("\t[EDIT] Set anim and animBuffer duration = %1 s.")
-           .arg( framesToSec(animFrames - 1) ));
+           .arg( durationCDPR ));
 
-    animBuff["duration"] = framesToSec(animFrames - 1);
+    animBuff["duration"] = durationCDPR;
     animObj["animBuffer"] = animBuff;
-    animObj["duration"] = framesToSec(animFrames - 1);
+    animObj["duration"] = durationCDPR;
+    if ( animObj.contains("motionExtraction") ) {
+        JSO motionObj = animObj["motionExtraction"].toObject();
+        motionObj["duration"] = qMin(motionObj["duration"].toDouble(), durationCDPR);
+        animObj["motionExtraction"] = motionObj;
+    }
     m_animDurations[m_animIndex] = framesToSec(animFrames - 1);
 }
 
@@ -765,6 +790,9 @@ JSO MAU::varToEntry(QString entryName, QVariant val, QString customType) {
             if (customType.toUpper() == "CNAME") {
                 entry["Type"] = "CName";
                 entry["Value"] = val.toString();
+            } else if (m_knownEnumTypes.contains(customType)) {
+                entry["Type"] = customType;
+                entry["Value"] = val.toString();
             } else {
                 entry["Type"] = "StringAnsi";
                 entry["val"] = val.toString();
@@ -813,7 +841,7 @@ JSO MAU::varToEntry(QString entryName, QVariant val, QString customType) {
                     QPair<QString, QString>("cameraAnimOnMissedHit", "CName"),
                 };
             } else {
-                qDebug() << QString("varToEntry: Unknown type %2 for %1!").arg(entryName).arg(val.typeName());
+                addLog(QString("[ERROR] varToEntry: unknown type %1 for %2").arg(entryName).arg(val.typeName()), logError);
                 return JSO();
             }
             for (QPair<QString, QString> p : mapKeys) {
@@ -829,6 +857,7 @@ JSO MAU::varToEntry(QString entryName, QVariant val, QString customType) {
     }
     return entry;
 }
+
 QVariant MAU::entryToVar(JSO entry) {
     if ( !entry.contains("Type") ) {
         qDebug() << "entryToVar: entry type not found! Name: " << entry.value("Name").toString();;
@@ -852,6 +881,8 @@ QVariant MAU::entryToVar(JSO entry) {
             ret.append( array.at(i).toString() );
         }
         return ret;
+    } else if (m_knownEnumTypes.contains(type)) {
+        return entry.value("Value").toString();
     } else if (type == "SEnumVariant" || type == "CPreAttackEventData") {
         QHash<QString, QVariant> ret = QHash<QString, QVariant>();
         JSA array = entry.value("Content").toArray();
@@ -864,10 +895,11 @@ QVariant MAU::entryToVar(JSO entry) {
         }
         return ret;
     } else {
-        qDebug() << QString("entryToVar: Unknown type %1!").arg(type);
+        addLog(QString("[ERROR] entryToVar: unknown type %1 for %2").arg(type).arg(entry["Name"].toString()), logError);
         return QVariant();
     }
 }
+
 void MAU::eventsLoad() {
     ui->listEvents->clear();
 
@@ -878,6 +910,7 @@ void MAU::eventsLoad() {
         ui->listEvents->setCurrentRow(0);
     }
 }
+
 QVariant MAU::getEventParam(QJsonObject eventObj, QString paramName, QVariant defaultValue) {
     QJsonArray contentArr = eventObj.value("Content").toArray();
     upn(j, 0, contentArr.count() - 1) {
@@ -889,6 +922,7 @@ QVariant MAU::getEventParam(QJsonObject eventObj, QString paramName, QVariant de
     qDebug() << QString("Can't find event %1! Type: %2").arg(paramName).arg(eventObj.value("Type").toString());
     return defaultValue;
 }
+
 void MAU::eventsUpdateLabel(int eventIndex, bool add) {
     if (eventIndex < 0)
         return;
@@ -912,6 +946,7 @@ void MAU::eventsUpdateLabel(int eventIndex, bool add) {
             ui->listEvents->item(eventIndex)->setText( QString("%1 #%2 [%3 s]").arg(type).arg(eventIndex).arg(startTime, 0, 'f', 3) );
     }
 }
+
 void MAU::eventsUpdateContentLabel(int eventIndex, int index, bool add) {
     if (index < 0 || eventIndex < 0)
         return;
@@ -933,6 +968,7 @@ void MAU::eventsUpdateContentLabel(int eventIndex, int index, bool add) {
         ui->listEventsContent->item(index)->setText( QString("%1 (%2) = %3").arg(entryName).arg(entryType).arg(value.toString()) );
     }
 }
+
 JSO MAU::defaultEntry(QString name, QString type) {
     JSO contentEntry = JSO();
     if (type == "Bool") {
@@ -947,6 +983,8 @@ JSO MAU::defaultEntry(QString name, QString type) {
         contentEntry = varToEntry(name, "", "CName");
     } else if (type == "array:2,0,StringAnsi") {
         contentEntry = varToEntry( name, QStringList({""}) );
+    } else if (m_knownEnumTypes.contains(type)) {
+        contentEntry = varToEntry(name, m_knownEnumTypes[type].first(), type);
     } else if (type == "SEnumVariant") {
        QHash<QString, QVariant> map = QHash<QString, QVariant>();
        map["enumType"] = QString("ERotationRate");
@@ -958,11 +996,40 @@ JSO MAU::defaultEntry(QString name, QString type) {
         map["soundAttackType"] = QString("monster_big_bite");
         map["hitReactionType"] = 1;
         contentEntry = varToEntry( name, QVariant::fromValue(map), "CPreAttackEventData" );
+    } else {
+        addLog(QString("[ERROR] defaultEntry: unknown type %1 for %2").arg(type).arg(name), logError);
     }
     return contentEntry;
 }
 
 // EVENTS slots
+void MAU::onClicked_eventsSort() {
+    editSortEvents(m_animEvents);
+    eventsLoad();
+    addLog(QString("[EVENTS] Sorted event entries: %2.")
+           .arg(m_animEvents.count()));
+}
+void MAU::onClicked_fixAnimationNames() {
+    int fixed_vars = 0;
+
+    upn(eventIndex, 0, m_animEvents.count() - 1) {
+        JSO eventObj = m_animEvents.at(eventIndex).toObject();
+        JSA contentArr = eventObj.value("Content").toArray();
+        upn(index, 0, contentArr.count() - 1) {
+            JSO contentEntry = contentArr.at(index).toObject();
+            if (contentEntry["Name"] == "animationName" && contentEntry["Value"].toString() != m_animNames[m_animIndex]) {
+                contentEntry["Value"] = m_animNames[m_animIndex];
+                contentArr[index] = contentEntry;
+                ++fixed_vars;
+            }
+        }
+        eventObj["Content"] = contentArr;
+        m_animEvents[eventIndex] = eventObj;
+    }
+    eventsLoad();
+    addLog(QString("[EVENTS] Fixed animationName vars: %1.")
+           .arg(fixed_vars));
+}
 void MAU::onChecked_DynamicLabel(bool checked) {
     QCheckBox* box = qobject_cast<QCheckBox*>(sender());
     if (box != nullptr) {
@@ -1014,16 +1081,61 @@ void MAU::onClicked_eventsAdd() {
 
     QString type = ui->comboEventsType->currentText();
     // generic CExtAnimEvent
-    contentArr.append( varToEntry("eventName", "-", "CName") );
-    contentArr.append( varToEntry("startTime", 0.0) );
+    contentArr.append( defaultEntry("eventName", "CName") );
+    contentArr.append( defaultEntry("startTime", "Float") );
     contentArr.append( varToEntry("animationName", m_animNames[m_animIndex], "CName") );
-    if (type.endsWith("DurationEvent")) {
+
+    if (type.endsWith("DurationEvent") || type == "CEASEnumEvent" || type == "CPreAttackEvent") {
         contentArr.append( varToEntry("duration", qMax(0.01, m_animDurations[m_animIndex] - framesToSec(1))) );
-        contentArr.append( varToEntry("alwaysFiresEnd", false) );
-    } else if (type.startsWith("CExtAnimEffect")) {
-        contentArr.append( varToEntry("effectName", "", "CName") );
+        contentArr.append( defaultEntry("alwaysFiresEnd", "Bool") );
     }
-    // TODO!!!
+
+    if (type.startsWith("CExtAnimEffect")) {
+        contentArr.append( defaultEntry("effectName", "CName") );
+    }
+    if (type == "CExtAnimEffectEvent") {
+        contentArr.append( defaultEntry("action", "EAnimEffectAction") );
+    }
+    if (type == "CExtAnimItemEvent") {
+        contentArr.append( defaultEntry("category", "CName") );
+        contentArr.append( defaultEntry("itemName_optional", "CName") );
+        contentArr.append( defaultEntry("ignoreItemsWithTag", "CName") );
+        contentArr.append( defaultEntry("action", "EItemAction") );
+    }
+    if (type == "CExtAnimItemEffectEvent") {
+        contentArr.append( defaultEntry("effectName", "CName") );
+        contentArr.append( defaultEntry("itemSlot", "CName") );
+        contentArr.append( defaultEntry("action", "EItemEffectAction") );
+    }
+
+    if (type.startsWith("CExp")) {
+        contentArr.append( defaultEntry("translation", "Bool") );
+        contentArr.append( defaultEntry("rotation", "Bool") );
+    }
+
+    if (type == "CExtAnimAttackEvent") {
+        contentArr.append( defaultEntry("soundAttackType", "CName") );
+    }
+
+    if (type == "CExtAnimSoundEvent" || type == "CExtAnimFootstepEvent") {
+        contentArr.append( defaultEntry("soundEventName", "StringAnsi") );
+        contentArr.append( defaultEntry("maxDistance", "Float") );
+        contentArr.append( defaultEntry("bone", "CName") );
+        contentArr.append( defaultEntry("switchesToUpdate", "array:2,0,StringAnsi") );
+    }
+
+    if (type == "CExtAnimFootstepEvent") {
+        contentArr.append( defaultEntry("fx", "Bool") );
+        contentArr.append( defaultEntry("customFxName", "CName") );
+    }
+
+    if (type == "CEASEnumEvent") {
+        contentArr.append( defaultEntry("enumVariant", "SEnumVariant") );
+    }
+
+    if (type == "CPreAttackEvent") {
+        contentArr.append( defaultEntry("data", "CPreAttackEventData") );
+    }
 
     eventObj["Content"] = contentArr;
     eventObj["Name"] = type;
@@ -1165,6 +1277,11 @@ void MAU::onChanged_eventContentRow(int newRow) {
         } else if (entryType == "array:2,0,StringAnsi") {
             ui->stackEventsValue->setCurrentIndex(4);
             ui->editEventsValueArrayString->setPlainText( value.toStringList().join("\n") );
+        } else if (m_knownEnumTypes.contains(entryType)) {
+            ui->stackEventsValue->setCurrentIndex(7);
+            ui->comboEventsValueEnum->clear();
+            ui->comboEventsValueEnum->addItems( m_knownEnumTypes[entryType] );
+            ui->comboEventsValueEnum->setCurrentText( value.toString() );
         } else if (entryType == "SEnumVariant") {
             ui->stackEventsValue->setCurrentIndex(5);
             QHash<QString, QVariant> map = value.value< QHash<QString, QVariant> >();
@@ -1304,6 +1421,8 @@ void MAU::onChanged_eventsVarAny() {
         contentEntry = varToEntry( entryName, ui->lineEventsValueString->text(), entryType );
     } else if (entryType == "array:2,0,StringAnsi") {
         contentEntry = varToEntry( entryName, ui->editEventsValueArrayString->toPlainText().split("\n"), entryType );
+    } else if (m_knownEnumTypes.contains(entryType)) {
+        contentEntry = varToEntry( entryName, ui->comboEventsValueEnum->currentText(), entryType );
     } else if (entryType == "SEnumVariant") {
         ui->stackEventsValue->setCurrentIndex(5);
         QHash<QString, QVariant> map = QHash<QString, QVariant>();
