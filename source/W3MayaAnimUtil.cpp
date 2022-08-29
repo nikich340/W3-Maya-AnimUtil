@@ -1295,6 +1295,9 @@ void MAU::onChanged_eventContentRow(int newRow) {
 
             eventsUpdateContentData(map, ui->checkEventsVarEnumType, "enumType", "CName");
             eventsUpdateContentData(map, ui->checkEventsVarEnumValue, "enumValue", "Int32");
+            if ( !map.isEmpty() ) {
+                addLog(QString("[WARNING] SEnumVariant %1, the following vars are unknown for this type: %2").arg(entryName).arg(map.keys().join("; ")), logWarning);
+            }
         } else if (entryType == "CPreAttackEventData") {
             ui->stackEventsValue->setCurrentIndex(6);
             QHash<QString, QVariant> map = value.value< QHash<QString, QVariant> >();
@@ -1314,6 +1317,9 @@ void MAU::onChanged_eventContentRow(int newRow) {
             eventsUpdateContentData(map, ui->checkEventsVarAttackSwingDir, "swingDir", "EAttackSwingDirection");
             eventsUpdateContentData(map, ui->checkEventsVarAttackSound, "soundAttackType", "CName");
             eventsUpdateContentData(map, ui->checkEventsVarAttackCanBeDodged, "canBeDodged", "Bool");
+            if ( !map.isEmpty() ) {
+                addLog(QString("[WARNING] CPreAttackEventData %1, the following vars are unknown for this type: %2").arg(entryName).arg(map.keys().join("; ")), logWarning);
+            }
         }
 
         m_eventsAcceptSignals = true;
