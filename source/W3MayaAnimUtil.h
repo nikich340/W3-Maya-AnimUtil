@@ -118,6 +118,10 @@ private:
         { "EAnimEffectAction", {"EA_Start", "EA_Stop"} },
         { "EItemAction", {"IA_Mount", "IA_MountToHand", "IA_MountToLeftHand", "IA_MountToRightHand", "IA_Unmount"} },
         { "EItemEffectAction", {"IEA_Start", "IEA_Stop"} },
+        // for CPreAttackData - treated as Int32 in w2anims
+        { "EHitReactionType", {"EHRT_None", "EHRT_Light", "EHRT_Heavy", "EHRT_Igni", "EHRT_Reflect", "EHRT_LightClose"} },
+        { "EAttackSwingType", {"AST_Horizontal", "AST_Vertical", "AST_DiagonalUp", "AST_DiagonalDown", "AST_Jab", "AST_NotSet"} },
+        { "EAttackSwingDirection", {"ASD_UpDown", "ASD_DownUp", "ASD_LeftRight", "ASD_RightLeft", "ASD_NotSet"} },
     };
     const QStringList m_knownVarTypes = {   "Bool",
                                             "Int32",

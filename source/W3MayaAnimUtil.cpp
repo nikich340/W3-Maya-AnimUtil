@@ -72,6 +72,9 @@ MAU::MAU(QWidget *parent)
     ui->comboEventsType->addItems(m_knownEventTypes);
     ui->comboEventsVarType->addItems(m_knownVarTypes);
     ui->comboEventsVarType->addItems(m_knownEnumTypes.keys());
+    ui->comboEventsAttackHitReaction->addItems(m_knownEnumTypes["EHitReactionType"]);
+    ui->comboEventsAttackSwingDir->addItems(m_knownEnumTypes["EAttackSwingDirection"]);
+    ui->comboEventsAttackSwingType->addItems(m_knownEnumTypes["EAttackSwingType"]);
     ui->stackEventsValue->widget(0)->setProperty("type", QString("Bool"));
     ui->stackEventsValue->widget(1)->setProperty("type", QString("Int32"));
     ui->stackEventsValue->widget(2)->setProperty("type", QString("Float"));
@@ -84,11 +87,11 @@ MAU::MAU(QWidget *parent)
     addEventsVarControl(ui->checkEventsVarEnumValue, ui->spinEventsEnumValue);
     addEventsVarControl(ui->checkEventsVarAttackName, ui->lineEventsAttackName);
     addEventsVarControl(ui->checkEventsVarAttackWeaponSlot, ui->lineEventsAttackWeaponSlot);
-    addEventsVarControl(ui->checkEventsVarAttackSwingType, ui->spinEventsAttackSwingType);
-    addEventsVarControl(ui->checkEventsVarAttackSwingDir, ui->spinEventsAttackSwingDir);
+    addEventsVarControl(ui->checkEventsVarAttackSwingType, ui->comboEventsAttackSwingType);
+    addEventsVarControl(ui->checkEventsVarAttackSwingDir, ui->comboEventsAttackSwingDir);
     addEventsVarControl(ui->checkEventsVarAttackSound, ui->lineEventsAttackSound);
     addEventsVarControl(ui->checkEventsVarAttackRange, ui->lineEventsAttackRange);
-    addEventsVarControl(ui->checkEventsVarAttackHitReaction, ui->spinEventsAttackHitReaction);
+    addEventsVarControl(ui->checkEventsVarAttackHitReaction, ui->comboEventsAttackHitReaction);
     addEventsVarControl(ui->checkEventsVarAttackCanParry, ui->checkEventsAttackCanParry);
     addEventsVarControl(ui->checkEventsVarAttackCanBeDodged, ui->checkEventsAttackCanBeDodged);
     addEventsVarControl(ui->checkEventsVarAttackDamageNeutral, ui->checkEventsAttackDamageNeutral);
@@ -1209,8 +1212,10 @@ void MAU::eventsUpdateContentData(QHash<QString, QVariant>& map, QCheckBox* pCon
         qobject_cast<QDoubleSpinBox*>(pElement)->setValue( val.toFloat() );
     } else if (type == "StringAnsi" || type == "CName") {
         qobject_cast<QLineEdit*>(pElement)->setText( val.toString() );
+    } else if (m_knownEnumTypes.contains(type)) {
+        qobject_cast<QComboBox*>(pElement)->setCurrentIndex( val.toInt() );
     } else {
-        qDebug() << QString("eventsUpdateContentData: unknown type %1 for key %2").arg(type).arg(key);
+        addLog( QString("eventsUpdateContentData: unknown type %1 for key %2.").arg(type).arg(key), logError );
     }
 }
 void MAU::eventsLoadContentData(QHash<QString, QVariant>& map, QCheckBox* pController, QString key, QString type) {
@@ -1227,6 +1232,8 @@ void MAU::eventsLoadContentData(QHash<QString, QVariant>& map, QCheckBox* pContr
         map[key] = qobject_cast<QDoubleSpinBox*>(pElement)->value();
     } else if (type == "StringAnsi" || type == "CName") {
         map[key] = qobject_cast<QLineEdit*>(pElement)->text();
+    } else if (m_knownEnumTypes.contains(type)) {
+        map[key] = qobject_cast<QComboBox*>(pElement)->currentIndex();
     } else {
         qDebug() << QString("eventsLoadContentData: unknown type %1 for key %2").arg(type).arg(key);
     }
@@ -1295,7 +1302,7 @@ void MAU::onChanged_eventContentRow(int newRow) {
             eventsUpdateContentData(map, ui->checkEventsVarAttackName, "attackName", "CName");
             eventsUpdateContentData(map, ui->checkEventsVarAttackRange, "rangeName", "CName");
             eventsUpdateContentData(map, ui->checkEventsVarAttackWeaponSlot, "weaponSlot", "CName");
-            eventsUpdateContentData(map, ui->checkEventsVarAttackHitReaction, "hitReactionType", "Int32");
+            eventsUpdateContentData(map, ui->checkEventsVarAttackHitReaction, "hitReactionType", "EHitReactionType");
             eventsUpdateContentData(map, ui->checkEventsVarAttackDamageFriendly, "Damage_Friendly", "Bool");
             eventsUpdateContentData(map, ui->checkEventsVarAttackDamageNeutral, "Damage_Neutral", "Bool");
             eventsUpdateContentData(map, ui->checkEventsVarAttackCanParry, "Can_Parry_Attack", "Bool");
@@ -1303,8 +1310,8 @@ void MAU::onChanged_eventContentRow(int newRow) {
             eventsUpdateContentData(map, ui->checkEventsVarAttackHitBackFx, "hitBackFX", "CName");
             eventsUpdateContentData(map, ui->checkEventsVarAttackHitParriedFx, "hitParriedFX", "CName");
             eventsUpdateContentData(map, ui->checkEventsVarAttackHitBackParriedFx, "hitBackParriedFX", "CName");
-            eventsUpdateContentData(map, ui->checkEventsVarAttackSwingType, "swingType", "Int32");
-            eventsUpdateContentData(map, ui->checkEventsVarAttackSwingDir, "swingDir", "Int32");
+            eventsUpdateContentData(map, ui->checkEventsVarAttackSwingType, "swingType", "EAttackSwingType");
+            eventsUpdateContentData(map, ui->checkEventsVarAttackSwingDir, "swingDir", "EAttackSwingDirection");
             eventsUpdateContentData(map, ui->checkEventsVarAttackSound, "soundAttackType", "CName");
             eventsUpdateContentData(map, ui->checkEventsVarAttackCanBeDodged, "canBeDodged", "Bool");
         }
@@ -1437,7 +1444,7 @@ void MAU::onChanged_eventsVarAny() {
         eventsLoadContentData(map, ui->checkEventsVarAttackName, "attackName", "CName");
         eventsLoadContentData(map, ui->checkEventsVarAttackRange, "rangeName", "CName");
         eventsLoadContentData(map, ui->checkEventsVarAttackWeaponSlot, "weaponSlot", "CName");
-        eventsLoadContentData(map, ui->checkEventsVarAttackHitReaction, "hitReactionType", "Int32");
+        eventsLoadContentData(map, ui->checkEventsVarAttackHitReaction, "hitReactionType", "EHitReactionType");
         eventsLoadContentData(map, ui->checkEventsVarAttackDamageFriendly, "Damage_Friendly", "Bool");
         eventsLoadContentData(map, ui->checkEventsVarAttackDamageNeutral, "Damage_Neutral", "Bool");
         eventsLoadContentData(map, ui->checkEventsVarAttackCanParry, "Can_Parry_Attack", "Bool");
@@ -1445,8 +1452,8 @@ void MAU::onChanged_eventsVarAny() {
         eventsLoadContentData(map, ui->checkEventsVarAttackHitBackFx, "hitBackFX", "CName");
         eventsLoadContentData(map, ui->checkEventsVarAttackHitParriedFx, "hitParriedFX", "CName");
         eventsLoadContentData(map, ui->checkEventsVarAttackHitBackParriedFx, "hitBackParriedFX", "CName");
-        eventsLoadContentData(map, ui->checkEventsVarAttackSwingType, "swingType", "Int32");
-        eventsLoadContentData(map, ui->checkEventsVarAttackSwingDir, "swingDir", "Int32");
+        eventsLoadContentData(map, ui->checkEventsVarAttackSwingType, "swingType", "EAttackSwingType");
+        eventsLoadContentData(map, ui->checkEventsVarAttackSwingDir, "swingDir", "EAttackSwingDirection");
         eventsLoadContentData(map, ui->checkEventsVarAttackSound, "soundAttackType", "CName");
         eventsLoadContentData(map, ui->checkEventsVarAttackCanBeDodged, "canBeDodged", "Bool");
         contentEntry = varToEntry( entryName, QVariant::fromValue(map), entryType );

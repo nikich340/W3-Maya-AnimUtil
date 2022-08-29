@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1153</width>
-    <height>1100</height>
+    <width>1147</width>
+    <height>841</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -600,7 +600,7 @@
         <item>
          <widget class="QWidget" name="widgetEventsEdit" native="true">
           <property name="enabled">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <layout class="QGridLayout" name="gridLayout_5">
            <property name="leftMargin">
@@ -841,7 +841,7 @@
               </sizepolicy>
              </property>
              <property name="currentIndex">
-              <number>7</number>
+              <number>6</number>
              </property>
              <widget class="QWidget" name="pageBool">
               <layout class="QVBoxLayout" name="verticalLayout_13">
@@ -1085,9 +1085,6 @@
                     </property>
                    </widget>
                   </item>
-                  <item row="5" column="4">
-                   <widget class="QSpinBox" name="spinEventsAttackSwingType"/>
-                  </item>
                   <item row="8" column="7">
                    <widget class="QCheckBox" name="checkEventsAttackDamageFriendly">
                     <property name="text">
@@ -1141,9 +1138,6 @@
                   <item row="7" column="7">
                    <widget class="QLineEdit" name="lineEventsAttackHitBackParriedFx"/>
                   </item>
-                  <item row="7" column="4">
-                   <widget class="QSpinBox" name="spinEventsAttackSwingDir"/>
-                  </item>
                   <item row="8" column="4">
                    <widget class="QCheckBox" name="checkEventsAttackDamageNeutral">
                     <property name="text">
@@ -1191,13 +1185,6 @@
                   </item>
                   <item row="1" column="7">
                    <widget class="QLineEdit" name="lineEventsAttackHitFx"/>
-                  </item>
-                  <item row="8" column="1">
-                   <widget class="QSpinBox" name="spinEventsAttackHitReaction">
-                    <property name="suffix">
-                     <string/>
-                    </property>
-                   </widget>
                   </item>
                   <item row="7" column="3">
                    <widget class="QCheckBox" name="checkEventsVarAttackSwingDir">
@@ -1262,6 +1249,15 @@
                      <string>attackName:</string>
                     </property>
                    </widget>
+                  </item>
+                  <item row="5" column="4">
+                   <widget class="QComboBox" name="comboEventsAttackSwingType"/>
+                  </item>
+                  <item row="7" column="4">
+                   <widget class="QComboBox" name="comboEventsAttackSwingDir"/>
+                  </item>
+                  <item row="8" column="1">
+                   <widget class="QComboBox" name="comboEventsAttackHitReaction"/>
                   </item>
                  </layout>
                 </widget>
@@ -2384,7 +2380,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>503</x>
-     <y>636</y>
+     <y>596</y>
     </hint>
     <hint type="destinationlabel">
      <x>1098</x>
@@ -2399,8 +2395,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>503</x>
-     <y>636</y>
+     <x>907</x>
+     <y>541</y>
     </hint>
     <hint type="destinationlabel">
      <x>1098</x>
@@ -2415,8 +2411,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_DynamicLabel(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>503</x>
-     <y>636</y>
+     <x>907</x>
+     <y>541</y>
     </hint>
     <hint type="destinationlabel">
      <x>1098</x>
@@ -2431,8 +2427,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_DynamicLabel(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>472</x>
-     <y>617</y>
+     <x>872</x>
+     <y>485</y>
     </hint>
     <hint type="destinationlabel">
      <x>1098</x>
@@ -2447,8 +2443,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_DynamicLabel(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>472</x>
-     <y>622</y>
+     <x>872</x>
+     <y>513</y>
     </hint>
     <hint type="destinationlabel">
      <x>1099</x>
@@ -2463,8 +2459,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_DynamicLabel(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>472</x>
-     <y>638</y>
+     <x>872</x>
+     <y>597</y>
     </hint>
     <hint type="destinationlabel">
      <x>1101</x>
@@ -2479,8 +2475,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_DynamicLabel(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>507</x>
-     <y>638</y>
+     <x>1111</x>
+     <y>597</y>
     </hint>
     <hint type="destinationlabel">
      <x>1101</x>
@@ -2495,8 +2491,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>499</x>
-     <y>624</y>
+     <x>1025</x>
+     <y>515</y>
     </hint>
     <hint type="destinationlabel">
      <x>1097</x>
@@ -2511,8 +2507,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>499</x>
-     <y>632</y>
+     <x>1025</x>
+     <y>568</y>
     </hint>
     <hint type="destinationlabel">
      <x>1097</x>
@@ -2528,7 +2524,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>854</x>
-     <y>680</y>
+     <y>542</y>
     </hint>
     <hint type="destinationlabel">
      <x>1097</x>
@@ -2543,8 +2539,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>503</x>
-     <y>636</y>
+     <x>913</x>
+     <y>542</y>
     </hint>
     <hint type="destinationlabel">
      <x>1098</x>
@@ -2560,7 +2556,7 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>913</x>
-     <y>696</y>
+     <y>542</y>
     </hint>
     <hint type="destinationlabel">
      <x>1095</x>
@@ -2575,8 +2571,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>437</x>
-     <y>617</y>
+     <x>644</x>
+     <y>486</y>
     </hint>
     <hint type="destinationlabel">
      <x>1096</x>
@@ -2591,8 +2587,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>437</x>
-     <y>622</y>
+     <x>644</x>
+     <y>514</y>
     </hint>
     <hint type="destinationlabel">
      <x>1099</x>
@@ -2607,8 +2603,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>437</x>
-     <y>628</y>
+     <x>644</x>
+     <y>542</y>
     </hint>
     <hint type="destinationlabel">
      <x>1096</x>
@@ -2623,28 +2619,12 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>437</x>
-     <y>633</y>
+     <x>644</x>
+     <y>570</y>
     </hint>
     <hint type="destinationlabel">
      <x>1099</x>
      <y>750</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinEventsAttackHitReaction</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>W3MayaAnimUtil</receiver>
-   <slot>onChanged_eventsVarAny()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>437</x>
-     <y>638</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1102</x>
-     <y>785</y>
     </hint>
    </hints>
   </connection>
@@ -2655,8 +2635,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>472</x>
-     <y>617</y>
+     <x>872</x>
+     <y>485</y>
     </hint>
     <hint type="destinationlabel">
      <x>1097</x>
@@ -2671,8 +2651,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>472</x>
-     <y>617</y>
+     <x>872</x>
+     <y>485</y>
     </hint>
     <hint type="destinationlabel">
      <x>1072</x>
@@ -2687,44 +2667,12 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>472</x>
-     <y>622</y>
+     <x>872</x>
+     <y>513</y>
     </hint>
     <hint type="destinationlabel">
      <x>1055</x>
      <y>641</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinEventsAttackSwingType</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>W3MayaAnimUtil</receiver>
-   <slot>onChanged_eventsVarAny()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>472</x>
-     <y>628</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1062</x>
-     <y>678</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>spinEventsAttackSwingDir</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>W3MayaAnimUtil</receiver>
-   <slot>onChanged_eventsVarAny()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>472</x>
-     <y>633</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1067</x>
-     <y>721</y>
     </hint>
    </hints>
   </connection>
@@ -2735,8 +2683,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>472</x>
-     <y>638</y>
+     <x>872</x>
+     <y>597</y>
     </hint>
     <hint type="destinationlabel">
      <x>1069</x>
@@ -2751,8 +2699,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>507</x>
-     <y>617</y>
+     <x>1111</x>
+     <y>486</y>
     </hint>
     <hint type="destinationlabel">
      <x>1068</x>
@@ -2767,8 +2715,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>507</x>
-     <y>622</y>
+     <x>1111</x>
+     <y>514</y>
     </hint>
     <hint type="destinationlabel">
      <x>1064</x>
@@ -2783,12 +2731,12 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>507</x>
-     <y>628</y>
+     <x>1111</x>
+     <y>542</y>
     </hint>
     <hint type="destinationlabel">
      <x>1065</x>
-     <y>867</y>
+     <y>840</y>
     </hint>
    </hints>
   </connection>
@@ -2799,12 +2747,12 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>507</x>
-     <y>633</y>
+     <x>1111</x>
+     <y>570</y>
     </hint>
     <hint type="destinationlabel">
      <x>1062</x>
-     <y>909</y>
+     <y>840</y>
     </hint>
    </hints>
   </connection>
@@ -2815,12 +2763,12 @@ p, li { white-space: pre-wrap; }
    <slot>onChanged_eventsVarAny()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>507</x>
-     <y>638</y>
+     <x>1111</x>
+     <y>597</y>
     </hint>
     <hint type="destinationlabel">
      <x>1065</x>
-     <y>943</y>
+     <y>840</y>
     </hint>
    </hints>
   </connection>
@@ -2831,12 +2779,12 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>423</x>
-     <y>633</y>
+     <x>560</x>
+     <y>569</y>
     </hint>
     <hint type="destinationlabel">
      <x>1070</x>
-     <y>1047</y>
+     <y>840</y>
     </hint>
    </hints>
   </connection>
@@ -2847,12 +2795,12 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>423</x>
-     <y>638</y>
+     <x>560</x>
+     <y>597</y>
     </hint>
     <hint type="destinationlabel">
      <x>1070</x>
-     <y>1027</y>
+     <y>840</y>
     </hint>
    </hints>
   </connection>
@@ -2863,12 +2811,12 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>458</x>
-     <y>617</y>
+     <x>747</x>
+     <y>485</y>
     </hint>
     <hint type="destinationlabel">
      <x>1046</x>
-     <y>1036</y>
+     <y>840</y>
     </hint>
    </hints>
   </connection>
@@ -2879,12 +2827,12 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>458</x>
-     <y>622</y>
+     <x>747</x>
+     <y>513</y>
     </hint>
     <hint type="destinationlabel">
      <x>1052</x>
-     <y>1064</y>
+     <y>840</y>
     </hint>
    </hints>
   </connection>
@@ -2895,12 +2843,12 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>458</x>
-     <y>628</y>
+     <x>747</x>
+     <y>541</y>
     </hint>
     <hint type="destinationlabel">
      <x>1051</x>
-     <y>1010</y>
+     <y>840</y>
     </hint>
    </hints>
   </connection>
@@ -2911,12 +2859,12 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>458</x>
-     <y>633</y>
+     <x>747</x>
+     <y>569</y>
     </hint>
     <hint type="destinationlabel">
      <x>1095</x>
-     <y>985</y>
+     <y>840</y>
     </hint>
    </hints>
   </connection>
@@ -2927,12 +2875,12 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>458</x>
-     <y>638</y>
+     <x>747</x>
+     <y>597</y>
     </hint>
     <hint type="destinationlabel">
      <x>1083</x>
-     <y>1081</y>
+     <y>840</y>
     </hint>
    </hints>
   </connection>
@@ -2943,8 +2891,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>493</x>
-     <y>617</y>
+     <x>987</x>
+     <y>485</y>
     </hint>
     <hint type="destinationlabel">
      <x>1070</x>
@@ -2959,8 +2907,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>493</x>
-     <y>622</y>
+     <x>987</x>
+     <y>513</y>
     </hint>
     <hint type="destinationlabel">
      <x>1074</x>
@@ -2975,8 +2923,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>493</x>
-     <y>628</y>
+     <x>987</x>
+     <y>541</y>
     </hint>
     <hint type="destinationlabel">
      <x>1067</x>
@@ -2991,8 +2939,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>493</x>
-     <y>633</y>
+     <x>987</x>
+     <y>569</y>
     </hint>
     <hint type="destinationlabel">
      <x>1083</x>
@@ -3007,8 +2955,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>493</x>
-     <y>638</y>
+     <x>987</x>
+     <y>597</y>
     </hint>
     <hint type="destinationlabel">
      <x>1067</x>
@@ -3023,8 +2971,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>456</x>
-     <y>632</y>
+     <x>525</x>
+     <y>567</y>
     </hint>
     <hint type="destinationlabel">
      <x>1073</x>
@@ -3039,8 +2987,8 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>456</x>
-     <y>624</y>
+     <x>525</x>
+     <y>514</y>
     </hint>
     <hint type="destinationlabel">
      <x>1124</x>
@@ -3055,12 +3003,12 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>423</x>
-     <y>628</y>
+     <x>560</x>
+     <y>541</y>
     </hint>
     <hint type="destinationlabel">
      <x>1126</x>
-     <y>963</y>
+     <y>840</y>
     </hint>
    </hints>
   </connection>
@@ -3071,12 +3019,12 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>423</x>
-     <y>622</y>
+     <x>560</x>
+     <y>513</y>
     </hint>
     <hint type="destinationlabel">
      <x>1129</x>
-     <y>939</y>
+     <y>840</y>
     </hint>
    </hints>
   </connection>
@@ -3087,12 +3035,12 @@ p, li { white-space: pre-wrap; }
    <slot>onChecked_ToggleVar(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>423</x>
-     <y>617</y>
+     <x>560</x>
+     <y>485</y>
     </hint>
     <hint type="destinationlabel">
      <x>1128</x>
-     <y>920</y>
+     <y>840</y>
     </hint>
    </hints>
   </connection>
@@ -3104,11 +3052,59 @@ p, li { white-space: pre-wrap; }
    <hints>
     <hint type="sourcelabel">
      <x>1067</x>
-     <y>690</y>
+     <y>542</y>
     </hint>
     <hint type="destinationlabel">
-     <x>1151</x>
+     <x>1135</x>
      <y>690</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboEventsAttackHitReaction</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>616</x>
+     <y>593</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1143</x>
+     <y>790</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboEventsAttackSwingType</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>842</x>
+     <y>531</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1144</x>
+     <y>722</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboEventsAttackSwingDir</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>W3MayaAnimUtil</receiver>
+   <slot>onChanged_eventsVarAny()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>829</x>
+     <y>556</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1143</x>
+     <y>678</y>
     </hint>
    </hints>
   </connection>
