@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QFileInfo>
 #include <QFileDialog>
+#include <math.h>
 
 #define upn(val, start, end) for(int val = start; val <= end; ++val)
 #define JRef QJsonValueRef
@@ -66,7 +67,8 @@ MAU::MAU(QWidget *parent)
     connect(ui->spinEditEnd, SIGNAL(valueChanged(int)), this, SLOT(onChanged_EditEnd(int)));
     connect(ui->buttonEditApply, SIGNAL(clicked(bool)), this, SLOT(onClicked_EditApply()));
     connect(ui->buttonEditApplyAll, SIGNAL(clicked(bool)), this, SLOT(onClicked_EditApplyAll()));
-    connect(ui->groupEditCut, SIGNAL(clicked(bool)), this, SLOT(onChecked_EditCut(bool)));
+    connect(ui->groupEditCut, SIGNAL(clicked(bool)), this, SLOT(onChecked_EditCutScale(bool)));
+    connect(ui->groupEditScale, SIGNAL(clicked(bool)), this, SLOT(onChecked_EditCutScale(bool)));
 
     /* EVENTS EDIT */
     ui->comboEventsType->addItems(m_knownEventTypes);
@@ -235,6 +237,19 @@ void MAU::setEventStartTime(QJsonObject& eventObj, double newTime) {
     }
     eventObj["Content"] = contentArr;
 }
+void MAU::setEventDuration(QJsonObject& eventObj, double newDuration) {
+    QJsonArray contentArr = eventObj.value("Content").toArray();
+
+    upn(j, 0, contentArr.count() - 1) {
+        QJsonObject contentEntry = contentArr.at(j).toObject();
+        if (contentEntry.value("Name") == "duration") {
+            contentEntry["val"] = newDuration;
+            contentArr[j] = contentEntry;
+            break;
+        }
+    }
+    eventObj["Content"] = contentArr;
+}
 void MAU::onChanged_GUIStyle(QString newStyle) {
     if (newStyle == "Default") {
         QSettings().remove("GUIStyle");
@@ -326,7 +341,13 @@ void MAU::applyEdits() {
         editCropAnim(animObj, eventsArray, ui->checkEditCutEvents->isChecked(),
                      ui->spinEditStart->value(), ui->spinEditDuration->value());
         hasChanges = true;
-    } else if (ui->editForceDuration->isChecked()) {
+    }
+    if (ui->groupEditScale->isChecked()) {
+        editScaleAnim(animObj, eventsArray, ui->checkEditScaleEvents->isChecked(),
+                      ui->spinEditScale->value());
+        hasChanges = true;
+    }
+    if (ui->editForceDuration->isChecked()) {
         editSetCDPRDuration(animObj);
         hasChanges = true;
     }
@@ -414,6 +435,90 @@ void MAU::editSortEvents(QJsonArray& eventsArray) {
     }
 
     eventsArray = newEventsArray;
+}
+
+void MAU::editScaleAnim(QJsonObject &animObj, QJsonArray &eventsArray, bool scaleEvents, double speedFactor) {
+    QJsonObject animBuff = animObj.value("animBuffer").toObject();
+    int animFrames = animBuff.value("numFrames").toInt();
+    //speedFactor += 1.0 / animFrames; // to add 1 frame for correct result
+    int newFrames = qMax(2, int(animFrames * speedFactor) - 1);
+    double frameLen = 1.0 / speedFactor;
+    double newDuration = framesToSec(newFrames - 1);
+    QJsonArray animBones = animBuff.value("bones").toArray();
+
+    addLog(QString("\t[EDIT] Scale anim frames: [%1 -> %2].")
+           .arg(animFrames)
+           .arg(newFrames));
+
+    for (int i = 0; i < animBones.count(); i += 1) {
+        QString boneName = animBones[i].toObject().value("BoneName").toString();
+        QJsonObject boneObj = animBones[i].toObject();
+
+        QString attrNames[3] = { "position", "rotation", "scale" };
+        upn(j, 0, 2) {
+            int attrFrames = boneObj.value(QString("%1_numFrames").arg(attrNames[j])).toInt();
+            QJsonArray attrArray = boneObj.value(QString("%1Frames").arg(attrNames[j])).toArray();
+
+            if (attrFrames == 1) {
+                // do nothing
+            } else if (attrFrames == animFrames) {
+                QJsonArray newArray = QJsonArray();
+
+
+                double framePos = 0.0;
+                newArray.append( attrArray.first() );
+                // frame = 1 == first(), skipped
+                upn(frame, 2, newFrames - 1) {
+                    int f1 = int(framePos);
+                    int f2 = f1 + 1;
+                    double k = framePos - floor(framePos);
+                    qDebug() << QString("Bone %1, %5 frame %2, framePos %3, k %4.").arg(boneName).arg(frame).arg(framePos).arg(k).arg(attrNames[j]);
+                    newArray.append( interpolateObj(k, attrArray[f1].toObject(), attrArray[f2].toObject()) );
+                    framePos += frameLen;
+                }
+
+                newArray.append( attrArray.last() );
+
+                boneObj[ QString("%1_numFrames").arg(attrNames[j]) ] = newFrames;
+                boneObj[ QString("%1Frames").arg(attrNames[j]) ] = newArray;
+            } else {
+                addLog(QString("\t[EDIT][SCALE] Bone: %1, 1 < %2_Frames = %3 < animFrames = %4. Cropping skipped.")
+                       .arg(boneName).arg(attrNames[j]).arg(attrFrames).arg(animFrames), logError);
+                return;
+            }
+        }
+        animBones[i] = boneObj;
+    }
+
+    if ( scaleEvents && !eventsArray.isEmpty() ) {
+        QJsonArray newEventsArray = QJsonArray();
+
+        upn(i, 0, eventsArray.count() - 1) {
+            QJsonObject eventObj = eventsArray.at(i).toObject();
+            double startTime = getEventParam(eventObj, "startTime", -1.0).toDouble();
+            double duration = getEventParam(eventObj, "duration", -1.0).toDouble();
+            if (startTime >= 0.0) {
+                setEventStartTime(eventObj, startTime * (speedFactor - 1.0 / (double)animFrames));
+            }
+            if (duration >= 0.0) {
+                setEventDuration(eventObj, duration * (speedFactor - 1.0 / (double)animFrames));
+            }
+            newEventsArray.append( eventObj );
+        }
+        addLog( QString("\t[EDIT] Scale %1 anim events.")
+                .arg(newEventsArray.count()) );
+        eventsArray = newEventsArray;
+    }
+
+    animBuff["bones"] = animBones;
+    animBuff["numFrames"] = newFrames;
+    animBuff["duration"] = newDuration;
+    animObj["animBuffer"] = animBuff;
+    animObj["duration"] = newDuration;
+    m_animFrames[m_animIndex] = newFrames;
+    m_animDurations[m_animIndex] = newDuration;
+    addLog(QString("\t[EDIT] Set anim and animBuffer duration = %1 s.")
+           .arg( framesToSec(newFrames - 1) ));
 }
 
 void MAU::editCropAnim(QJsonObject& animObj, QJsonArray& eventsArray, bool cropEvents, int startFrame, int durationFrames) {
@@ -645,14 +750,12 @@ int MAU::editOptimizeBones(QJsonObject& animObj, bool optimizePos, bool optimize
     return optimized;
 }
 
-void MAU::onChecked_EditCut(bool checked) {
-    if (checked) {
-        if (!ui->groupEditBake->isChecked())
-            ui->groupEditBake->setChecked(true);
-        ui->groupEditBake->setEnabled(false);
+void MAU::onChecked_EditCutScale(bool checked) {
+    if (ui->groupEditCut->isChecked() || ui->groupEditScale->isChecked()) {
         ui->groupEditBake->setChecked(true);
         ui->checkEditBakePos->setChecked(true);
         ui->checkEditBakeRot->setChecked(true);
+        ui->groupEditBake->setEnabled(false);
     } else {
         ui->groupEditBake->setEnabled(true);
     }
@@ -1666,6 +1769,21 @@ QJsonObject MAU::objXYZW(double X, double Y, double Z, double W) const {
 QJsonObject MAU::objQuanternion(double Pitch, double Yaw, double Roll) const {
     QVector4D vec4 = QQuaternion::fromEulerAngles(QVector3D(Pitch, Yaw, Roll)).toVector4D();
     return objXYZW( vec4.x(), vec4.y(), vec4.z(), vec4.w() );
+}
+JSO MAU::interpolateObj(double k, QJsonObject prevObj, QJsonObject nextObj) {
+    double X1, Y1, Z1, W1;
+    double X2, Y2, Z2, W2;
+    if (prevObj.contains("W")) {
+        objToXYZW(prevObj, X1, Y1, Z1, W1);
+        objToXYZW(nextObj, X2, Y2, Z2, W2);
+        interpolateRot(k, X1, Y1, Z1, W1, X2, Y2, Z2, W2);
+        return objXYZW(X1, Y1, Z1, W1);
+    } else {
+        objToXYZ(prevObj, X1, Y1, Z1);
+        objToXYZ(nextObj, X2, Y2, Z2);
+        interpolatePos(k, X1, Y1, Z1, X2, Y2, Z2);
+        return objXYZ(X1, Y1, Z1);
+    }
 }
 void MAU::interpolatePos(double k, double& X1, double& Y1, double& Z1, double X2, double Y2, double Z2) {
     X1 = X1 * (1.0 - k) + X2 * k;

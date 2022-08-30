@@ -72,6 +72,7 @@ private:
     void objToXYZW(QJsonObject obj, double& X, double& Y, double& Z, double& W) const;
     void interpolatePos(double k, double& X1, double& Y1, double& Z1, double X2, double Y2, double Z2);
     void interpolateRot(double k, double& X1, double& Y1, double& Z1, double& W1, double X2, double Y2, double Z2, double W2);
+    JSO interpolateObj(double k, JSO prevObj, JSO nextObj);
     void blendPos(QJsonArray& posArray, int targetFrames);
     void blendRot(QJsonArray& rotArray, int targetFrames);
     double framesToSec(int frames, int fps = 30);
@@ -92,9 +93,11 @@ private:
     bool m_eventsAcceptSignals = true;
     double getEventStartTime(QJsonObject eventObj);
     void setEventStartTime(QJsonObject& eventObj, double newTime);
+    void setEventDuration(QJsonObject& eventObj, double newDuration);
     void setCurrentAnimInfo(int bones, int events, int frames, double duration, bool rootMotion, bool motionExtraction);
     void editBakeBones(QJsonObject& animObj, bool bakePos = true, bool bakeRot = true, bool bakeScale = false);
     void editCropAnim(QJsonObject& animObj, QJsonArray& eventsArray, bool cropEvents, int startFrame, int durationFrames);
+    void editScaleAnim(QJsonObject& animObj, QJsonArray& eventsArray, bool scaleEvents, double speedFactor);
     void editSetCDPRDuration(QJsonObject& animObj);
     void editSortEvents(QJsonArray& eventsArray);
     void editRenameAnim(QJsonObject& animObj, QJsonArray& eventsArray, QString newName);
@@ -211,7 +214,7 @@ private slots:
     void onClicked_patchPartsCutscene();
 
     /* GENERAL EDIT */
-    void onChecked_EditCut(bool checked);
+    void onChecked_EditCutScale(bool checked);
     void onChanged_EditCurrentAnim(int newAnimIndex);
     void onChanged_EditStart(int startFrame);
     void onChanged_EditDuration(int durFrames);

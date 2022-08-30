@@ -268,10 +268,26 @@
            <property name="spacing">
             <number>8</number>
            </property>
-           <item row="10" column="2">
+           <item row="1" column="0" colspan="2">
+            <widget class="QLabel" name="labelEditName">
+             <property name="text">
+              <string>Rename animation: </string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="13" column="2">
             <widget class="QPushButton" name="buttonEditApply">
              <property name="enabled">
               <bool>false</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
              </property>
              <property name="text">
               <string>APPLY (current)</string>
@@ -282,17 +298,107 @@
              </property>
             </widget>
            </item>
-           <item row="7" column="0">
-            <widget class="QCheckBox" name="editForceDuration">
-             <property name="text">
-              <string>Force set duration from numFrames</string>
+           <item row="5" column="0" colspan="3">
+            <widget class="QGroupBox" name="groupEditCut">
+             <property name="title">
+              <string>Crop animation frames</string>
              </property>
-             <property name="checked">
+             <property name="checkable">
               <bool>true</bool>
              </property>
+             <property name="checked">
+              <bool>false</bool>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_4">
+              <property name="leftMargin">
+               <number>12</number>
+              </property>
+              <property name="topMargin">
+               <number>6</number>
+              </property>
+              <property name="rightMargin">
+               <number>6</number>
+              </property>
+              <property name="bottomMargin">
+               <number>6</number>
+              </property>
+              <property name="spacing">
+               <number>6</number>
+              </property>
+              <item row="1" column="0">
+               <widget class="QLabel" name="labelEditStart">
+                <property name="text">
+                 <string>Start (- s) frame:</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QSpinBox" name="spinEditEnd">
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>100000</number>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QCheckBox" name="checkEditCutEvents">
+                <property name="text">
+                 <string>Crop anim events + recalculate startTime</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QSpinBox" name="spinEditDuration">
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>100000</number>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="labelEditEnd">
+                <property name="text">
+                 <string>End (- s) frame:</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="labelEditDuration">
+                <property name="text">
+                 <string>Duration (- s) frames:</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QSpinBox" name="spinEditStart">
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>100000</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
-           <item row="2" column="0" colspan="3">
+           <item row="3" column="0" colspan="3">
             <widget class="QGroupBox" name="groupEditBake">
              <property name="title">
               <string>Bake bones to full animFrames</string>
@@ -358,20 +464,27 @@
              </layout>
             </widget>
            </item>
-           <item row="10" column="0">
-            <widget class="QPushButton" name="buttonEditApplyAll">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
+           <item row="2" column="0">
+            <widget class="QCheckBox" name="checkEditAddRootMotion">
              <property name="text">
-              <string>APPLY (all)</string>
+              <string>Add RootMotion bone (with no motion on it)</string>
              </property>
             </widget>
            </item>
-           <item row="4" column="0" colspan="3">
-            <widget class="QGroupBox" name="groupEditCut">
+           <item row="1" column="2">
+            <widget class="QLineEdit" name="lineEditName">
+             <property name="text">
+              <string> - </string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0" colspan="3">
+            <widget class="QGroupBox" name="groupEditScale">
              <property name="title">
-              <string>Crop animation frames</string>
+              <string>Scale animation in time</string>
              </property>
              <property name="checkable">
               <bool>true</bool>
@@ -379,9 +492,12 @@
              <property name="checked">
               <bool>false</bool>
              </property>
-             <layout class="QGridLayout" name="gridLayout_4">
+             <layout class="QHBoxLayout" name="horizontalLayout_13">
+              <property name="spacing">
+               <number>6</number>
+              </property>
               <property name="leftMargin">
-               <number>12</number>
+               <number>6</number>
               </property>
               <property name="topMargin">
                <number>6</number>
@@ -392,73 +508,39 @@
               <property name="bottomMargin">
                <number>6</number>
               </property>
-              <property name="spacing">
-               <number>6</number>
-              </property>
-              <item row="2" column="1">
-               <widget class="QSpinBox" name="spinEditDuration">
-                <property name="minimum">
-                 <number>1</number>
-                </property>
-                <property name="maximum">
-                 <number>100000</number>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QLabel" name="labelEditStart">
+              <item>
+               <widget class="QLabel" name="labelEditScale">
                 <property name="text">
-                 <string>Start (- s) frame:</string>
+                 <string>Speed factor (1.0 - original):</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                 </property>
                </widget>
               </item>
-              <item row="2" column="0">
-               <widget class="QLabel" name="labelEditDuration">
-                <property name="text">
-                 <string>Duration (- s) frames:</string>
+              <item>
+               <widget class="QDoubleSpinBox" name="spinEditScale">
+                <property name="decimals">
+                 <number>3</number>
                 </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="1">
-               <widget class="QSpinBox" name="spinEditEnd">
                 <property name="minimum">
-                 <number>1</number>
+                 <double>0.050000000000000</double>
                 </property>
                 <property name="maximum">
-                 <number>100000</number>
+                 <double>1000.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.050000000000000</double>
+                </property>
+                <property name="value">
+                 <double>1.000000000000000</double>
                 </property>
                </widget>
               </item>
-              <item row="1" column="1">
-               <widget class="QSpinBox" name="spinEditStart">
-                <property name="minimum">
-                 <number>1</number>
-                </property>
-                <property name="maximum">
-                 <number>100000</number>
-                </property>
-               </widget>
-              </item>
-              <item row="3" column="0">
-               <widget class="QLabel" name="labelEditEnd">
+              <item>
+               <widget class="QCheckBox" name="checkEditScaleEvents">
                 <property name="text">
-                 <string>End (- s) frame:</string>
-                </property>
-                <property name="alignment">
-                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QCheckBox" name="checkEditCutEvents">
-                <property name="text">
-                 <string>Crop anim events + recalculate startTime</string>
+                 <string>Scale anim events (startTime, duration)</string>
                 </property>
                 <property name="checked">
                  <bool>true</bool>
@@ -468,51 +550,7 @@
              </layout>
             </widget>
            </item>
-           <item row="6" column="0">
-            <widget class="QCheckBox" name="checkEditSortEvents">
-             <property name="text">
-              <string>Sort anim events by startTime</string>
-             </property>
-             <property name="checked">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QCheckBox" name="checkEditAddRootMotion">
-             <property name="text">
-              <string>Add RootMotion bone (with no motion on it)</string>
-             </property>
-            </widget>
-           </item>
-           <item row="10" column="1">
-            <widget class="QLabel" name="label_3">
-             <property name="text">
-              <string/>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QLineEdit" name="lineEditName">
-             <property name="text">
-              <string> - </string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0" colspan="2">
-            <widget class="QLabel" name="labelEditName">
-             <property name="text">
-              <string>Rename animation: </string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="5" column="0" colspan="3">
+           <item row="8" column="0" colspan="3">
             <widget class="QGroupBox" name="groupEditOptimize">
              <property name="title">
               <string>Optimize resulting bone frames: set single frame where all keys are equal (recommended to speed up loading in Maya)</string>
@@ -569,6 +607,42 @@
              </layout>
             </widget>
            </item>
+           <item row="9" column="0" colspan="3">
+            <widget class="QCheckBox" name="checkEditSortEvents">
+             <property name="text">
+              <string>Sort anim events by startTime</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="10" column="0" colspan="3">
+            <widget class="QCheckBox" name="editForceDuration">
+             <property name="text">
+              <string>Force set duration from numFrames</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="13" column="0">
+            <widget class="QPushButton" name="buttonEditApplyAll">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>APPLY (all)</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
         </item>
@@ -600,7 +674,7 @@
         <item>
          <widget class="QWidget" name="widgetEventsEdit" native="true">
           <property name="enabled">
-           <bool>true</bool>
+           <bool>false</bool>
           </property>
           <layout class="QGridLayout" name="gridLayout_5">
            <property name="leftMargin">
