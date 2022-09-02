@@ -9,7 +9,7 @@
 
 #define upn(val, start, end) for(int val = start; val <= end; ++val)
 #define JRef QJsonValueRef
-#define VERSION "v2.2"
+#define VERSION "v2.3"
 #define MAU W3MayaAnimUtil
 
 MAU::MAU(QWidget *parent)
@@ -22,7 +22,7 @@ MAU::MAU(QWidget *parent)
                          "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">"
                          "p, li { white-space: pre-wrap; }"
                          "</style></head><body style=\" font-family:'Segoe UI'; font-size:9pt; font-weight:400; font-style:normal;\">"
-                         "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Welcome to <span style=\" font-weight:700;\">W3MayaAnimUtil"
+                         "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Welcome to <span style=\" font-weight:700;\">W3MayaAnimUtil "
                          + QString(VERSION " (" __DATE__ ")")
                          + "</span>.<br />Made by <span style=\" font-weight:696; color:#6f00a6;\">nikich340</span> for better the Witcher 3 modding experiene.<br /><span style=\" font-style:italic;\"><br /></span>Click &quot;Load anim .json&quot; to start.</p>"
                          "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><img src=\":/icons/motivated_small.png\" /></p></body></html>");
@@ -2090,11 +2090,24 @@ bool MAU::applyMotionToBone(QJsonValueRef ref) {
     mBoneObj["scale_numFrames"] = QJsonValue(1);
     mBoneObj["scaleFrames"] = QJsonArray({ objXYZ(1, 1, 1) });
     
-    QByteArray deltaTimes = QByteArray::fromBase64( motionObj["deltaTimes"].toString().toUtf8() );
+    int deltaTotal = 0;
     QVector<int> framePoints;
     framePoints.append(1);
-    upn(i, 0, deltaTimes.size() - 1) {
-        framePoints.append( framePoints.back() + static_cast<uint8_t>(deltaTimes[i]) );
+
+    if (motionObj["deltaTimes"].isString()) {
+        QByteArray deltaTimes = QByteArray::fromBase64( motionObj["deltaTimes"].toString().toUtf8() );
+        upn(i, 0, deltaTimes.size() - 1) {
+            framePoints.append( framePoints.back() + static_cast<uint8_t>(deltaTimes[i]) );
+            deltaTotal += static_cast<uint8_t>(deltaTimes[i]);
+        }
+    } else if (motionObj["deltaTimes"].isArray()) {
+        JSA deltaTimes = motionObj["deltaTimes"].toArray();
+        upn(i, 0, deltaTimes.size() - 1) {
+            framePoints.append( framePoints.back() + deltaTimes[i].toInt() );
+            deltaTotal += deltaTimes[i].toInt();
+        }
+    } else {
+        addLog(QString("[ERROR] Unknown deltaTimes format: %1").arg(motionObj["deltaTimes"].type()), logError);
     }
 
     QVector<double> motionX, motionY, motionZ, motionRotZ;
@@ -2147,10 +2160,6 @@ bool MAU::applyMotionToBone(QJsonValueRef ref) {
         addLog( QString("   Flags = 0 in motionExtraction, setting null motion.").arg(animName), logWarning);
     }
 
-    int deltaTotal = 0;
-    upn(i, 0, deltaTimes.size() - 1) {
-        deltaTotal += static_cast<uint8_t>(deltaTimes[i]);
-    }
     //qDebug() << "framesSets: " << framesSets;
     //qDebug() << "deltaTotal: " << deltaTotal;
     //qDebug() << "framePoints: " << framePoints;
@@ -2162,14 +2171,15 @@ bool MAU::applyMotionToBone(QJsonValueRef ref) {
 
     /* OK: deltaTimes.size() = framesSets - 1 */
     /* OK: deltaTotal = animFrames - 1        */
-    if (deltaTimes.size() != framesSets - 1 || deltaTotal > animFrames || deltaTotal < animFrames - 1) {
-        addLog(QString("    Incorrect motionExtraction [deltaCnt = %1, framesSets = %2, deltaTotal = %3, animFrames = %4], setting zero RootMotion.").arg(deltaTimes.size()).arg(framesSets).arg(deltaTotal).arg(animFrames), logError);
+    if (framePoints.size() != framesSets || deltaTotal > animFrames || deltaTotal < animFrames - 1) {
+        addLog(QString("    Incorrect motionExtraction [framePointsSize = %1, framesSets = %2, deltaTotal = %3, animFrames = %4], setting zero RootMotion.")
+               .arg(framePoints.size()).arg(framesSets).arg(deltaTotal).arg(animFrames), logError);
         anyFlag = false;
     }
-    if (deltaTotal == animFrames) {
+    /*if (deltaTotal == animFrames) {
         addLog(QString("    Fixing motionExtraction [deltaTotal = %3 == animFrames = %4]").arg(deltaTotal).arg(animFrames), logWarning);
         deltaTimes.back() = (int)deltaTimes.back() - 1;
-    }
+    }*/
 
     if (!anyFlag) {
         mBoneObj["position_numFrames"] = QJsonValue(1);
@@ -2208,51 +2218,6 @@ bool MAU::applyMotionToBone(QJsonValueRef ref) {
                     positionFrames.append( objXYZ(motionX[frame], motionY[frame], motionZ[frame]) );
             }
             mBoneObj["positionFrames"] = positionFrames;
-
-            // ADD INVERTED PELVIS TO ROOT, if root has no motion
-            /*if (ui->checkAddInverted->isChecked()) {
-                int rootIndex = -1, pelvisIndex = -1;
-                upn(i, 0, bonesArray.size() - 1) {
-                    if (bonesArray[i].toObject().value("BoneName").toString() == "Root") {
-                        rootIndex = i;
-                    }
-                    if (bonesArray[i].toObject().value("BoneName").toString() == "pelvis") {
-                        pelvisIndex = i;
-                    }
-                }
-                QJsonObject pelvisBone = bonesArray[pelvisIndex].toObject();
-                QJsonObject rootBone = bonesArray[rootIndex].toObject();
-                int pelvisFrames = pelvisBone.value("position_numFrames").toInt();
-                int rootFrames = rootBone.value("position_numFrames").toInt();
-                if (pelvisFrames > 1 && rootFrames == 1) {
-                    rootBone["position_numFrames"] = pelvisFrames;
-                    QJsonArray pelvisPositionArray = pelvisBone.value("positionFrames").toArray();
-                    QJsonObject rootOriginalKeys = rootBone.value("positionFrames").toArray().at(0).toObject();
-                    upn(j, 0, pelvisPositionArray.size() - 1) {
-                        QJsonObject frameKeys = pelvisPositionArray[j].toObject();
-                        if (flags & BYTE_X) {
-                            frameKeys["x"] = - frameKeys.value("x").toDouble();
-                        } else {
-                            frameKeys["x"] = rootOriginalKeys.value("x");
-                        }
-                        if (flags & BYTE_Y) {
-                            frameKeys["y"] = - frameKeys.value("y").toDouble();
-                        } else {
-                            frameKeys["y"] = rootOriginalKeys.value("y");
-                        }
-                        if (flags & BYTE_Z) {
-                            frameKeys["z"] = - frameKeys.value("z").toDouble();
-                        } else {
-                            frameKeys["z"] = rootOriginalKeys.value("z");
-                        }
-                        pelvisPositionArray[j] = frameKeys;
-                    }
-
-                    rootBone["positionFrames"] = pelvisPositionArray;
-                    bonesArray[rootIndex] = rootBone;
-                    addLog("    Added inverted pelvis motion to Root!");
-                }
-            }*/
         } else {
             mBoneObj["position_numFrames"] = QJsonValue(1);
             mBoneObj["positionFrames"] = QJsonArray({ objXYZ(0, 0, 0) });
